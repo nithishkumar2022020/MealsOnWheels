@@ -43,7 +43,7 @@ Long-term, the platform becomes the **default pre-order layer for inter-city tra
 
 | ID | Goal | Success indicator |
 |----|------|-------------------|
-| G1 | Route-aware restaurant discovery | User sees restaurants within corridor of selected route in < 3 s (cached) |
+| G1 | Route-aware restaurant discovery | User sees restaurants near their stop with P95 < 800 ms on a cache hit ([02_TECHNICAL_SPEC.md](./02_TECHNICAL_SPEC.md) §7) |
 | G2 | Timed pre-booking | User creates booking with arrival time; restaurant sees cutoff countdown |
 | G3 | Order lifecycle visibility | Status transitions visible to user and restaurant (pending → confirmed → ready → handed_over) |
 | G4 | Pay-on-arrival | No payment gateway in MVP; payment abstraction documented for Phase 2 |
@@ -57,7 +57,7 @@ Long-term, the platform becomes the **default pre-order layer for inter-city tra
 The following are **explicitly out of scope** for the first release. See [13_ROADMAP.md](./13_ROADMAP.md) for phasing.
 
 - Online payment processing (UPI, cards, wallets)
-- SMS / push notifications (email only in MVP sprint; push in Phase 2)
+- SMS / push notifications (email only in MVP; push in Phase 2)
 - ML-based ETA prediction (GPS ingest only; model is extension point)
 - OAuth / social login (phone + OTP only)
 - Restaurant POS integration
@@ -65,7 +65,10 @@ The following are **explicitly out of scope** for the first release. See [13_ROA
 - Admin analytics dashboard beyond basic order stats
 - Automated compliance / FSSAI verification
 
-**Rationale:** Each non-goal saves 6+ engineering hours in a 24-hour sprint context and avoids premature complexity. Extension points are documented so Phase 2 does not require re-architecture.
+**Rationale:** Each of these is a product in its own right. Building them now would mean
+maintaining them before the core proposition — time-aligned pickup — has been validated with
+real travellers and real dhabas. Extension points are documented so Phase 2 does not require
+re-architecture.
 
 ---
 
@@ -157,7 +160,7 @@ flowchart LR
 |--------|--------|-------------|
 | Booking completion rate | ≥ 70% of started bookings | Funnel: search → book → confirmed |
 | Restaurant confirmation rate | ≥ 85% within cutoff window | Dashboard timestamps |
-| On-time handover rate | ≥ 75% ready before traveller arrival | `ready_at` vs `booking_time` |
+| On-time handover rate | ≥ 75% ready before traveller arrival | `ready_at` vs `arrival_time` |
 | P95 search latency | < 800 ms (cache hit) | API metrics |
 | Critical security findings | 0 open | Pre-launch review |
 
@@ -171,7 +174,8 @@ flowchart LR
 
 ### Constraints
 
-- **24-hour sprint** for first demoable product (parallel agent streams)
+- **Resumable stages** — work is sequenced so that stopping after any stage leaves the
+  repository coherent ([14_BUILD_PLAN.md](./14_BUILD_PLAN.md)). No deadline
 - **Zero-cost OSS** stack: FastAPI, PostgreSQL + PostGIS, Redis, MapLibre, OSM, Nominatim, OSRM
 - **Pay-on-arrival** only in MVP
 - **Manual restaurant onboarding** in MVP

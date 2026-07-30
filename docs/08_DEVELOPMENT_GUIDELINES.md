@@ -11,8 +11,11 @@
 - **Open-source first** — Prefer OSS libraries with active communities
 - **Zero-cost where practical** — OSM, Nominatim, Render free tier, Cloudflare R2 free tier
 - **Simple before clever** — Readable code beats premature abstraction
-- **Maintainability over shortcuts** — Except during 24h sprint: ship now, optimize later
-- **No refactoring during sprint** — Fix bugs only; structural cleanup post-launch
+- **Maintainability over shortcuts** — There is no deadline to trade correctness against.
+  Where a shortcut is still taken it is listed and gated in
+  [14_BUILD_PLAN.md](./14_BUILD_PLAN.md) §2, not decided ad hoc
+- **Leave each stage working** — Finish the smallest coherent unit rather than spreading
+  half-applied changes across modules. Work must be resumable by someone who was not here
 - **Security by default** — Never commit secrets; validate all inputs server-side
 
 ---
@@ -21,20 +24,22 @@
 
 ### 2.1 Branch naming
 
+One branch per build stage, named after the stage rather than a parallel work stream:
+
 ```
 main                          # Production-ready
-feature/backend-auth          # Stream A
-feature/restaurant-search     # Stream B
-feature/bookings              # Stream C
-feature/flutter-frontend      # Stream D
-feature/deploy-notifications  # Stream E
+feature/stage-07-skeleton     # Backend skeleton, config, schema, health
+feature/stage-08-auth         # Register, login, JWT, profile
+feature/stage-10-restaurants  # Search, detail, register
+feature/stage-11-bookings     # Booking lifecycle and state machine
 ```
 
-### 2.2 Sprint merge cadence
+### 2.2 Merge cadence
 
-- Merge feature branches to `main` every **3 hours** during 24h sprint
-- Resolve conflicts in favor of `main` for shared config files
-- Each agent commits to their feature branch every **2 hours**
+- One stage per branch; merge to `main` when that stage's tests pass
+- A stage is never merged half-applied — if it cannot be finished, merge nothing and
+  record where it stopped in [14_BUILD_PLAN.md](./14_BUILD_PLAN.md)
+- Resolve conflicts in favour of `main` for shared config files
 
 ### 2.3 Commit message format
 
@@ -66,7 +71,7 @@ chore(infra): add docker-compose for postgres and redis
 ### 3.2 First-time setup
 
 ```bash
-git clone https://github.com/nithishkumar202020/MealsOnWheels.git
+git clone https://github.com/nithishkumar2022020/MealsOnWheels.git
 cd MealsOnWheels
 
 # Start infrastructure
@@ -164,7 +169,7 @@ mobile/lib/
 ├── theme/app_theme.dart
 ├── models/           # Data classes (restaurant, booking, user)
 ├── services/         # api_service.dart, auth_service.dart
-├── providers/        # Riverpod providers (Phase 2; Provider in sprint)
+├── providers/        # Riverpod providers
 ├── screens/          # One file per screen
 └── widgets/          # Reusable UI components
 ```
@@ -178,13 +183,13 @@ mobile/lib/
 
 ### 5.3 State management
 
-- **MVP sprint:** `provider` package (per execution plan)
-- **Post-MVP:** migrate to `riverpod` ([02_TECHNICAL_SPEC.md](./02_TECHNICAL_SPEC.md))
+**`riverpod`**, from the start. The original plan used `provider` to save sprint setup time
+and booked the migration as debt; with no deadline there is no reason to write code twice.
 
 ### 5.4 API service pattern
 
 - Base URL from environment/config constant
-- JWT attached via interceptor reading SharedPreferences
+- JWT attached via interceptor reading `flutter_secure_storage`
 - On 401: clear token, navigate to login
 
 ---
@@ -209,13 +214,20 @@ mobile/lib/
 
 ---
 
-## 8. Testing (Sprint vs Post-Sprint)
+## 8. Testing
 
-**24h sprint:** Manual testing only in final 2 hours. No automated test requirement.
+Tests ship with the code they cover. A build stage is not done until its tests pass — see
+[11_TESTING.md](./11_TESTING.md) for the strategy and
+[14_BUILD_PLAN.md](./14_BUILD_PLAN.md) for which tests belong to which stage.
 
-**Post-sprint:** See [11_TESTING.md](./11_TESTING.md) for pytest + Flutter test strategy.
+Before marking any stage complete:
 
-During sprint, each stream owner verifies their endpoints with `curl` before marking checkpoint complete.
+```bash
+ruff check app/ && black --check app/ && pytest tests/ -v
+```
+
+Also hit the endpoints you touched with `curl` against a running server. Passing tests and
+a working request are different claims; make both.
 
 ---
 

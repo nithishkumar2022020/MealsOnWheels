@@ -45,10 +45,13 @@ erDiagram
     varchar email
     text address
     geography location
-    decimal hygiene_rating
+    decimal composite_rating
+    int rating_count
     int avg_prep_time_minutes
     boolean is_active
+    bigint osm_id UK
     timestamptz created_at
+    timestamptz updated_at
   }
 
   routes {
@@ -61,6 +64,7 @@ erDiagram
     geometry geometry
     int distance_km
     timestamptz created_at
+    timestamptz updated_at
   }
 
   bookings {
@@ -68,7 +72,7 @@ erDiagram
     bigint user_id FK
     bigint restaurant_id FK
     bigint route_id FK
-    timestamptz booking_time
+    timestamptz arrival_time
     timestamptz cutoff_time
     varchar status
     jsonb items
@@ -127,17 +131,65 @@ erDiagram
 | `email` | `VARCHAR(255)` | NULL | Notification target |
 | `address` | `TEXT` | NULL | Human-readable address |
 | `location` | `GEOGRAPHY(POINT, 4326)` | NOT NULL | WGS84 lat/lon |
-| `hygiene_rating` | `DECIMAL(3,2)` | DEFAULT 0 | Aggregated 0–5 |
-| `avg_prep_time_minutes` | `INTEGER` | DEFAULT 30 | Used for cutoff calc |
-| `is_active` | `BOOLEAN` | DEFAULT true | Soft disable |
+| `composite_rating` | `DECIMAL(3,2)` | NOT NULL DEFAULT 0 | Mean of all three rating dimensions, 0–5. `0` means unrated |
+| `rating_count` | `INTEGER` | NOT NULL DEFAULT 0 | Ratings behind `composite_rating`; lets the mean update incrementally |
+| `avg_prep_time_minutes` | `INTEGER` | NOT NULL DEFAULT 30 | Cutoff calc **and** the minimum booking lead time |
+| `is_active` | `BOOLEAN` | NOT NULL DEFAULT true | Soft disable; inactive restaurants are unsearchable and unbookable |
+| `osm_id` | `BIGINT` | UNIQUE NULL | Set when the row was promoted from an OSM POI; `NULL` for manually onboarded restaurants |
 | `created_at` | `TIMESTAMPTZ` | NOT NULL DEFAULT now() | |
+| `updated_at` | `TIMESTAMPTZ` | NOT NULL DEFAULT now() | |
+
+**On `composite_rating` naming:** this column previously held the composite score under the
+name `hygiene_rating`, which read as a hygiene-only figure and collided with the genuinely
+hygiene-only `average_hygiene` in [05_API_SPEC.md](./05_API_SPEC.md) §9.2. Two different
+quantities, near-identical names.
+
+**On `osm_id`:** required so an Overpass search result can be promoted into a real
+restaurant row when a traveller books it. Without it the same OSM POI inserts repeatedly.
+See §3.2.1.
 
 **Indexes:**
 
 ```sql
 CREATE INDEX idx_restaurants_location ON restaurants USING GIST (location);
 CREATE INDEX idx_restaurants_active ON restaurants (is_active) WHERE is_active = true;
+CREATE UNIQUE INDEX idx_restaurants_osm_id ON restaurants (osm_id) WHERE osm_id IS NOT NULL;
 ```
+
+#### 3.2.1 Promoting OSM results into `restaurants`
+
+A search may return POIs that came from Overpass and have no row in this table. Those
+results must still be bookable, and `bookings.restaurant_id` is a `NOT NULL` foreign key —
+so an OSM result cannot be returned with a null id and booked later.
+
+**Resolution:** every Overpass POI that survives filtering is upserted into `restaurants`
+at search time, keyed on `osm_id`:
+
+```sql
+INSERT INTO restaurants (name, phone, address, location, osm_id, avg_prep_time_minutes)
+VALUES (:name, '', :address, ST_SetSRID(ST_MakePoint(:lon, :lat), 4326)::geography,
+        :osm_id, 30)
+ON CONFLICT (osm_id) DO UPDATE
+  SET name       = EXCLUDED.name,
+      address    = COALESCE(EXCLUDED.address, restaurants.address),
+      updated_at = now()
+RETURNING id;
+```
+
+Every search result therefore carries a real integer `id`. Consequences:
+
+- `phone` is empty for OSM-derived rows — they were never onboarded, so there is nobody to
+  notify. The booking still succeeds; the notification stub logs that it had no contact.
+- `composite_rating` is `0` and `rating_count` is `0` until someone rates them. The API
+  reports `composite_rating: null` rather than `0` for unrated restaurants so clients do not
+  render a zero-star rating.
+- `avg_prep_time_minutes` defaults to 30, which also sets their minimum booking lead time.
+- The `source` field in search responses (`"local"` / `"osm"`) is derived from whether
+  `osm_id IS NULL`, not stored separately.
+
+The alternative — returning `id: null` and blocking booking on OSM results — was rejected
+because Overpass supplementation exists precisely to cover corridors where seeded data is
+thin, so it would disable booking exactly where it is most needed.
 
 ### 3.3 `routes`
 
@@ -152,6 +204,7 @@ CREATE INDEX idx_restaurants_active ON restaurants (is_active) WHERE is_active =
 | `geometry` | `GEOMETRY(LINESTRING, 4326)` | NULL | Route polyline from OSRM |
 | `distance_km` | `INTEGER` | NULL | Approximate |
 | `created_at` | `TIMESTAMPTZ` | NOT NULL DEFAULT now() | |
+| `updated_at` | `TIMESTAMPTZ` | NOT NULL DEFAULT now() | |
 
 **Indexes:**
 
@@ -167,7 +220,7 @@ CREATE INDEX idx_routes_geometry ON routes USING GIST (geometry);
 | `user_id` | `BIGINT` | FK → users(id) NOT NULL | |
 | `restaurant_id` | `BIGINT` | FK → restaurants(id) NOT NULL | |
 | `route_id` | `BIGINT` | FK → routes(id) NULL | |
-| `booking_time` | `TIMESTAMPTZ` | NOT NULL | Expected arrival |
+| `arrival_time` | `TIMESTAMPTZ` | NOT NULL | Expected arrival |
 | `cutoff_time` | `TIMESTAMPTZ` | NOT NULL | Last moment to confirm |
 | `status` | `VARCHAR(20)` | NOT NULL DEFAULT 'pending' | State machine value |
 | `items` | `JSONB` | NOT NULL | `[{name, qty, price}]` |
@@ -261,18 +314,41 @@ WHERE is_active = true
 ORDER BY distance_m;
 ```
 
-### 5.2 Restaurants along route corridor (Phase 1.5)
+### 5.2 Restaurants along route corridor (canonical)
+
+This is the single definition of the corridor query. [02_TECHNICAL_SPEC.md](./02_TECHNICAL_SPEC.md)
+§5.1 refers here rather than duplicating it.
 
 ```sql
-SELECT r.id, r.name
-FROM restaurants r
-JOIN routes rt ON rt.id = :route_id
-WHERE ST_DWithin(
-  r.location,
-  rt.geometry::geography,
-  :buffer_meters
-);
+SELECT r.id,
+       r.name,
+       ST_Distance(r.location, rt.geog) AS distance_m
+FROM (
+       SELECT geometry::geography AS geog
+       FROM routes
+       WHERE id = :route_id
+     ) rt,
+     restaurants r
+WHERE r.is_active = true
+  AND ST_DWithin(r.location, rt.geog, :buffer_meters)
+ORDER BY distance_m;
 ```
+
+**Why this shape:**
+
+- `restaurants.location` is already `GEOGRAPHY(POINT, 4326)`. Casting it again
+  (`r.location::geography`) is redundant and can prevent use of `idx_restaurants_location`.
+- The route geometry is cast to `geography` **once**, in a subquery, rather than per-row in
+  the `WHERE` clause. Casting a column inline makes the expression non-indexable; hoisting
+  it lets the planner treat it as a constant and use the GiST index on
+  `restaurants.location`.
+- `ST_Distance` on two `geography` values returns metres along the spheroid, which is what
+  the API reports as `distance_km`. Do not mix in `ST_ClosestPoint` — it is a *geometry*
+  function and feeding it geography arguments forces an implicit cast back to planar
+  degrees, producing distances that are wrong at Indian latitudes.
+
+Verify with `EXPLAIN ANALYZE` that an index scan on `idx_restaurants_location` appears; a
+sequential scan means the cast was reintroduced somewhere.
 
 ---
 
@@ -280,7 +356,7 @@ WHERE ST_DWithin(
 
 | Phase | Tool | Location |
 |-------|------|----------|
-| MVP sprint | Raw SQL | `backend/migrations/001_create_tables.sql` |
+| MVP | Raw SQL | `backend/migrations/001_create_tables.sql` |
 | Post-MVP | Alembic | `backend/alembic/versions/` |
 
 **Migration execution:**
@@ -291,17 +367,42 @@ docker compose exec postgres psql -U mealsonwheels -d highway_food_booking \
   -f /migrations/001_create_tables.sql
 
 # Production (Render)
-npm run migrate:prod  # or python script invoking psql
+python scripts/migrate.py
 ```
 
 **Rules:**
 
-- Migrations are forward-only in sprint (no down migrations)
+- Migrations are forward-only while the schema is pre-release (no down migrations). Roll
+  back by restoring a backup, not by reversing a migration
 - Always enable PostGIS before creating spatial columns:
 
 ```sql
 CREATE EXTENSION IF NOT EXISTS postgis;
 ```
+
+- `001_create_tables.sql` is idempotent (`CREATE TABLE IF NOT EXISTS`,
+  `CREATE INDEX IF NOT EXISTS`) so re-running it against an existing database is safe
+
+### 6.1 Adopting Alembic later
+
+The hand-written SQL migration must be **baselined**, not re-derived, when Alembic arrives
+in Phase 1. Without this step Alembic's first autogenerate sees an empty version history,
+compares an empty model of the database against the live schema, and emits a migration that
+tries to create every table that already exists.
+
+Procedure:
+
+1. `alembic init backend/alembic`; point `target_metadata` at the SQLAlchemy `Base`.
+2. Hand-write `0001_baseline.py` whose `upgrade()` is **empty** — it represents the schema
+   that `001_create_tables.sql` already produced.
+3. On every existing database (local, Render): `alembic stamp 0001_baseline`. This records
+   the revision without executing anything.
+4. Only then run `alembic revision --autogenerate` for the next real change, and read the
+   generated diff before applying it. PostGIS columns in particular are frequently
+   mis-detected — `geoalchemy2` must be imported in `env.py` or autogenerate will propose
+   dropping and recreating every spatial column.
+5. Fresh databases from that point run `alembic upgrade head` instead of the raw SQL file.
+   Keep `001_create_tables.sql` in the repository as the historical record; do not edit it.
 
 ---
 
@@ -313,7 +414,10 @@ CREATE EXTENSION IF NOT EXISTS postgis;
 | Restaurants | 10 | Along Delhi-Chandigarh corridor |
 | Users | 1 | Test user `+919876543210` |
 
-Seed script: `backend/scripts/seed.py` (Stream B deliverable)
+Seed script: `backend/scripts/seed.py`. Restaurant coordinates must fall within the default
+15 km radius of the canonical demo search point `29.02, 77.02`
+([05_API_SPEC.md](./05_API_SPEC.md) §6.1) — otherwise every documented search example
+returns nothing.
 
 ---
 

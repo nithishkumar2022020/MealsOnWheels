@@ -134,18 +134,28 @@ Restaurant search hits Overpass/Nominatim on cache miss. Redis may be unavailabl
 
 ### Decision
 
-Use **Redis 7** for search and geocode caching. Application detects Redis unavailability at startup and **continues without cache**.
+Use **Redis 7** for search and geocode caching. Every cache operation **fails open
+individually** — any Redis error is logged and treated as a cache miss, and the request
+continues against PostgreSQL and the external APIs.
 
 ### Rationale
 
-- 7-day search cache dramatically reduces Overpass load and latency
-- Graceful fallback prevents Redis from being a single point of failure
+- A 6-hour search cache substantially reduces Overpass load and latency
+- Per-operation fallback prevents Redis from being a single point of failure at any moment,
+  not just at boot
 - Same Redis instance usable for rate limiting and refresh tokens in Phase 2
 
 ### Consequences
 
-- `cache.py` exposes `is_available` flag checked before every cache operation
-- Cache miss path must always produce correct results (cache is optimization only)
+- `cache.py` wraps every get/set in exception handling; callers never see a Redis error
+- Cache miss path must always produce correct results (cache is optimisation only)
+- Rate limiting degrades to best-effort per-process when Redis is down
+  ([10_SECURITY.md](./10_SECURITY.md) §9)
+
+**Amended 2026-07-30:** originally this probed Redis once at startup and set a
+`REDIS_AVAILABLE` flag. That covered only "Redis was already down when we booted" and would
+have raised on every request if Redis died mid-run — the more likely failure on a free tier.
+Replaced with per-operation fail-open.
 
 ### Alternatives considered
 
@@ -363,6 +373,62 @@ Reserve `bus_gps_events` table and stub `services/eta.py` / `services/demand.py`
 
 ---
 
+## ADR-0011: Sequential Resumable Stages Replace the 24-Hour Sprint
+
+**Status:** Accepted
+**Date:** 2026-07-30
+
+### Context
+
+ADRs 0001–0010 were written against a **24-hour sprint executed by parallel agent
+streams**. Several of their consequences were justified by that clock: skip automated
+tests, leave the restaurant dashboard unauthenticated, accept client-supplied prices,
+use `provider` instead of `riverpod`.
+
+That constraint no longer exists. There is no deadline. The binding constraint is now
+**resumability** — work may be interrupted at any point, and what has been built must
+remain coherent and continuable by someone with no memory of the reasoning.
+
+Parallel streams are the wrong shape for this. Five streams interrupted mid-flight leave
+five partial modules and no working system. The same work sequenced leaves a working
+system at every boundary.
+
+### Decision
+
+Work is sequenced as **numbered stages, each ending in a verified working state**, tracked
+in [14_BUILD_PLAN.md](./14_BUILD_PLAN.md). Stream labels A–E are retired. A stage is not
+complete until its tests pass.
+
+Shortcuts justified only by the deadline are **fixed rather than carried**:
+
+| Was | Now | Reason |
+|-----|-----|--------|
+| No automated tests | Tests ship with each stage | A stage cannot be verified working without them, and resumability depends on the next person trusting what came before |
+| Client-supplied item prices | Server validates every line against its own menu | Nothing was buying this except sprint speed |
+| `provider`, migrate to `riverpod` later | `riverpod` from the start | Writing the state layer twice costs more than doing it once |
+| Unauthenticated dashboard, "obscure URL" | Shared token gated to non-production | Obscurity was never a control |
+
+### Consequences
+
+- ADRs 0001–0010 keep their original text. Their *context* remains historically accurate;
+  where a *consequence* no longer holds, this ADR supersedes it.
+- Specifically superseded: ADR-0005's "auto-register on first login for sprint
+  convenience" (now gated to non-production and restricted to known phones) and the
+  testing consequences implied throughout.
+- ADR-0001's rationale for FastAPI is **unaffected** — it rested on the Python ML path,
+  not on the sprint. Same for ADR-0002, 0003, 0004, 0006, 0007, 0008, 0009, 0010.
+- Estimated dates in [13_ROADMAP.md](./13_ROADMAP.md) are planning aids, not commitments.
+
+### Alternatives considered
+
+| Option | Rejected because |
+|--------|------------------|
+| Keep parallel streams, drop the deadline | Parallel in-flight work is not recoverable after an interruption, which is the constraint that now matters most |
+| Rewrite ADRs 0001–0010 to remove sprint language | Destroys the record of why decisions were actually made; an ADR log that is edited retroactively cannot be trusted |
+| Carry all sprint shortcuts as Phase 1 debt | Several cost more to carry than to fix, and two of them are security gaps |
+
+---
+
 ## 2. Decision Index
 
 | ADR | Title | Status |
@@ -377,6 +443,7 @@ Reserve `bus_gps_events` table and stub `services/eta.py` / `services/demand.py`
 | 0008 | JSONB booking items | Accepted |
 | 0009 | Render hosting | Accepted |
 | 0010 | AI as extension points | Accepted |
+| 0011 | Sequential resumable stages replace 24-hour sprint | Accepted |
 
 ---
 

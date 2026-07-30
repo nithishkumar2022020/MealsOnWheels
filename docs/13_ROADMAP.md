@@ -12,45 +12,48 @@
 gantt
   title MealsOnWheels Roadmap
   dateFormat YYYY-MM-DD
-  section MVP_Sprint
-  Backend_Auth           :2026-07-25, 1d
-  Restaurant_Search      :2026-07-25, 1d
-  Booking_Flow           :2026-07-25, 1d
-  Flutter_Frontend       :2026-07-25, 1d
-  Deploy_E2E             :2026-07-25, 1d
+  section Phase0_MVP_Build
+  Backend_Spec_Correction :2026-07-29, 2d
+  Backend_Implementation  :2026-07-31, 14d
+  Flutter_Client          :2026-08-14, 14d
+  Deploy_E2E              :2026-08-28, 3d
   section Phase1
-  Real_SMS_OTP           :2026-08-01, 7d
-  PostGIS_Corridor       :2026-08-01, 7d
-  Menu_CRUD              :2026-08-08, 14d
+  Real_SMS_OTP           :2026-09-01, 7d
+  PostGIS_Corridor       :2026-09-01, 7d
+  Menu_CRUD              :2026-09-08, 14d
   section Phase2
   Online_Payments        :2026-09-01, 21d
   Push_Notifications     :2026-09-01, 14d
   section Phase3
-  GPS_ETA_Model          :2026-10-01, 30d
-  Bus_Aggregator_API     :2026-11-01, 30d
+  GPS_ETA_Model          :2026-11-01, 30d
+  Bus_Aggregator_API     :2026-12-01, 30d
 ```
+
+Dates past Phase 0 are planning estimates, not commitments. Live status lives in
+[14_BUILD_PLAN.md](./14_BUILD_PLAN.md).
 
 ---
 
-## 2. Phase 0 — 24-Hour Sprint (Current)
+## 2. Phase 0 — MVP Build (Current)
 
-**Goal:** Demoable end-to-end product live on Render.
+**Goal:** Working end-to-end product live on Render.
 
-| Stream | Deliverable | Hours |
-|--------|-------------|-------|
-| A | FastAPI skeleton, DB schema, phone+OTP auth, JWT | 0–6 |
-| B | Restaurant search (Overpass + cache + seed data) | 0–8 |
-| C | Booking flow, dashboard API, ratings | 4–16 |
-| D | Flutter app (login, search, book, status, dashboard) | 6–18 |
-| E | Email notifications, Render deploy, E2E test | 16–24 |
+Sequenced as resumable stages in **[14_BUILD_PLAN.md](./14_BUILD_PLAN.md) §3** — that
+document tracks live status and is the place to look for what is done and what is next.
+This roadmap covers what comes after.
+
+The original plan ran five parallel work streams against a 24-hour clock. That has been
+replaced by sequential stages, each ending in a verified working state, because parallel
+in-flight work is not recoverable if it is interrupted partway.
 
 **Success criteria:** See [01_PRODUCT_SPEC.md](./01_PRODUCT_SPEC.md) AC-1 through AC-5.
 
-**Explicitly deferred:** Payments, SMS, ML ETA, OAuth, automated tests, admin panel.
+**Explicitly deferred:** Payments, SMS, ML ETA, OAuth, admin panel. Automated tests are
+**no longer deferred** — they ship with each stage ([11_TESTING.md](./11_TESTING.md)).
 
 ---
 
-## 3. Phase 1 — Production Hardening (Weeks 1–4 post-sprint)
+## 3. Phase 1 — Production Hardening (4 weeks after Phase 0)
 
 **Goal:** Safe for limited public beta on one corridor (Delhi-Chandigarh).
 
@@ -129,18 +132,28 @@ gantt
 
 ## 7. Technical Debt Register
 
-Items consciously accepted in sprint; scheduled for paydown:
+Shortcuts consciously accepted, with the condition that ends each one. Anything gated to
+non-production **blocks public launch** until cleared —
+[10_SECURITY.md](./10_SECURITY.md) §10 is the gate.
 
-| Debt | Introduced | Paydown phase |
-|------|------------|---------------|
-| OTP stub `123456` | Sprint | Phase 1 |
-| Unauthenticated dashboard | Sprint | Phase 1 |
-| JSONB booking items | Sprint | Phase 1 (menu CRUD) |
-| Manual restaurant seed | Sprint | Phase 1 (self-registration) |
-| Polling instead of WebSocket | Sprint | Phase 2 |
-| No automated tests | Sprint | Phase 1 |
-| Point-radius vs corridor search | Sprint | Phase 1 |
-| Provider vs Riverpod in Flutter | Sprint | Phase 1 |
+| Debt | Why accepted | Paydown |
+|------|--------------|---------|
+| OTP stub `123456` | No SMS provider yet; gated to non-production | Phase 1 — blocks launch |
+| Shared dashboard token instead of per-restaurant accounts | Per-restaurant auth needs an onboarding flow that does not exist yet; gated to non-production | Phase 1 — blocks launch |
+| Hardcoded menus | Menu CRUD is a Phase 1 feature. Prices are server-owned, so this is not a trust gap | Phase 1 (menu CRUD) |
+| JSONB booking items | Normalising needs the menu table first | Phase 1 (menu CRUD) |
+| Point-radius instead of corridor search | Route polylines not seeded yet | Phase 1 |
+| Polling instead of WebSocket | Adequate at current scale | Phase 2 |
+| Public Nominatim / Overpass instances | Usage policy prohibits sustained production traffic regardless of throttling | Self-host before launch |
+
+**Resolved rather than carried** (were on this register; fixed instead):
+
+| Was | Resolution |
+|-----|------------|
+| No automated tests | Tests now ship with each stage ([11_TESTING.md](./11_TESTING.md)) |
+| Client-supplied item prices | Server validates every line item against its own menu |
+| Provider instead of Riverpod | Riverpod from the start — no migration to schedule |
+| Manual restaurant seed only | Seed data plus authenticated self-registration |
 
 ---
 
@@ -161,7 +174,7 @@ Items consciously accepted in sprint; scheduled for paydown:
 
 | Milestone | Target date | Metric |
 |-----------|-------------|--------|
-| Sprint demo | Day 1 | E2E flow on Render |
+| MVP live | End of Phase 0 | E2E flow on Render |
 | Closed beta | +4 weeks | 50 bookings, 10 restaurants |
 | Open beta | +8 weeks | 500 bookings/month |
 | Paid launch | +12 weeks | First online payment |
