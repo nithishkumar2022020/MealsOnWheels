@@ -1,7 +1,7 @@
 # Build Plan & Handoff Log
 
 **Document version:** 1.0
-**Last updated:** 2026-07-30
+**Last updated:** 2026-07-30 (Stage 8 complete)
 **Purpose:** Single source of truth for build progress. Any agent or contributor picking
 this project up mid-stream starts here.
 
@@ -76,7 +76,7 @@ Each stage is independently runnable and independently testable.
 | # | Stage | Status | Ends when |
 |---|-------|--------|-----------|
 | 7 | Backend skeleton, config, DB schema, health check | DONE | `docker compose up` → `GET /api/health` returns 200 with db + redis status |
-| 8 | Auth module — register, login, JWT, profile | TODO | `pytest tests/test_auth.py` green; login returns a usable token |
+| 8 | Auth module — register, login, JWT, profile | DONE | `pytest tests/test_auth.py` green; login returns a usable token |
 | 9 | Routes module + seed script | TODO | Seeded DB; `GET /api/routes` returns 5 routes |
 | 10 | Restaurant search, detail, register | TODO | `tests/test_restaurants.py` green including Overpass-down fallback |
 | 11 | Booking module + state machine | TODO | `tests/test_bookings.py` green including every invalid transition |
@@ -100,9 +100,9 @@ Deliberately unplanned in detail. Scope these when Phase B is done, not before.
 
 ## 4. Next Action
 
-**Stage 8 — auth module: register, login, JWT, profile.**
+**Stage 9 — routes module and seed script.**
 
-Phase A (spec correction) and Stage 7 (skeleton) are complete and verified. Do not re-open
+Phase A, Stage 7 (skeleton) and Stage 8 (auth) are complete and verified. Do not re-open
 the Phase A decisions; they are recorded in §5 with reasons.
 
 ### What already exists (build on it, do not rewrite)
@@ -110,53 +110,37 @@ the Phase A decisions; they are recorded in §5 with reasons.
 | File | What it gives you |
 |------|-------------------|
 | `app/config.py` | `get_settings()`; `settings.otp_stub_allowed`, `.is_production`, `.JWT_SECRET`, `.JWT_EXPIRE_HOURS` |
-| `app/db.py` | `Base`, `SessionLocal`, `get_db` dependency |
-| `app/cache.py` | `cache.incr_with_expiry()` — returns `None` when Redis is down, meaning "cannot enforce" |
-| `app/errors.py` | `unauthorized()`, `not_found()`, `conflict()`, `rate_limited()`, `service_unavailable()` — all carry a `code` |
-| `app/models.py` | `User`, and `ALLOWED_TRANSITIONS` for later stages |
-| `app/logging_config.py` | `mask_phone()` — use it before any phone reaches a log |
+| `app/db.py` | `Base`, `SessionLocal`, `get_db`. `NullPool` under `ENVIRONMENT=test` — see §5 |
+| `app/cache.py` | `cache.get_json()` / `set_json()` / `incr_with_expiry()`. All fail open |
+| `app/errors.py` | `unauthorized()`, `not_found()`, `conflict()`, `service_unavailable()` — all carry a `code` |
+| `app/models.py` | `User`, `Restaurant`, `Route`, `Booking`, `Rating`; `ALLOWED_TRANSITIONS` |
+| `app/schemas.py` | `RequestModel` (`extra="forbid"`) and `ResponseModel` base classes; `PHONE_PATTERN`, `normalise_phone()` |
+| `app/deps.py` | `CurrentUser`, `DbSession`, `ClientIp` annotated dependencies |
+| `app/services/rate_limit.py` | `enforce(key, limit, window)`; add a new `(limit, window)` constant per §9 of `10_SECURITY.md` |
+| `app/core/security.py` | `create_access_token()`, `decode_token()` |
+| `tests/conftest.py` | Creates `<db>_test`, applies migrations, truncates between tests. `client` fixture |
+
+**Subclass `RequestModel` / `ResponseModel` for new schemas.** Declaring a bare `BaseModel`
+loses `extra="forbid"`, which is the control behind the Stage 11 price promise.
 
 ### Build
 
-1. `app/core/security.py` — `create_access_token(user_id, phone)` and `decode_token()`
-   using `python-jose` HS256. Claims exactly `sub`, `phone`, `iat`, `exp`
-   ([10_SECURITY.md](./10_SECURITY.md) §3.2). `sub` must be a string — jose rejects int
-   subjects on decode.
-2. `app/schemas.py` — Pydantic request/response models. Every request schema sets
-   `model_config = ConfigDict(extra="forbid")`; this is what makes the "a `price` field is
-   rejected, not ignored" promise true in Stage 11. Phone validated against
-   `^\+[1-9]\d{6,14}$`.
-3. `app/deps.py` — `get_current_user` reading the `Authorization: Bearer` header, decoding,
-   and loading the user. Expired token → `401 TOKEN_EXPIRED`; malformed or unknown user →
-   `401 UNAUTHORIZED`.
-4. `app/services/rate_limit.py` — `enforce(key, limit, window_seconds)` built on
-   `cache.incr_with_expiry`. When it returns `None`, **allow the request** and log that the
-   limit was unenforceable. Failing closed would make a Redis outage an auth outage.
-5. `app/routers/auth.py` — `POST /api/auth/register`, `POST /api/auth/login`.
-6. `app/routers/users.py` — `GET /api/user/profile`.
-7. Wire both routers into `app/main.py`.
-
-### The three behaviours that must be exactly right
-
-These are the Stage 4 security decisions; getting them wrong silently re-opens the hole.
-
-- **Login never creates a user.** Unknown phone → `404` with code `USER_NOT_FOUND`. Not a
-  201, not an implicit insert.
-- **The OTP stub is gated on `settings.otp_stub_allowed`, nothing else.** When it is false
-  and no SMS provider exists, return `503 SERVICE_UNAVAILABLE`. Never fall through to
-  accepting `123456`.
-- **Register conflicts are `409 PHONE_ALREADY_REGISTERED`**, and the phone is normalised to
-  E.164 before the uniqueness check so `+919876543210` and ` +919876543210 ` collide.
+1. `scripts/seed.py` — 5 NH-44 routes and the seeded restaurants near the canonical demo
+   coordinate `29.02, 77.02` ([04_DATABASE_DESIGN.md](./04_DATABASE_DESIGN.md) §7).
+   Idempotent: re-running must not duplicate rows. Route polylines are generated offline
+   and stored, never fetched from OSRM at request time (ADR: OSRM is local-only).
+2. `app/services/routes.py` + `app/routers/routes.py` — `GET /api/routes`,
+   `GET /api/routes/{id}` ([05_API_SPEC.md](./05_API_SPEC.md) §5).
+3. Wire the router into `app/main.py`.
 
 ### Done when
 
-`tests/test_auth.py` covers, and passes: register success; register duplicate → 409; login
-with correct stub OTP → token; login wrong OTP → 401 `INVALID_OTP`; login unknown phone →
-404 `USER_NOT_FOUND`; profile with valid token → 200; profile with no token → 401; profile
-with expired token → 401 `TOKEN_EXPIRED`; and a test asserting the stub is refused when
-`otp_stub_allowed` is false.
+`GET /api/routes` returns the 5 seeded routes against a seeded database, and
+`tests/test_routes.py` covers the list, a single fetch, and a `404 NOT_FOUND` for an unknown
+id. Seeding twice leaves the row counts unchanged.
 
-Plus `ruff check`, `black --check`, and a real `curl` login against the running container.
+Plus `ruff check`, `black --check`, `pytest tests/ -q` all green, and a real `curl` against
+the running container.
 
 ### Running the stack
 
@@ -212,6 +196,12 @@ Decisions taken during the build that are not obvious from the code. Append, nev
 | 2026-07-30 | Health returns 503 only for a database failure | A missing or broken cache is degraded, not down. Returning 503 for it would make Render kill a service that still works |
 | 2026-07-30 | Rate limiting fails **open** when Redis is unavailable | Failing closed turns a cache outage into an auth outage. The limit is documented as best-effort for exactly this reason |
 | 2026-07-30 | All development runs in the container, not a host venv | Local Python is 3.14 and `pydantic-core` has no wheels for it; building from source needs a Rust toolchain. The container pins 3.11 |
+| 2026-07-30 | Login verifies the OTP **before** looking the phone up | Checking existence first makes the 404/401 split a registered-number oracle for a caller who has no valid OTP at all |
+| 2026-07-30 | A valid token for a deleted user is `401 UNAUTHORIZED`, identical to a bad signature | Distinguishing the two tells a token prober which user ids exist. Expiry stays distinguishable because a client needs to know to re-login |
+| 2026-07-30 | Phone separators stripped before pattern validation, not rejected | `+91 98765-43210` is what people type. Stripping in a `mode="before"` validator means the E.164 pattern still governs storage, and one number cannot become two rows |
+| 2026-07-30 | Tests use a `<dbname>_test` database derived from the ambient `DATABASE_URL`, created and migrated by `conftest.py` | The host differs between a container run and a host run; only the name should change. Deriving it also means the suite can never truncate the development database |
+| 2026-07-30 | `app/db.py` uses `NullPool` when `ENVIRONMENT == "test"` | pytest gives each test its own event loop and an asyncpg connection is bound to the loop that opened it, so a pooled connection fails with "Event loop is closed" on reuse. Pooling is unchanged everywhere else |
+| 2026-07-30 | `email-validator` added to `requirements.txt` | `pydantic.EmailStr` imports it at model-definition time and pydantic does not vendor it; without the pin the app fails at import, not at first use |
 
 ---
 
@@ -230,6 +220,14 @@ Things noticed but deliberately not acted on. Keeps them from being silently los
   CRUD lands.
 - Phase C (Stages 15–19) is intentionally not broken down. Scope it when Phase B is done
   and the shape of the client is clearer, not before.
+- **Discovered in Stage 8:** the Stage 7 suite never reached a live database. Its
+  `DATABASE_URL` named a `_test` database that did not exist, and the health test tolerates
+  `database: "unreachable"` by design, so it passed on the degraded branch. `conftest.py`
+  now creates and migrates that database, and the health check has been exercised against a
+  reachable one. Nothing in Stage 7 was wrong; it was less covered than it appeared.
+- Rate limits are unenforced whenever Redis is absent, including in the test suite, which
+  runs with `REDIS_URL` unset. `tests/test_auth.py` asserts both branches — fail-open
+  without a counter, and 429 with `Retry-After` when one is available.
 
 ---
 

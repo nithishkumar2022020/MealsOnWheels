@@ -39,9 +39,12 @@ spec first and record why — do not let code and docs drift apart.
 
 ## Repository state
 
-`git config user.name` and `user.email` are **unset**. Commits will fail until the owner
-sets them. Write files to disk and update the build plan; do not attempt to work around
-this by setting the identity yourself.
+Work happens on `autopilot/backend-build-20260730`, not `main`. Merging is the owner's call.
+
+A **repo-local** git identity (`Claude (autopilot)` / `noreply@anthropic.com`) was set so
+commits are possible at all; the owner's global config is untouched. See
+[AUTOPILOT_LOG.md](./AUTOPILOT_LOG.md) for how to re-author under a real name. Do not change
+this identity yourself.
 
 ## Security constraints
 
