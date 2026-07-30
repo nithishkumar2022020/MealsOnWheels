@@ -17,6 +17,8 @@ from app.config import get_settings
 from app.db import SessionLocal, engine
 from app.errors import AppError
 from app.logging_config import RequestContextMiddleware, configure_logging
+from app.routers import auth as auth_router
+from app.routers import users as users_router
 
 settings = get_settings()
 configure_logging()
@@ -70,6 +72,8 @@ async def _app_error_handler(request: Request, exc: AppError) -> JSONResponse:
     return JSONResponse(
         status_code=exc.status_code,
         content={"detail": exc.detail, "code": exc.code},
+        # Carries Retry-After on a 429; empty otherwise.
+        headers=exc.headers,
     )
 
 
@@ -114,6 +118,12 @@ async def _unhandled_error_handler(request: Request, exc: Exception) -> JSONResp
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         content={"detail": "Internal server error", "code": "INTERNAL_ERROR"},
     )
+
+
+# --- Routers --------------------------------------------------------------
+
+app.include_router(auth_router.router)
+app.include_router(users_router.router)
 
 
 # --- Health ---------------------------------------------------------------
