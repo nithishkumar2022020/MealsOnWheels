@@ -64,12 +64,19 @@ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 | `REDIS_URL` | `redis://redis:6379/0` | Render Redis URL |
 | `JWT_SECRET` | dev-only random string | 32+ byte random (Render secret) |
 | `JWT_EXPIRE_HOURS` | `24` | `24` |
-| `ENVIRONMENT` | `development` | `production` |
-| `CORS_ORIGINS` | `http://localhost:3000,http://localhost:8080` | Flutter web URL |
+| `ENVIRONMENT` | `development` | `production` — **must be set explicitly**; no default |
+| `RESTAURANT_DASHBOARD_TOKEN` | any dev string | **Unused in production** — the shared-token path is refused when `ENVIRONMENT=production` |
+| `CORS_ORIGINS` | `http://localhost:3000,http://localhost:8080` | Flutter web URL; never `*` |
 | `NOMINATIM_BASE_URL` | `https://nominatim.openstreetmap.org` | Same (throttled) |
+| `NOMINATIM_USER_AGENT` | `MealsOnWheels/1.0 (+https://github.com/nithishkumar2022020/MealsOnWheels)` | Same |
 | `OVERPASS_URL` | `https://overpass-api.de/api/interpreter` | Same (throttled) |
 
-### 3.2 Email (Stream E)
+Setting `ENVIRONMENT=production` disables the OTP stub, refuses the shared dashboard token,
+and turns off `/docs`, `/redoc`, and `/openapi.json`. Since the platform has no SMS provider
+and no per-restaurant auth yet, a production deploy today has **no working login path** —
+that is intentional. See [10_SECURITY.md](./10_SECURITY.md) §10 for what must land first.
+
+### 3.2 Email
 
 | Variable | Description |
 |----------|-------------|
@@ -93,10 +100,9 @@ docker compose exec postgres psql -U mealsonwheels -d highway_food_booking \
 
 ### 4.2 Production (Render)
 
-Add to `backend/scripts/migrate.py` or npm-style script:
+Run via `backend/scripts/migrate.py`:
 
 ```bash
-# package.json equivalent in Makefile or scripts
 python scripts/migrate.py
 ```
 
@@ -106,7 +112,7 @@ python scripts/migrate.py
 
 ---
 
-## 5. Render Setup (MVP Sprint — Stream E)
+## 5. Render Setup
 
 ### 5.1 Create resources
 
@@ -184,10 +190,9 @@ jobs:
           ruff check app/
           black --check app/
 
-      # Sprint: skip tests. Post-sprint: uncomment pytest step.
-      # - name: Test
-      #   working-directory: backend
-      #   run: pytest tests/ -v
+      - name: Test
+        working-directory: backend
+        run: pytest tests/ -v --cov=app --cov-fail-under=60
 
   deploy:
     needs: backend
@@ -198,7 +203,8 @@ jobs:
         run: echo "Render auto-deploys on push when connected"
 ```
 
-**MVP sprint:** Lint only. Tests enabled post-sprint per [11_TESTING.md](./11_TESTING.md).
+Lint and tests both gate the merge. A failing test blocks deploy — see
+[11_TESTING.md](./11_TESTING.md) §7. Flutter steps activate once the client exists.
 
 ### 6.2 Render auto-deploy
 
@@ -247,7 +253,27 @@ Render uses this for service health checks.
 - Structured JSON logs to stdout (Render captures)
 - Log level: `INFO` in production, `DEBUG` in development
 - Include request ID per request (middleware)
-- Never log PII or JWT tokens
+- Never log PII or JWT tokens; phone numbers masked as `+919****3210`
+
+**Request timing line.** The middleware emits one line per request so the P95 targets in
+[02_TECHNICAL_SPEC.md](./02_TECHNICAL_SPEC.md) §7 can actually be computed before
+Prometheus exists:
+
+```json
+{
+  "event": "request",
+  "request_id": "3f2a…",
+  "method": "GET",
+  "route": "/api/restaurants/search",
+  "status_code": 200,
+  "duration_ms": 84,
+  "cache_hit": true
+}
+```
+
+`route` is the **template**, not the resolved path — `/api/bookings/{id}`, never
+`/api/bookings/42`. Logging resolved paths makes percentiles impossible to group and leaks
+identifiers into logs. `cache_hit` is omitted on routes that do not consult the cache.
 
 ### 8.3 Monitoring (Phase 2)
 
@@ -287,7 +313,7 @@ Render uses this for service health checks.
 
 ---
 
-## 12. Deployment Checklist (Sprint Hour 22)
+## 12. Pre-Deploy Checklist
 
 - [ ] PostgreSQL created on Render; `DATABASE_URL` set
 - [ ] Redis created; `REDIS_URL` set
@@ -297,7 +323,8 @@ Render uses this for service health checks.
 - [ ] `POST /api/auth/login` works on production
 - [ ] Flutter `API_URL` points to production
 - [ ] CORS includes Flutter web origin
-- [ ] `TEST_RESULTS.md` documents E2E pass
+- [ ] Automated suite green in CI; manual smoke test
+      ([11_TESTING.md](./11_TESTING.md) §3) passes against the deployed URL
 
 ---
 

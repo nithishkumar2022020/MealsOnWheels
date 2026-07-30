@@ -21,9 +21,10 @@
 | [08_DEVELOPMENT_GUIDELINES.md](./08_DEVELOPMENT_GUIDELINES.md) | Dev setup, code conventions |
 | [09_ARCHITECTURE_DECISIONS.md](./09_ARCHITECTURE_DECISIONS.md) | ADR log with rationale |
 | [10_SECURITY.md](./10_SECURITY.md) | Threat model, auth, OWASP |
-| [11_TESTING.md](./11_TESTING.md) | Test strategy, manual sprint plan |
+| [11_TESTING.md](./11_TESTING.md) | Test strategy and smoke test plan |
 | [12_DEPLOYMENT.md](./12_DEPLOYMENT.md) | Docker, Render, CI/CD |
 | [13_ROADMAP.md](./13_ROADMAP.md) | Phased roadmap and risks |
+| [14_BUILD_PLAN.md](./14_BUILD_PLAN.md) | **Build progress and handoff log — start here** |
 
 ---
 
@@ -78,7 +79,8 @@ flowchart TD
 | Restaurant search | [02_TECHNICAL_SPEC.md](./02_TECHNICAL_SPEC.md) | [03_SYSTEM_ARCHITECTURE.md](./03_SYSTEM_ARCHITECTURE.md) |
 | Pay-on-arrival | ADR-0007 | [01_PRODUCT_SPEC.md](./01_PRODUCT_SPEC.md) |
 | Local dev setup | [08_DEVELOPMENT_GUIDELINES.md](./08_DEVELOPMENT_GUIDELINES.md) | [12_DEPLOYMENT.md](./12_DEPLOYMENT.md) |
-| Sprint manual tests | [11_TESTING.md](./11_TESTING.md) | [01_PRODUCT_SPEC.md](./01_PRODUCT_SPEC.md) AC section |
+| Manual smoke tests | [11_TESTING.md](./11_TESTING.md) | [01_PRODUCT_SPEC.md](./01_PRODUCT_SPEC.md) AC section |
+| Build progress / handoff | [14_BUILD_PLAN.md](./14_BUILD_PLAN.md) | [../CLAUDE.md](../CLAUDE.md) |
 | MVP vs Phase 2 | [13_ROADMAP.md](./13_ROADMAP.md) | [00_PROJECT_CHARTER.md](./00_PROJECT_CHARTER.md) non-goals |
 
 ---
@@ -102,8 +104,8 @@ flowchart TD
 ```
 MealsOnWheels/
 ├── docs/                 ← You are here
-├── backend/              ← FastAPI API (Stream A+)
-├── mobile/               ← Flutter app (Stream D)
+├── backend/              ← FastAPI API
+├── mobile/               ← Flutter app
 ├── dashboard/            ← Restaurant web console (Phase 2)
 ├── docker-compose.yml
 └── .github/workflows/

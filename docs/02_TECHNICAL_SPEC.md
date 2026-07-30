@@ -29,7 +29,7 @@ This document specifies **how** the system is built: technology choices, module 
 | Auth | JWT (python-jose) + phone OTP | Stateless access tokens; Redis-backed refresh (Phase 2) |
 | Containerization | Docker + docker-compose | Reproducible local and production environments |
 | CI/CD | GitHub Actions | Lint, test, build image, deploy |
-| Hosting (MVP sprint) | Render | Free tier PostgreSQL + Redis + web service |
+| Hosting (MVP) | Render | Free tier PostgreSQL + Redis + web service |
 
 **Why FastAPI over Node.js Express:** Async performance, Pydantic validation, OpenAPI generation, and direct path to Python ML services without a rewrite. See ADR-0001 in [09_ARCHITECTURE_DECISIONS.md](./09_ARCHITECTURE_DECISIONS.md).
 
@@ -54,11 +54,14 @@ MealsOnWheels/
 │   │   ├── routers/         # Route handlers
 │   │   └── services/        # Nominatim, Overpass, notifications
 │   ├── migrations/          # SQL migrations
+│   ├── scripts/
+│   │   ├── migrate.py       # Applies migrations against DATABASE_URL
+│   │   └── seed.py          # Routes, restaurants, test user
 │   ├── tests/
 │   ├── Dockerfile
 │   ├── requirements.txt
 │   └── .env.example
-├── mobile/                  # Flutter app (Stream D)
+├── mobile/                  # Flutter app
 ├── dashboard/               # Restaurant web console (Phase 2 or Flutter tab)
 ├── docker-compose.yml       # postgres, redis, osrm (optional), api
 └── .github/workflows/       # CI/CD
@@ -83,19 +86,28 @@ MealsOnWheels/
 
 ### 4.3 Restaurant search module (`services/overpass.py`, `routers/restaurants.py`)
 
-- `GET /api/restaurants/search?route_id&latitude&longitude&radius_km`
+- `GET /api/restaurants/search?latitude&longitude&radius_km[&route_id]`
 - Pipeline:
-  1. Check Redis cache key `restaurants:{route_id}:{lat}:{lon}:{radius}`
-  2. Query Overpass API for OSM `amenity=restaurant` nodes near coordinates
-  3. Join with local `restaurants` table for `hygiene_rating`, `avg_prep_time_minutes`
-  4. Fallback: if Overpass fails, return DB-seeded restaurants only
-  5. Cache result TTL 7 days
+  1. Check Redis cache key `restaurants:{lat}:{lon}:{radius}`. Hit → return with
+     `cached: true`
+  2. Query local `restaurants` by PostGIS radius
+     ([04_DATABASE_DESIGN.md](./04_DATABASE_DESIGN.md) §5.1)
+  3. Query Overpass for OSM `amenity=restaurant` nodes near the coordinates
+  4. **Upsert each Overpass POI into `restaurants` keyed on `osm_id`**
+     ([04_DATABASE_DESIGN.md](./04_DATABASE_DESIGN.md) §3.2.1) so every result carries a
+     real integer `id` and is bookable
+  5. Merge and dedupe local + promoted rows, order by distance
+  6. Cache the result with a 6-hour TTL (§5.5)
+- **Degradation:** if Overpass times out or errors, return step 2's results alone. Search
+  never fails because an external service did — it returns less.
+- The upsert in step 4 is the only write on this read path. It is idempotent, so a repeated
+  search does not duplicate rows.
 
 ### 4.4 Booking module (`models/booking.py`, `routers/bookings.py`)
 
 - Create booking with items JSON, compute `cutoff_time`
 - State machine enforcement (see [01_PRODUCT_SPEC.md](./01_PRODUCT_SPEC.md))
-- Notification hook on create (console stub → email in Stream E)
+- Notification hook on create (console stub → SMTP email)
 
 ### 4.5 Dashboard module (`routers/dashboard.py`)
 
@@ -118,45 +130,93 @@ MealsOnWheels/
 
 ### 5.1 Corridor restaurant search (production path)
 
-For routes with stored polyline geometry:
+For routes with stored polyline geometry, restaurants are selected by distance from the
+route line rather than from a single point.
 
-```sql
-SELECT r.*
-FROM restaurants r
-JOIN routes rt ON rt.id = :route_id
-WHERE ST_DWithin(
-  r.location::geography,
-  rt.geometry::geography,
-  :radius_meters
-)
-ORDER BY ST_Distance(r.location, ST_ClosestPoint(rt.geometry, r.location));
-```
+**Canonical query:** [04_DATABASE_DESIGN.md](./04_DATABASE_DESIGN.md) §5.2. It is defined
+there once so the two documents cannot drift; do not duplicate the SQL here.
 
-**Buffer:** Default 15 km (`radius_km=15`). Uses GiST index on `restaurants.location`.
+**Buffer:** Default 15 km (`radius_km=15`).
 
-**MVP sprint shortcut:** Point-radius search around traveller coordinates + Overpass supplement. PostGIS corridor query is Phase 1.5 once route polylines are seeded.
+**Index note:** `restaurants.location` is already `GEOGRAPHY`, so it must not be re-cast.
+`routes.geometry` is `GEOMETRY(LINESTRING, 4326)` and casting it to `geography` inline
+discards the `idx_routes_geometry` GiST index — see §5.2 of the database design for the
+form that keeps the index usable.
 
-### 5.2 Cutoff and ready-by calculation
+**Current implementation:** Point-radius search around the traveller's coordinates plus an
+Overpass supplement ([04_DATABASE_DESIGN.md](./04_DATABASE_DESIGN.md) §5.1). The corridor
+query lands once route polylines are seeded — Stage 16 in
+[14_BUILD_PLAN.md](./14_BUILD_PLAN.md).
+
+### 5.2 Cutoff, lead time, and ready-by calculation
 
 ```python
-cutoff_time = booking_time - timedelta(minutes=restaurant.avg_prep_time_minutes or 30)
-ready_by = booking_time - timedelta(minutes=5)
+prep = restaurant.avg_prep_time_minutes or 30
+
+# Reject before computing anything: the restaurant cannot physically make the window.
+if arrival_time < now + timedelta(minutes=prep):
+    raise ArrivalTooSoon
+
+cutoff_time = arrival_time - timedelta(minutes=prep)
+ready_by = arrival_time - timedelta(minutes=5)
 ```
 
-### 5.3 Rating aggregation (outlier exclusion)
+The lead-time floor is `avg_prep_time_minutes`, not a flat 30. Without it a booking placed
+minutes ahead yields a `cutoff_time` already in the past — a booking nobody can fulfil.
 
-1. Fetch all ratings for restaurant
-2. Compute mean μ and std σ for composite score `(hygiene + food_quality + timeliness) / 3`
-3. Exclude ratings where `|score - μ| > 2σ`
-4. Return mean of remaining scores
+A `pending` booking whose `cutoff_time` passes without confirmation **stays `pending`** and
+is flagged overdue on the dashboard. Nothing auto-rejects it in MVP; a human decides.
 
-### 5.4 Cache key design
+### 5.3 Order pricing
+
+```python
+menu = get_menu(restaurant_id)          # server-owned, see 05_API_SPEC §6.2
+prices = {item["name"]: item["price"] for item in menu}
+
+for line in request.items:              # request carries name + qty only
+    if line.name not in prices:
+        raise ValidationError(f"'{line.name}' is not on this restaurant's menu")
+
+resolved = [{"name": l.name, "qty": l.qty, "price": prices[l.name]} for l in request.items]
+total_price = sum(l["price"] * l["qty"] for l in resolved)
+```
+
+`resolved` is what gets persisted to `bookings.items`, freezing the unit prices at order
+time. The client never supplies a price; a `price` key in the request is rejected outright
+by `extra="forbid"`.
+
+### 5.4 Rating aggregation
+
+```python
+composite = (hygiene_score + food_quality_score + timeliness_score) / 3
+```
+
+`restaurants.composite_rating` is the **plain mean** of every rating's composite, with
+`rating_count` tracking how many. Both update incrementally when a rating is created — no
+full-table scan.
+
+Outlier exclusion is deliberately **not** done. The original design discarded ratings more
+than 2σ from the mean, which is unsound at these sample sizes: σ is degenerate at n ≤ 2, and
+at n = 5 a single honest 1-star review gets thrown away. Genuine outlier handling belongs
+with rating moderation and fraud detection in Phase 2
+([13_ROADMAP.md](./13_ROADMAP.md) §4).
+
+### 5.5 Cache key design
 
 | Key pattern | TTL | Content |
 |-------------|-----|---------|
 | `nominatim:{lat}:{lon}` | 30 days | Reverse geocode JSON |
-| `restaurants:{route_id}:{lat}:{lon}:{radius}` | 7 days | Search result array |
+| `restaurants:{lat}:{lon}:{radius}` | 6 hours | Search result array |
 | `otp:{phone}` | 5 min | OTP session (Phase 2) |
+
+**Why 6 hours, not 7 days:** a restaurant that registers itself must become discoverable
+within a usable timeframe. At a 7-day TTL a new dhaba stays invisible for a week, and the
+only documented invalidation was a manual flush. Six hours bounds the staleness without
+losing the Overpass-load reduction the cache exists for.
+
+`route_id` is not part of the search cache key — the MVP search is point-radius and does not
+read it (see §5.1). Adding it to the key would fragment the cache across routes that return
+identical results.
 
 ---
 
@@ -166,7 +226,15 @@ ready_by = booking_time - timedelta(minutes=5)
 
 - Endpoint: configurable `NOMINATIM_BASE_URL` (default public with User-Agent)
 - Rate limit: **1 request/second** client-side throttle
-- Required header: `User-Agent: MealsOnWheels/1.0 (contact@example.com)`
+- Required header: `User-Agent: MealsOnWheels/1.0 (+https://github.com/nithishkumar2022020/MealsOnWheels)`
+  — set from the `NOMINATIM_USER_AGENT` env var. Nominatim's usage policy requires a
+  genuine identifying agent and blocks generic or placeholder values, so this must not be
+  left as an example string.
+
+**Usage policy, not just rate limits:** the public Nominatim and Overpass instances
+prohibit sustained application traffic regardless of throttling. The 1 req/sec throttle
+keeps development compliant; a public launch requires self-hosting both (or a paid
+provider). Tracked as Stage 19 in [14_BUILD_PLAN.md](./14_BUILD_PLAN.md).
 
 ### 6.2 Overpass API
 
@@ -193,14 +261,30 @@ ready_by = booking_time - timedelta(minutes=5)
 | Category | Requirement | Target |
 |----------|-------------|--------|
 | Availability | MVP demo uptime | 99% (Render free tier cold starts excluded) |
-| Latency | Restaurant search (cache hit) | P95 < 800 ms |
+| Latency | Restaurant search (cache hit) | P95 < 800 ms; typically < 100 ms |
 | Latency | Restaurant search (cache miss) | P95 < 5 s |
+| Latency | Restaurant search (Redis unavailable) | P95 < 5 s — every request behaves as a cache miss |
 | Latency | Booking create | P95 < 500 ms |
 | Concurrency | MVP | 50 concurrent users |
-| Data retention | Bookings, ratings | 2 years |
-| Backup | PostgreSQL | Daily automated (Render managed) |
+| Data retention | Bookings, ratings | 2 years (policy target — see note) |
+| Backup | PostgreSQL | Daily automated, 7-day retention (Render free tier) |
 | i18n | MVP | English only; Hindi Phase 2 |
 | Accessibility | Mobile + dashboard | WCAG 2.1 AA ([07_UI_UX_GUIDELINES.md](./07_UI_UX_GUIDELINES.md)) |
+
+**Latency:** P95 < 800 ms on a cache hit is the requirement. Cache hits normally land well
+under 100 ms; that is an expectation, not a separate target. These figures assume Redis is
+available — the degraded row above applies when it is not.
+
+**Retention:** 2 years is the *policy*, and the current infrastructure does not meet it. The
+Render free tier keeps 7 days of backups, so a data loss older than a week is unrecoverable.
+Honouring the policy requires a paid tier or external backup export; until then, do not
+represent the platform as a 2-year system of record.
+
+**Measurability:** every P95 target here requires request timing to exist. MVP logs
+`duration_ms`, `route`, `status_code`, and `cache_hit` per request as structured JSON
+([12_DEPLOYMENT.md](./12_DEPLOYMENT.md) §8.2), which is enough to compute these percentiles
+from logs. Prometheus/Grafana remains Phase 2, but the targets are not unmeasurable in the
+meantime.
 
 ---
 
@@ -210,14 +294,24 @@ Documented in `backend/.env.example` and [12_DEPLOYMENT.md](./12_DEPLOYMENT.md):
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `DATABASE_URL` | Yes | PostgreSQL connection string |
-| `REDIS_URL` | No | Redis URL; omit for DB-only fallback |
+| `DATABASE_URL` | Yes | PostgreSQL connection string (asyncpg driver) |
 | `JWT_SECRET` | Yes | HS256 signing secret (≥ 32 bytes) |
+| `ENVIRONMENT` | Yes | `development` \| `test` \| `production`. Gates the OTP stub, the dashboard token, and the API docs — so it has no default |
+| `RESTAURANT_DASHBOARD_TOKEN` | Yes when `ENVIRONMENT != production` | Shared secret for `X-Restaurant-Token` |
+| `REDIS_URL` | No | Redis URL; omit to run without cache |
 | `JWT_EXPIRE_HOURS` | No | Default 24 |
 | `NOMINATIM_BASE_URL` | No | Default public Nominatim |
+| `NOMINATIM_USER_AGENT` | No | Identifying agent required by Nominatim's usage policy (§6.1) |
 | `OVERPASS_URL` | No | Default public Overpass |
-| `CORS_ORIGINS` | No | Comma-separated allowed origins |
-| `ENVIRONMENT` | No | `development` \| `production` |
+| `CORS_ORIGINS` | No | Comma-separated allowed origins; never `*` in production |
+| `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASSWORD` / `EMAIL_FROM` | No | Notification email; unset logs notifications instead of sending |
+
+`ENVIRONMENT` deliberately has **no default**. Three security controls key off it, and a
+value that defaults to `development` would mean a deploy that forgot to set it silently
+enables the OTP stub in production. Startup fails if it is unset or unrecognised.
+
+Startup also fails if `ENVIRONMENT=production` and `JWT_SECRET` is shorter than 32 bytes or
+matches a known development placeholder. Fail at boot, not at first login.
 
 ---
 

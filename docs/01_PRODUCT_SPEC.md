@@ -57,7 +57,7 @@ This document defines **what** the product does for MVP: user stories, feature l
 
 | Feature | MVP | Phase 2 | Notes |
 |---------|-----|---------|-------|
-| Phone + OTP login | ✅ | Enhance with real SMS | OTP stub `123456` in sprint |
+| Phone + OTP login | ✅ | Real SMS provider | OTP stub `123456`, gated to non-production |
 | Route selection | ✅ | Custom origin/dest | 5 seeded routes in MVP |
 | Restaurant search (corridor) | ✅ | PostGIS + OSM hybrid | See [02_TECHNICAL_SPEC.md](./02_TECHNICAL_SPEC.md) |
 | Map view (MapLibre) | ✅ | Clustering, offline tiles | List-only fallback if map fails |
@@ -136,7 +136,7 @@ stateDiagram-v2
 ### 6.1 Cutoff time
 
 ```
-cutoff_time = booking_time - prep_buffer_minutes
+cutoff_time = arrival_time - prep_buffer_minutes
 ```
 
 - Default `prep_buffer_minutes = 30` (configurable per restaurant via `avg_prep_time_minutes`)
@@ -146,15 +146,19 @@ cutoff_time = booking_time - prep_buffer_minutes
 ### 6.2 Ready-by time
 
 ```
-ready_by = booking_time - 5 minutes
+ready_by = arrival_time - 5 minutes
 ```
 
 Restaurant should aim to have food ready 5 minutes before stated arrival to absorb minor delays.
 
 ### 6.3 Pricing
 
-- MVP: item prices supplied in booking request (from menu display)
-- `total_price = sum(item.price * item.qty)`
+- The booking request carries item **names and quantities only**. The server resolves each
+  unit price from the restaurant's own menu — a client cannot propose a price
+- `total_price = Σ (menu_price(item.name) × item.qty)`, computed server-side
+- Resolved unit prices are frozen onto the booking at creation, so a later menu change does
+  not alter a placed order
+- An item name that is not on that restaurant's menu rejects the whole booking
 - No platform fee in MVP
 
 ### 6.4 Payment
@@ -208,13 +212,21 @@ Detailed UX in [07_UI_UX_GUIDELINES.md](./07_UI_UX_GUIDELINES.md).
 
 ### AC-2: Restaurant discovery
 
-- [ ] User selects route Delhi-Chandigarh
-- [ ] Search returns ≥ 1 restaurant within 15 km of route corridor
-- [ ] Second identical search responds from cache (< 100 ms)
+- [ ] Search from the canonical demo point `29.02, 77.02` with the default 15 km radius
+      returns ≥ 1 seeded restaurant, ordered by distance
+- [ ] Every result carries a real integer `id` and can be booked, including
+      `source: "osm"` results
+- [ ] A second identical search returns `cached: true` and is measurably faster
+- [ ] With Overpass unreachable, the search still returns the seeded restaurants
+
+Corridor-based discovery ("within 15 km of the route line") replaces the radius assertion
+when corridor search lands — Stage 16 in
+[14_BUILD_PLAN.md](./14_BUILD_PLAN.md). The current search is point-radius and `route_id` is
+optional, so an AC written against a corridor could not pass.
 
 ### AC-3: Booking
 
-- [ ] User creates booking with ≥ 1 item and future `booking_time`
+- [ ] User creates booking with ≥ 1 item and future `arrival_time`
 - [ ] Response includes `booking_id`, `status=pending`, `cutoff_time`
 - [ ] Restaurant dashboard lists the order sorted by cutoff
 
@@ -228,13 +240,17 @@ Detailed UX in [07_UI_UX_GUIDELINES.md](./07_UI_UX_GUIDELINES.md).
 ### AC-5: Deployment
 
 - [ ] Backend live on Render; Flutter/web points to production API URL
-- [ ] End-to-end flow documented in `TEST_RESULTS.md` (sprint deliverable)
+- [ ] Automated suite green against the deployed instance; manual smoke test
+      ([11_TESTING.md](./11_TESTING.md) §3) passes on the production URL
 
 ---
 
 ## 10. Out-of-Scope Reminder
 
-Do not build in MVP: payments, SMS, ML ETA, OAuth, POS, analytics dashboards, automated testing suite (manual QA in final 2 hours of sprint).
+Do not build in MVP: payments, SMS, ML ETA, OAuth, POS integration, analytics dashboards.
+
+Automated tests are **not** on this list — they ship with each stage
+([11_TESTING.md](./11_TESTING.md)).
 
 ---
 

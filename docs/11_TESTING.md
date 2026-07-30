@@ -8,9 +8,14 @@
 
 ## 1. Testing Philosophy
 
-**24-hour sprint rule:** Manual testing only in the final 2 hours. No automated test suite is a sprint deliverable.
+**Tests ship with the code that they cover.** Every implementation stage in
+[14_BUILD_PLAN.md](./14_BUILD_PLAN.md) ends with its tests passing — a stage is not done
+until they do. This replaces the original plan, which deferred all testing to a manual pass
+at the end of a 24-hour sprint.
 
-**Post-sprint rule:** Build a test pyramid before public launch. Tests protect the booking state machine and auth flows — the highest-risk areas.
+Tests protect the booking state machine and the auth flows first. Those are the highest-risk
+areas: a wrong state transition is unrecoverable for a real order, and an auth gap is
+unrecoverable for a real user.
 
 Principles:
 - Test behavior, not implementation details
@@ -20,7 +25,7 @@ Principles:
 
 ---
 
-## 2. Test Pyramid (Post-Sprint Target)
+## 2. Test Pyramid (Target)
 
 ```mermaid
 flowchart TB
@@ -40,9 +45,11 @@ flowchart TB
 
 ---
 
-## 3. Sprint Manual Test Plan (Final 2 Hours)
+## 3. Manual Smoke Test Plan
 
-Document results in `TEST_RESULTS.md` at repo root.
+Run this end to end after any stage that touches the booking lifecycle, and again before
+any deploy. It complements the automated suite rather than replacing it — it catches
+wiring and environment problems that unit and integration tests cannot see.
 
 ### 3.1 Authentication
 
@@ -92,7 +99,7 @@ Document results in `TEST_RESULTS.md` at repo root.
 
 ---
 
-## 4. Backend Automated Tests (Post-Sprint)
+## 4. Backend Automated Tests
 
 ### 4.1 Setup
 
@@ -138,7 +145,7 @@ async def test_status_transition(from_status, to_status, expected_code):
 
 ---
 
-## 5. Flutter Tests (Post-Sprint)
+## 5. Flutter Tests
 
 ### 5.1 Widget tests
 
@@ -166,12 +173,18 @@ Fixed coordinates for deterministic tests:
 |---------|-----|-----|---------|
 | `DELHI_CENTER` | 28.6139 | 77.2090 | Route origin |
 | `CHANDIGARH_CENTER` | 30.7333 | 76.7794 | Route destination |
-| `MURTHAL_Dhaba` | 29.0012 | 77.0123 | Seeded restaurant |
+| `SEARCH_ORIGIN` | 29.0200 | 77.0200 | **Canonical demo search point** (NH-44 near Murthal) |
+| `MURTHAL_DHABA` | 29.0012 | 77.0123 | Seeded restaurant, ~2.2 km from `SEARCH_ORIGIN` |
 | `OUT_OF_RANGE` | 20.0000 | 75.0000 | Should return empty search |
+
+`SEARCH_ORIGIN` is the same coordinate used in [05_API_SPEC.md](./05_API_SPEC.md) §6.1 and
+[07_UI_UX_GUIDELINES.md](./07_UI_UX_GUIDELINES.md) §3.2. Searching from it with the default
+15 km radius must return the seeded corridor restaurants — if it returns nothing, the seed
+data and the fixture have drifted apart.
 
 ---
 
-## 7. CI Test Gates (Post-Sprint)
+## 7. CI Test Gates
 
 GitHub Actions job `test`:
 
@@ -183,7 +196,12 @@ GitHub Actions job `test`:
 - Run flutter test
 ```
 
-MVP sprint CI: lint only, no test gate ([12_DEPLOYMENT.md](./12_DEPLOYMENT.md)).
+The test gate is **enabled** — see [12_DEPLOYMENT.md](./12_DEPLOYMENT.md) §6.1. A failing
+test blocks the merge. The coverage floor starts at 60% and rises as modules land; it is a
+floor, not a target.
+
+Flutter steps activate once the client exists (Stage 15); until then the backend job runs
+alone.
 
 ---
 
@@ -201,5 +219,6 @@ MVP sprint CI: lint only, no test gate ([12_DEPLOYMENT.md](./12_DEPLOYMENT.md)).
 
 - [01_PRODUCT_SPEC.md](./01_PRODUCT_SPEC.md) — Acceptance criteria
 - [05_API_SPEC.md](./05_API_SPEC.md) — Endpoint contracts to test against
-- [08_DEVELOPMENT_GUIDELINES.md](./08_DEVELOPMENT_GUIDELINES.md) — Sprint testing exception
+- [08_DEVELOPMENT_GUIDELINES.md](./08_DEVELOPMENT_GUIDELINES.md) — Code conventions
+- [14_BUILD_PLAN.md](./14_BUILD_PLAN.md) — Which tests belong to which stage
 - [12_DEPLOYMENT.md](./12_DEPLOYMENT.md) — CI pipeline

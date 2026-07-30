@@ -76,15 +76,23 @@ flowchart LR
     DevAPI[backend:8000]
     DevPG[postgres:5432]
     DevRedis[redis:6379]
-    DevOSRM[osrm:5000]
+    DevOSRM[osrm:5000_optional]
   end
 
   Flutter -->|HTTPS_JSON| WebSvc
   DashWeb -->|HTTPS_JSON| WebSvc
   WebSvc --> PG
   WebSvc --> Redis
-  WebSvc -->|optional| DevOSRM
+
+  DevAPI --> DevPG
+  DevAPI --> DevRedis
+  DevAPI -->|route_polyline_seeding| DevOSRM
 ```
+
+The two subgraphs are **separate environments**, not connected tiers. OSRM runs only in
+local Docker Compose and is used offline when seeding route polylines; the Render
+production service never calls it. Production routes are seeded from polylines generated
+locally and committed to the seed data.
 
 ---
 
@@ -207,18 +215,33 @@ flowchart LR
 
 | Layer | What | Invalidation |
 |-------|------|--------------|
-| Redis | Restaurant search results | TTL 7 days; manual flush on restaurant update |
+| Redis | Restaurant search results | TTL 6 hours |
 | Redis | Nominatim reverse geocode | TTL 30 days |
-| Client (Flutter) | JWT in SharedPreferences | On logout / 401 |
+| Client (Flutter) | JWT in `flutter_secure_storage` (Keychain/Keystore) | On logout / 401 |
 | PostgreSQL | Materialized views (Phase 2) | Nightly refresh for stats |
 
-**Redis unavailable:** Application sets `REDIS_AVAILABLE=false` at startup and skips cache reads/writes. All requests hit DB and external APIs directly. Log warning once at boot.
+Search results use a 6-hour TTL so a newly activated restaurant becomes discoverable within
+a usable window. At the original 7 days a new dhaba stayed invisible for a week, with manual
+flush as the only remedy.
+
+**Redis unavailable — fail open, per operation.** Every cache read and write is individually
+guarded: on connection error, timeout, or any Redis exception, the operation is logged and
+treated as a miss, and the request proceeds against PostgreSQL and the external APIs.
+
+This is deliberately *not* a boot-time flag. The earlier design probed Redis once at startup
+and set `REDIS_AVAILABLE=false`, which handles only the case where Redis is already down
+when the process starts. The more common failure — Redis dying, restarting, or dropping
+connections mid-run, which is routine on a free tier — would have raised on every subsequent
+request. Cache is an optimisation; it must never be able to fail a request.
+
+To avoid log spam, the unavailability warning is emitted at most once per minute rather than
+once per failed operation.
 
 ---
 
 ## 9. Geospatial Architecture
 
-### MVP (sprint)
+### MVP
 
 - Point-radius search: restaurants within `radius_km` of `(latitude, longitude)`
 - Overpass supplements OSM POIs not yet in local DB
@@ -262,12 +285,16 @@ Details in [12_DEPLOYMENT.md](./12_DEPLOYMENT.md).
 
 | Failure | System behavior |
 |---------|-----------------|
-| Redis down | Continue without cache; higher latency |
-| Overpass timeout | Return DB-seeded restaurants only |
-| Nominatim rate limit | Return cached or skip reverse geocode label |
+| Redis down | Every cache operation fails open individually; requests proceed uncached at higher latency. Rate limits degrade to best-effort per-process |
+| Overpass timeout | Return DB restaurants only; search succeeds with fewer results |
+| Nominatim rate limit | Return cached or skip the reverse-geocode label; never fail the request |
 | PostgreSQL down | 503 on all data endpoints; health check fails |
-| OSRM down | Route polylines unavailable; point search still works |
-| Email SMTP down | Log notification; booking still created |
+| OSRM down | Local seeding only — production does not call OSRM (§3) |
+| Email SMTP down | Log the notification; booking still created |
+| Restaurant has no contact (OSM-derived) | Booking succeeds; notification stub logs that there was nobody to notify |
+
+The common rule: **an external dependency failing degrades the response, it does not fail
+the request.** Only PostgreSQL is load-bearing enough to return 503.
 
 ---
 
@@ -277,10 +304,16 @@ Details in [12_DEPLOYMENT.md](./12_DEPLOYMENT.md).
 |-------|--------------|
 | MVP | Single Render web service, managed PG + Redis |
 | 10K DAU | Horizontal API replicas behind load balancer; connection pooling (PgBouncer) |
-| 100K DAU | Read replica for search; CDN for static assets; dedicated Overpass/Nominatim |
-| 1M+ DAU | Extract notification service; event bus (Redis Streams → Kafka); ETA microservice |
+| 100K DAU | Read replica for search; CDN for static assets; self-hosted Overpass/Nominatim |
 
-No premature extraction in MVP.
+Beyond 100K DAU the useful answer depends on which dimension actually hurts — notification
+volume, search throughput, or write contention on bookings — and that is not knowable from
+here. The seams that would allow extraction (`services/`, `routers/`) exist already
+(ADR-0002); which one to pull is a decision for whoever has the traffic data.
+
+**No premature extraction.** An earlier draft specified Kafka, an event bus, and an extracted
+ETA microservice at 1M+ DAU. That is a plan for a system that does not exist yet, written
+before a single request has been served, and it sits badly against "do not overengineer".
 
 ---
 

@@ -1,0 +1,36 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+
+# Flutter / Dart
+mobile/.dart_tool/
+mobile/build/
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+mobile/ios/Pods/
+mobile/android/.gradle/
+mobile/android/local.properties
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
+
+# Local artefacts
+*.log
+
+# NOTE: backend/openapi.json is deliberately NOT ignored — it is committed so CI
+# can detect drift between the prose contract and the generated schema
+# (05_API_SPEC.md section 13).

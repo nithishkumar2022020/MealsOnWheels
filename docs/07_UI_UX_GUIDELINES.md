@@ -77,8 +77,9 @@ flowchart TD
 
 **Layout:**
 - Route dropdown (5 seeded routes)
-- Current location display (mock MVP: "Near Delhi (30.9, 77.7)")
-- Date/time picker for `booking_time` (default: now + 2 hours)
+- Current location display (mock: "Near Murthal, NH-44 (29.02, 77.02)" — the canonical demo
+  coordinate from [05_API_SPEC.md](./05_API_SPEC.md) §6.1)
+- Date/time picker for `arrival_time` (default: now + 2 hours)
 - "Search restaurants" primary button
 
 **Behavior:**
