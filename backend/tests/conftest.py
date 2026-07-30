@@ -1,17 +1,24 @@
 """Shared test fixtures.
 
 Environment is set before any app module is imported, so config.Settings
-validates against test values rather than whatever is in a local .env.
+validates against test values rather than whatever is in a local .env, and the
+app engine is built pointing at the test database rather than the dev one.
 """
 
 from __future__ import annotations
 
 import os
+from pathlib import Path
+from urllib.parse import urlparse, urlunparse
 
-os.environ.setdefault("ENVIRONMENT", "test")
+# Assigned, not setdefault: docker-compose sets ENVIRONMENT=development for the
+# container, and the suite must not run under a different environment than the
+# one it reports. ENVIRONMENT also selects NullPool in app/db.py, without which
+# pooled asyncpg connections leak across pytest's per-test event loops.
+os.environ["ENVIRONMENT"] = "test"
 os.environ.setdefault(
     "DATABASE_URL",
-    "postgresql+asyncpg://mealsonwheels:localdev@localhost:5432/highway_food_booking_test",
+    "postgresql+asyncpg://mealsonwheels:localdev@localhost:5432/highway_food_booking",
 )
 os.environ.setdefault("JWT_SECRET", "test-secret-value-that-is-long-enough-32chars")
 os.environ.setdefault("RESTAURANT_DASHBOARD_TOKEN", "test-restaurant-token")
@@ -19,8 +26,92 @@ os.environ.setdefault("RESTAURANT_DASHBOARD_TOKEN", "test-restaurant-token")
 # tested explicitly where it matters.
 os.environ.pop("REDIS_URL", None)
 
+
+def _as_test_database(url: str) -> str:
+    """Point a DATABASE_URL at `<dbname>_test`.
+
+    Derived from the ambient URL rather than hardcoded, because the host differs
+    between a container run (`postgres:5432`) and a host run (`localhost:5432`)
+    and only the database name should change. Deriving it also means the suite
+    can never truncate the development database: the name it connects to is
+    always the one ending in `_test`.
+    """
+    parts = urlparse(url)
+    name = parts.path.lstrip("/")
+    if name.endswith("_test"):
+        return url
+    return urlunparse(parts._replace(path=f"/{name}_test"))
+
+
+os.environ["DATABASE_URL"] = _as_test_database(os.environ["DATABASE_URL"])
+
+import psycopg2  # noqa: E402
 import pytest  # noqa: E402
 from httpx import ASGITransport, AsyncClient  # noqa: E402
+from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT  # noqa: E402
+from sqlalchemy import text  # noqa: E402
+
+MIGRATIONS_DIR = Path(__file__).resolve().parent.parent / "migrations"
+
+# Every table the schema owns, truncated between tests. Listed explicitly rather
+# than discovered, so a new table has to be added here deliberately instead of
+# silently leaking rows into the next test.
+TABLES = ("ratings", "bookings", "bus_gps_events", "restaurants", "routes", "users")
+
+
+def _sync_url(url: str) -> str:
+    return url.replace("postgresql+asyncpg://", "postgresql://")
+
+
+def _create_test_database_if_missing() -> None:
+    """CREATE DATABASE cannot run inside a transaction, hence autocommit."""
+    test_url = _sync_url(os.environ["DATABASE_URL"])
+    target = urlparse(test_url).path.lstrip("/")
+    admin_url = urlunparse(urlparse(test_url)._replace(path="/postgres"))
+
+    conn = psycopg2.connect(admin_url)
+    try:
+        conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+        with conn.cursor() as cur:
+            cur.execute("SELECT 1 FROM pg_database WHERE datname = %s", (target,))
+            if cur.fetchone() is None:
+                # Identifier cannot be parameterised; `target` comes from our own
+                # env-derived URL, not from a request.
+                cur.execute(f'CREATE DATABASE "{target}"')
+    finally:
+        conn.close()
+
+
+def _apply_migrations() -> None:
+    conn = psycopg2.connect(_sync_url(os.environ["DATABASE_URL"]))
+    try:
+        with conn.cursor() as cur:
+            for path in sorted(MIGRATIONS_DIR.glob("*.sql")):
+                cur.execute(path.read_text())
+        conn.commit()
+    finally:
+        conn.close()
+
+
+@pytest.fixture(scope="session", autouse=True)
+def database() -> None:
+    """Ensure the test database exists and carries the current schema.
+
+    Session-scoped: migrations are idempotent but re-running them per test would
+    dominate the runtime.
+    """
+    _create_test_database_if_missing()
+    _apply_migrations()
+
+
+@pytest.fixture(autouse=True)
+async def clean_tables(database: None):
+    """Truncate before each test so ordering cannot affect an outcome."""
+    from app.db import engine
+
+    async with engine.begin() as conn:
+        await conn.execute(text(f"TRUNCATE {', '.join(TABLES)} RESTART IDENTITY CASCADE"))
+    yield
 
 
 @pytest.fixture
