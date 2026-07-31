@@ -147,6 +147,11 @@ Every request schema is `extra="forbid"`. Sending a field the server does not mo
 **422, not a silent ignore**. So a mockup cannot "send `is_active`" or "send a price" — those
 are refused. This is deliberate and is the control behind server-side pricing.
 
+**Query strings behave the opposite way.** `extra="forbid"` applies to JSON bodies only, so an
+unrecognised query parameter is silently dropped and the request returns 200 —
+`?...&sort=rating` is accepted and does nothing. Verified. Do not infer from a 200 that a
+parameter is supported.
+
 ---
 
 ## 4. Blocking mismatches — design and server disagree
