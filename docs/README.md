@@ -25,6 +25,7 @@
 | [12_DEPLOYMENT.md](./12_DEPLOYMENT.md) | Docker, Render, CI/CD |
 | [13_ROADMAP.md](./13_ROADMAP.md) | Phased roadmap and risks |
 | [14_BUILD_PLAN.md](./14_BUILD_PLAN.md) | **Build progress and handoff log — start here** |
+| [15_FRONTEND_CONTRACT_AUDIT.md](./15_FRONTEND_CONTRACT_AUDIT.md) | Backend vs frozen frontend design — **open decisions** |
 
 ---
 
