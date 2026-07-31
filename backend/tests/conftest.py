@@ -135,6 +135,28 @@ async def seeded(clean_tables) -> None:
 
 
 @pytest.fixture
+def db_exec(database: None):
+    """Run a statement directly against the test database.
+
+    For arranging state the API cannot set — flipping `is_active`, planting a
+    rating aggregate. Synchronous and committed immediately so the app's own
+    session sees it.
+    """
+    import psycopg2
+
+    def run(sql: str) -> None:
+        conn = psycopg2.connect(_sync_url(os.environ["DATABASE_URL"]))
+        try:
+            with conn.cursor() as cur:
+                cur.execute(sql)
+            conn.commit()
+        finally:
+            conn.close()
+
+    return run
+
+
+@pytest.fixture
 async def client():
     """HTTP client bound to the app without starting a server."""
     from app.main import app

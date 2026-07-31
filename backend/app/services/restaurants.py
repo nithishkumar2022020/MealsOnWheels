@@ -1,0 +1,174 @@
+"""Restaurant search and detail.
+
+The radius query follows docs/04_DATABASE_DESIGN.md section 5.1 exactly:
+`ST_DWithin` against the `GEOGRAPHY` column so the GiST index on
+`idx_restaurants_location` is usable, and `location` is *not* re-cast — casting a
+column inline makes the expression non-indexable and turns the search into a
+sequential scan.
+
+`ST_Distance` on two geography values returns metres along the spheroid, which is
+what the API reports as `distance_km`.
+"""
+
+from __future__ import annotations
+
+import logging
+from decimal import Decimal
+
+from geoalchemy2 import Geography, Geometry
+from sqlalchemy import cast, func, select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.cache import cache
+from app.errors import not_found
+from app.logging_config import cache_hit_ctx
+from app.models import Restaurant
+from app.schemas import (
+    MenuItemResponse,
+    RestaurantDetailResponse,
+    RestaurantSearchResult,
+)
+from app.services.menu import menu_for
+
+logger = logging.getLogger(__name__)
+
+# Six hours, not seven days: a self-registered restaurant has to become
+# discoverable within a usable window, and the only documented invalidation is a
+# manual flush (docs/02_TECHNICAL_SPEC.md section 5.5).
+SEARCH_CACHE_TTL_SECONDS = 6 * 3600
+
+DEFAULT_RADIUS_KM = 15.0
+MAX_RADIUS_KM = 50.0
+
+# Coordinates are rounded to ~11 m before they enter the cache key. Raw floats
+# would give almost every request its own key — a GPS fix jitters in the seventh
+# decimal place — and the cache would never be hit.
+_KEY_PRECISION = 4
+
+
+def search_cache_key(latitude: float, longitude: float, radius_km: float) -> str:
+    """`restaurants:{lat}:{lon}:{radius}` per docs/02_TECHNICAL_SPEC.md §5.5.
+
+    `route_id` is deliberately absent: the MVP search is point-radius and never
+    reads it, so including it would fragment the cache across routes that return
+    identical results.
+    """
+    lat = round(latitude, _KEY_PRECISION)
+    lon = round(longitude, _KEY_PRECISION)
+    return f"restaurants:{lat}:{lon}:{radius_km}"
+
+
+def _to_result(row: object) -> RestaurantSearchResult:
+    mapping = dict(row)  # type: ignore[call-overload]
+    rating: Decimal | None = mapping["composite_rating"]
+    return RestaurantSearchResult(
+        id=mapping["id"],
+        name=mapping["name"],
+        lat=mapping["lat"],
+        lon=mapping["lon"],
+        # Metres from PostGIS; the API reports kilometres to 1 decimal.
+        distance_km=round(mapping["distance_m"] / 1000.0, 1),
+        # 0 means unrated. Reported as null so a client does not render a new
+        # restaurant as zero stars (docs/05_API_SPEC.md §6.1).
+        composite_rating=rating if mapping["rating_count"] > 0 else None,
+        avg_prep_time_minutes=mapping["avg_prep_time_minutes"],
+        address=mapping["address"],
+        source="osm" if mapping["osm_id"] is not None else "local",
+    )
+
+
+async def search_local(
+    db: AsyncSession,
+    latitude: float,
+    longitude: float,
+    radius_km: float,
+) -> list[RestaurantSearchResult]:
+    """Active restaurants within `radius_km`, nearest first.
+
+    `is_active = false` rows are excluded, which is what makes self-registration
+    safe: an unreviewed submission is never served.
+    """
+    point = cast(func.ST_SetSRID(func.ST_MakePoint(longitude, latitude), 4326), Geography)
+    distance = func.ST_Distance(Restaurant.location, point)
+
+    # Cast for the accessors only. Restaurant.location itself is never re-cast
+    # in the WHERE clause — that would make the expression non-indexable and
+    # turn this into a sequential scan.
+    location_geom = cast(Restaurant.location, Geometry)
+
+    stmt = (
+        select(
+            Restaurant.id,
+            Restaurant.name,
+            Restaurant.address,
+            Restaurant.composite_rating,
+            Restaurant.rating_count,
+            Restaurant.avg_prep_time_minutes,
+            Restaurant.osm_id,
+            func.ST_Y(location_geom).label("lat"),
+            func.ST_X(location_geom).label("lon"),
+            distance.label("distance_m"),
+        )
+        .where(
+            Restaurant.is_active.is_(True),
+            func.ST_DWithin(Restaurant.location, point, radius_km * 1000.0),
+        )
+        .order_by(distance)
+    )
+
+    result = await db.execute(stmt)
+    return [_to_result(row) for row in result.mappings()]
+
+
+async def search(
+    db: AsyncSession,
+    latitude: float,
+    longitude: float,
+    radius_km: float,
+) -> tuple[list[RestaurantSearchResult], bool]:
+    """Cached search. Returns `(results, was_cached)`.
+
+    A cache failure is a miss, never an error: `app/cache.py` swallows Redis
+    problems, so the worst case is that the database is queried.
+    """
+    key = search_cache_key(latitude, longitude, radius_km)
+
+    cached = await cache.get_json(key)
+    if cached is not None:
+        cache_hit_ctx.set(True)
+        return [RestaurantSearchResult.model_validate(r) for r in cached], True
+
+    cache_hit_ctx.set(False)
+    results = await search_local(db, latitude, longitude, radius_km)
+
+    await cache.set_json(
+        key,
+        [r.model_dump(mode="json") for r in results],
+        ttl_seconds=SEARCH_CACHE_TTL_SECONDS,
+    )
+    return results, False
+
+
+async def get_detail(db: AsyncSession, restaurant_id: int) -> RestaurantDetailResponse:
+    """Restaurant detail with its authoritative menu.
+
+    Inactive restaurants are 404, not 200: a pending self-registration must not
+    be readable by guessing an id when search deliberately hides it.
+    """
+    restaurant = await db.get(Restaurant, restaurant_id)
+    if restaurant is None or not restaurant.is_active:
+        raise not_found("Restaurant not found")
+
+    return RestaurantDetailResponse(
+        id=restaurant.id,
+        name=restaurant.name,
+        phone=restaurant.phone,
+        address=restaurant.address,
+        composite_rating=restaurant.composite_rating if restaurant.rating_count > 0 else None,
+        rating_count=restaurant.rating_count,
+        avg_prep_time_minutes=restaurant.avg_prep_time_minutes,
+        menu=[
+            MenuItemResponse(name=i.name, price=i.price, category=i.category)
+            for i in menu_for(restaurant.name)
+        ],
+    )

@@ -15,6 +15,7 @@ column cannot accidentally publish it.
 from __future__ import annotations
 
 from datetime import datetime
+from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
@@ -120,3 +121,72 @@ class RouteResponse(ResponseModel):
 class RouteListResponse(ResponseModel):
     routes: list[RouteResponse]
     total_count: int
+
+
+# --- Restaurants ----------------------------------------------------------
+
+
+class MenuItemResponse(ResponseModel):
+    name: str
+    # Decimal, not float: these are the prices Stage 11 sums into a NUMERIC
+    # column that money is owed against.
+    price: Decimal
+    category: str
+
+
+class RestaurantSearchResult(ResponseModel):
+    id: int
+    name: str
+    lat: float
+    lon: float
+    distance_km: float
+    # None, not 0, when nobody has rated it — an unrated restaurant, not a
+    # zero-star one (docs/05_API_SPEC.md §6.1).
+    composite_rating: Decimal | None = None
+    avg_prep_time_minutes: int
+    address: str | None = None
+    # "local" for onboarded rows, "osm" for promoted POIs. Derived from whether
+    # osm_id IS NULL, not stored separately.
+    source: str
+
+
+class RestaurantSearchResponse(ResponseModel):
+    restaurants: list[RestaurantSearchResult]
+    total_count: int
+    cached: bool
+
+
+class RestaurantDetailResponse(ResponseModel):
+    id: int
+    name: str
+    phone: str
+    address: str | None = None
+    composite_rating: Decimal | None = None
+    rating_count: int
+    avg_prep_time_minutes: int
+    menu: list[MenuItemResponse]
+
+
+class RestaurantRegisterRequest(RequestModel):
+    name: str = Field(min_length=2, max_length=200)
+    phone: str = Field(pattern=PHONE_PATTERN, max_length=20)
+    email: EmailStr | None = None
+    address: str | None = Field(default=None, max_length=500)
+    latitude: float = Field(ge=-90, le=90)
+    longitude: float = Field(ge=-180, le=180)
+    avg_prep_time_minutes: int = Field(default=30, ge=1, le=240)
+
+    _normalise = field_validator("phone", mode="before")(normalise_phone)
+
+
+class RestaurantRegisterResponse(ResponseModel):
+    id: int
+    name: str
+    phone: str
+    address: str | None = None
+    lat: float
+    lon: float
+    avg_prep_time_minutes: int
+    # Always false on creation. Surfaced so the caller learns its submission is
+    # pending review rather than assuming it is live and searchable.
+    is_active: bool
