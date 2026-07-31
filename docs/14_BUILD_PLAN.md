@@ -1,7 +1,7 @@
 # Build Plan & Handoff Log
 
 **Document version:** 1.0
-**Last updated:** 2026-07-30 (Stage 8 complete)
+**Last updated:** 2026-07-31 (Stage 9 complete)
 **Purpose:** Single source of truth for build progress. Any agent or contributor picking
 this project up mid-stream starts here.
 
@@ -77,7 +77,7 @@ Each stage is independently runnable and independently testable.
 |---|-------|--------|-----------|
 | 7 | Backend skeleton, config, DB schema, health check | DONE | `docker compose up` → `GET /api/health` returns 200 with db + redis status |
 | 8 | Auth module — register, login, JWT, profile | DONE | `pytest tests/test_auth.py` green; login returns a usable token |
-| 9 | Routes module + seed script | TODO | Seeded DB; `GET /api/routes` returns 5 routes |
+| 9 | Routes module + seed script | DONE | Seeded DB; `GET /api/routes` returns 5 routes |
 | 10 | Restaurant search, detail, register | TODO | `tests/test_restaurants.py` green including Overpass-down fallback |
 | 11 | Booking module + state machine | TODO | `tests/test_bookings.py` green including every invalid transition |
 | 12 | Dashboard module + restaurant token auth | TODO | `tests/test_dashboard.py` green including cross-restaurant denial |
@@ -100,56 +100,76 @@ Deliberately unplanned in detail. Scope these when Phase B is done, not before.
 
 ## 4. Next Action
 
-**Stage 9 — routes module and seed script.**
+**Stage 10 — restaurant search, detail, and register.**
 
-Phase A, Stage 7 (skeleton) and Stage 8 (auth) are complete and verified. Do not re-open
-the Phase A decisions; they are recorded in §5 with reasons.
+Phase A and Stages 7–9 are complete and verified. Do not re-open the Phase A decisions; they
+are recorded in §5 with reasons.
 
 ### What already exists (build on it, do not rewrite)
 
 | File | What it gives you |
 |------|-------------------|
-| `app/config.py` | `get_settings()`; `settings.otp_stub_allowed`, `.is_production`, `.JWT_SECRET`, `.JWT_EXPIRE_HOURS` |
+| `app/config.py` | `get_settings()`; `.otp_stub_allowed`, `.is_production`, `.OVERPASS_URL`, `.NOMINATIM_*` |
 | `app/db.py` | `Base`, `SessionLocal`, `get_db`. `NullPool` under `ENVIRONMENT=test` — see §5 |
 | `app/cache.py` | `cache.get_json()` / `set_json()` / `incr_with_expiry()`. All fail open |
-| `app/errors.py` | `unauthorized()`, `not_found()`, `conflict()`, `service_unavailable()` — all carry a `code` |
-| `app/models.py` | `User`, `Restaurant`, `Route`, `Booking`, `Rating`; `ALLOWED_TRANSITIONS` |
-| `app/schemas.py` | `RequestModel` (`extra="forbid"`) and `ResponseModel` base classes; `PHONE_PATTERN`, `normalise_phone()` |
-| `app/deps.py` | `CurrentUser`, `DbSession`, `ClientIp` annotated dependencies |
-| `app/services/rate_limit.py` | `enforce(key, limit, window)`; add a new `(limit, window)` constant per §9 of `10_SECURITY.md` |
-| `app/core/security.py` | `create_access_token()`, `decode_token()` |
-| `tests/conftest.py` | Creates `<db>_test`, applies migrations, truncates between tests. `client` fixture |
+| `app/errors.py` | `unauthorized()`, `not_found()`, `conflict()`, `validation_error()`, `service_unavailable()` |
+| `app/models.py` | `User`, `Restaurant` (`osm_id`, `is_from_osm`), `Route`, `Booking`, `Rating` |
+| `app/schemas.py` | `RequestModel` (`extra="forbid"`) / `ResponseModel` bases; `PHONE_PATTERN`, `normalise_phone()` |
+| `app/deps.py` | `CurrentUser`, `DbSession`, `ClientIp` |
+| `app/services/rate_limit.py` | `enforce(key, limit, window)`; add a `(limit, window)` constant per §9 of `10_SECURITY.md` |
+| `app/services/routes.py` | The geography-to-lat/lon pattern: `cast(col, Geometry)` then `ST_Y`/`ST_X` in SQL |
+| `scripts/seed_data.py` | `SEARCH_ORIGIN_LAT/LON`, `DEFAULT_RADIUS_KM`, `ROUTES`, `RESTAURANTS` — import these, do not re-type coordinates |
+| `tests/conftest.py` | `client` fixture; `seeded` fixture applies `scripts/seed.py` to the truncated test DB |
 
-**Subclass `RequestModel` / `ResponseModel` for new schemas.** Declaring a bare `BaseModel`
-loses `extra="forbid"`, which is the control behind the Stage 11 price promise.
+**Subclass `RequestModel` / `ResponseModel` for new schemas.** A bare `BaseModel` loses
+`extra="forbid"`, which is the control behind the Stage 11 price promise.
 
 ### Build
 
-1. `scripts/seed.py` — 5 NH-44 routes and the seeded restaurants near the canonical demo
-   coordinate `29.02, 77.02` ([04_DATABASE_DESIGN.md](./04_DATABASE_DESIGN.md) §7).
-   Idempotent: re-running must not duplicate rows. Route polylines are generated offline
-   and stored, never fetched from OSRM at request time (ADR: OSRM is local-only).
-2. `app/services/routes.py` + `app/routers/routes.py` — `GET /api/routes`,
-   `GET /api/routes/{id}` ([05_API_SPEC.md](./05_API_SPEC.md) §5).
-3. Wire the router into `app/main.py`.
+1. `app/services/restaurants.py` — point-radius search with `ST_DWithin` on the
+   `GEOGRAPHY` column, ordered by distance. Cache on `(lat, lon, radius)` rounded, 6-hour
+   TTL, **not** keyed on `route_id` (§5).
+2. Overpass supplementation: promote OSM POIs into `restaurants` via upsert on `osm_id`, so
+   every result has a real integer `id` and is bookable. Overpass being down must degrade to
+   local-only results, not fail the request.
+3. `app/routers/restaurants.py` — `GET /api/restaurants/search`,
+   `GET /api/restaurants/{id}` (detail with the hardcoded menu),
+   `POST /api/restaurants/register` ([05_API_SPEC.md](./05_API_SPEC.md) §6).
+4. Hardcoded per-restaurant menus. This is the **authoritative** price source Stage 11 reads
+   — put it somewhere Stage 11 can import, not inline in a handler.
+5. Wire the router into `app/main.py`.
+
+### The behaviours that must be exactly right
+
+- **`POST /restaurants/register` requires a JWT and lands `is_active = false`.** It is a
+  geospatial write; unauthenticated it is a search-poisoning vector whose rows then sit in
+  the cache.
+- **Every search result carries a real integer `id`.** `id: null` for OSM results made them
+  unbookable against the `NOT NULL` FK on `bookings.restaurant_id`.
+- **`composite_rating` is `null`, not `0`, when `rating_count` is 0** — an unrated
+  restaurant, not a zero-star one.
+- **Overpass and Nominatim are throttled to 1 req/sec** and must never be called from a
+  request path that cannot tolerate their latency.
 
 ### Done when
 
-`GET /api/routes` returns the 5 seeded routes against a seeded database, and
-`tests/test_routes.py` covers the list, a single fetch, and a `404 NOT_FOUND` for an unknown
-id. Seeding twice leaves the row counts unchanged.
+`tests/test_restaurants.py` is green, including the Overpass-down fallback, and a real
+`curl` search from `29.02, 77.02` returns the seeded corridor restaurants ordered by
+distance.
 
-Plus `ruff check`, `black --check`, `pytest tests/ -q` all green, and a real `curl` against
-the running container.
+Plus `ruff check`, `black --check`, `pytest tests/ -q`.
 
 ### Running the stack
 
 ```bash
 docker compose up -d postgres redis          # both healthy in ~10s
 docker compose up -d backend
+docker compose exec backend python scripts/migrate.py
+docker compose exec backend python scripts/seed.py   # idempotent, safe to re-run
 docker compose exec backend pytest tests/ -q
 docker compose exec backend ruff check app/ scripts/ tests/
 curl -s localhost:8000/api/health
+curl -s localhost:8000/api/routes
 ```
 
 Local Python is 3.14, which has no wheels for the pinned `pydantic-core` — **run everything
@@ -202,6 +222,12 @@ Decisions taken during the build that are not obvious from the code. Append, nev
 | 2026-07-30 | Tests use a `<dbname>_test` database derived from the ambient `DATABASE_URL`, created and migrated by `conftest.py` | The host differs between a container run and a host run; only the name should change. Deriving it also means the suite can never truncate the development database |
 | 2026-07-30 | `app/db.py` uses `NullPool` when `ENVIRONMENT == "test"` | pytest gives each test its own event loop and an asyncpg connection is bound to the loop that opened it, so a pooled connection fails with "Event loop is closed" on reuse. Pooling is unchanged everywhere else |
 | 2026-07-30 | `email-validator` added to `requirements.txt` | `pydantic.EmailStr` imports it at model-definition time and pydantic does not vendor it; without the pin the app fails at import, not at first use |
+| 2026-07-31 | No `GET /routes/{id}`; only the list endpoint exists | [05_API_SPEC.md](./05_API_SPEC.md) §5 defines one endpoint. The route id is booking context chosen from a dropdown the list already populates, so a detail fetch has no caller. An earlier draft of this section named a detail endpoint the spec never had |
+| 2026-07-31 | Seed matches on natural key with SELECT-then-write, not `ON CONFLICT` | Neither `routes.name` nor `restaurants.name` is UNIQUE, and neither should be: two real dhabas can share a name, and OSM rows deduplicate on `osm_id`. Adding a unique index to shorten a seed script would constrain production data for a dev convenience |
+| 2026-07-31 | Re-seeding never touches `composite_rating` / `rating_count` | They are derived from the `ratings` table. Resetting them on a re-seed would silently discard real ratings |
+| 2026-07-31 | Restaurant seed lookup is scoped to `osm_id IS NULL` | Otherwise a re-seed would overwrite a POI promoted from OpenStreetMap that happens to share a name with a seeded row |
+| 2026-07-31 | Route `geometry` seeded as NULL, not a fabricated LINESTRING | Polylines come from OSRM offline at seed time and no OSRM service exists in this compose file yet. Wrong data behind the Stage 16 corridor query is worse than no data; the column is nullable for this reason and the point-radius search does not read it |
+| 2026-07-31 | Seed constants live in `scripts/seed_data.py`, imported by both the script and the tests | A test that re-types a coordinate tests its own typo. `ST_X`/`ST_Y` swapped still returns 200 with plausible floats — it just puts Delhi in the Arctic |
 
 ---
 
@@ -228,6 +254,13 @@ Things noticed but deliberately not acted on. Keeps them from being silently los
 - Rate limits are unenforced whenever Redis is absent, including in the test suite, which
   runs with `REDIS_URL` unset. `tests/test_auth.py` asserts both branches — fail-open
   without a counter, and 429 with `Retry-After` when one is available.
+- **Route polylines are not seeded**, so Stage 16's corridor query has nothing to run
+  against yet. It needs an OSRM service in `docker-compose.yml` (absent today) plus a
+  one-off generation step whose output is committed or stored, since production never calls
+  OSRM. Stage 16 starts with that, not with the SQL.
+- The seeded restaurant names are real Murthal-area dhabas but the **phone numbers and
+  precise coordinates are invented** — plausible placeholders on the NH-44 corridor, not
+  surveyed positions. Fine for a demo; they must not be presented as a real directory.
 
 ---
 
