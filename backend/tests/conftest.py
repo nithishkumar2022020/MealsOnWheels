@@ -134,6 +134,27 @@ async def seeded(clean_tables) -> None:
         conn.close()
 
 
+@pytest.fixture(autouse=True)
+def no_overpass(monkeypatch: pytest.MonkeyPatch):
+    """Never call the real Overpass API from a test.
+
+    Autouse and default-empty, so a test that forgets to stub it gets local
+    results rather than silently sending traffic to a volunteer-run public
+    service — which its usage policy prohibits, and which would also make the
+    suite depend on someone else's uptime.
+
+    Tests that exercise supplementation override this with their own POIs.
+    """
+
+    async def no_pois(latitude: float, longitude: float, radius_km: float):
+        return []
+
+    from app.services import overpass, restaurants
+
+    monkeypatch.setattr(overpass, "find_restaurants", no_pois)
+    monkeypatch.setattr(restaurants.overpass, "find_restaurants", no_pois)
+
+
 @pytest.fixture
 def db_exec(database: None):
     """Run a statement directly against the test database.
@@ -154,6 +175,38 @@ def db_exec(database: None):
             conn.close()
 
     return run
+
+
+@pytest.fixture
+def db_scalar(database: None):
+    """Read one value directly from the test database.
+
+    For asserting on state the API does not expose — an `osm_id`, a stored
+    address — without inferring it from a response shape.
+    """
+    import psycopg2
+
+    def read(sql: str):
+        conn = psycopg2.connect(_sync_url(os.environ["DATABASE_URL"]))
+        try:
+            with conn.cursor() as cur:
+                cur.execute(sql)
+                row = cur.fetchone()
+                return row[0] if row else None
+        finally:
+            conn.close()
+
+    return read
+
+
+@pytest.fixture
+def db_count(db_scalar):
+    """`SELECT count(*)`-shaped read, as an int."""
+
+    def count(sql: str) -> int:
+        return int(db_scalar(sql))
+
+    return count
 
 
 @pytest.fixture

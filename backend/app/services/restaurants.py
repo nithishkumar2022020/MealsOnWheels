@@ -13,10 +13,11 @@ what the API reports as `distance_km`.
 from __future__ import annotations
 
 import logging
+from collections.abc import Sequence
 from decimal import Decimal
 
 from geoalchemy2 import Geography, Geometry
-from sqlalchemy import cast, func, select
+from sqlalchemy import cast, func, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.cache import cache
@@ -28,7 +29,9 @@ from app.schemas import (
     RestaurantDetailResponse,
     RestaurantSearchResult,
 )
+from app.services import overpass
 from app.services.menu import menu_for
+from app.services.overpass import OverpassPoi
 
 logger = logging.getLogger(__name__)
 
@@ -120,16 +123,78 @@ async def search_local(
     return [_to_result(row) for row in result.mappings()]
 
 
+async def promote_osm_pois(
+    db: AsyncSession,
+    pois: Sequence[OverpassPoi],
+) -> None:
+    """Upsert Overpass POIs into `restaurants`, keyed on `osm_id`.
+
+    This is the only write on the search read path, and it is what makes OSM
+    results bookable: `bookings.restaurant_id` is a NOT NULL foreign key, so a
+    result returned with `id: null` could never be booked
+    (docs/04_DATABASE_DESIGN.md section 3.2.1). Returning null ids was rejected
+    because Overpass supplementation exists precisely to cover corridors where
+    seeded data is thin — it would disable booking exactly where it is needed.
+
+    Idempotent, so a repeated search does not duplicate rows.
+
+    `phone` is empty: nobody was onboarded, so there is no contact. The booking
+    still succeeds and the notification stub logs that it had nobody to notify.
+    """
+    if not pois:
+        return
+
+    for poi in pois:
+        await db.execute(
+            text(
+                """
+                INSERT INTO restaurants
+                    (name, phone, address, location, osm_id, avg_prep_time_minutes)
+                VALUES
+                    (:name, '', :address,
+                     ST_SetSRID(ST_MakePoint(:lon, :lat), 4326)::geography,
+                     :osm_id, 30)
+                -- The predicate is required, not decoration: idx_restaurants_osm_id
+                -- is a PARTIAL unique index (WHERE osm_id IS NOT NULL), and
+                -- Postgres will not infer a partial index unless the conflict
+                -- target repeats its predicate. Without it this raises
+                -- "no unique or exclusion constraint matching the ON CONFLICT
+                -- specification" — see docs/04_DATABASE_DESIGN.md section 3.2.1.
+                ON CONFLICT (osm_id) WHERE osm_id IS NOT NULL DO UPDATE SET
+                    name       = EXCLUDED.name,
+                    -- COALESCE keeps a previously known address when this
+                    -- response happens to omit the addr:* tags.
+                    address    = COALESCE(EXCLUDED.address, restaurants.address),
+                    updated_at = now()
+                """
+            ),
+            {
+                "name": poi.name,
+                "address": poi.address,
+                "lat": poi.lat,
+                "lon": poi.lon,
+                "osm_id": poi.osm_id,
+            },
+        )
+
+    await db.commit()
+
+
 async def search(
     db: AsyncSession,
     latitude: float,
     longitude: float,
     radius_km: float,
 ) -> tuple[list[RestaurantSearchResult], bool]:
-    """Cached search. Returns `(results, was_cached)`.
+    """Cached search, supplemented by Overpass. Returns `(results, was_cached)`.
 
     A cache failure is a miss, never an error: `app/cache.py` swallows Redis
     problems, so the worst case is that the database is queried.
+
+    Overpass POIs are promoted into `restaurants` and then the local query is
+    re-run, rather than merging two lists in Python. One SQL ordering is easier
+    to trust than a hand-rolled merge, and it means promoted rows are
+    deduplicated by the `osm_id` unique index rather than by application logic.
     """
     key = search_cache_key(latitude, longitude, radius_km)
 
@@ -140,6 +205,13 @@ async def search(
 
     cache_hit_ctx.set(False)
     results = await search_local(db, latitude, longitude, radius_km)
+
+    # Returns [] if Overpass is down, slow, or malformed — search then answers
+    # with local rows alone rather than failing.
+    pois = await overpass.find_restaurants(latitude, longitude, radius_km)
+    if pois:
+        await promote_osm_pois(db, pois)
+        results = await search_local(db, latitude, longitude, radius_km)
 
     await cache.set_json(
         key,
