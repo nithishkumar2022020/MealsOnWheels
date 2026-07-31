@@ -17,16 +17,18 @@ from collections.abc import Sequence
 from decimal import Decimal
 
 from geoalchemy2 import Geography, Geometry
+from geoalchemy2.elements import WKTElement
 from sqlalchemy import cast, func, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.cache import cache
 from app.errors import not_found
 from app.logging_config import cache_hit_ctx
-from app.models import Restaurant
+from app.models import Restaurant, User
 from app.schemas import (
     MenuItemResponse,
     RestaurantDetailResponse,
+    RestaurantRegisterRequest,
     RestaurantSearchResult,
 )
 from app.services import overpass
@@ -219,6 +221,54 @@ async def search(
         ttl_seconds=SEARCH_CACHE_TTL_SECONDS,
     )
     return results, False
+
+
+async def register(
+    db: AsyncSession,
+    payload: RestaurantRegisterRequest,
+    submitted_by: User,
+) -> Restaurant:
+    """Create a restaurant, inactive, pending operator review.
+
+    Two controls, both load-bearing (docs/05_API_SPEC.md section 6.3):
+
+    **A JWT is required.** This is a public-facing write that inserts geospatial
+    rows. Left open it is a search-poisoning vector, and a spammed row would then
+    persist in the search cache for its full TTL. Requiring a token gives every
+    submission an accountable origin.
+
+    **`is_active` is false and is not settable by the caller.** An unreviewed row
+    is never served — search filters on `is_active` and detail 404s. There is no
+    field on the request schema for it, and `extra="forbid"` refuses one that is
+    sent anyway.
+
+    Activation is manual until the approval UI lands in Phase 1: an operator
+    flips the flag in the database.
+    """
+    restaurant = Restaurant(
+        name=payload.name,
+        phone=payload.phone,
+        email=str(payload.email) if payload.email else None,
+        address=payload.address,
+        location=WKTElement(f"POINT({payload.longitude} {payload.latitude})", srid=4326),
+        avg_prep_time_minutes=payload.avg_prep_time_minutes,
+        is_active=False,
+    )
+    db.add(restaurant)
+    await db.commit()
+    await db.refresh(restaurant)
+
+    logger.info(
+        "restaurant registered, pending activation",
+        extra={
+            "extra_fields": {
+                "event": "restaurant_registered",
+                "restaurant_id": restaurant.id,
+                "submitted_by_user_id": submitted_by.id,
+            }
+        },
+    )
+    return restaurant
 
 
 async def get_detail(db: AsyncSession, restaurant_id: int) -> RestaurantDetailResponse:

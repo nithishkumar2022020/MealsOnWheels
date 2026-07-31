@@ -8,10 +8,16 @@ from __future__ import annotations
 
 from typing import Annotated
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Query, status
 
-from app.deps import DbSession
-from app.schemas import RestaurantDetailResponse, RestaurantSearchResponse
+from app.deps import CurrentUser, DbSession
+from app.schemas import (
+    RestaurantDetailResponse,
+    RestaurantRegisterRequest,
+    RestaurantRegisterResponse,
+    RestaurantSearchResponse,
+)
+from app.services import rate_limit
 from app.services import restaurants as restaurants_service
 
 router = APIRouter(prefix="/api/restaurants", tags=["restaurants"])
@@ -39,6 +45,42 @@ async def search(
         restaurants=results,
         total_count=len(results),
         cached=cached,
+    )
+
+
+@router.post(
+    "/register",
+    response_model=RestaurantRegisterResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+async def register(
+    payload: RestaurantRegisterRequest,
+    db: DbSession,
+    user: CurrentUser,
+) -> RestaurantRegisterResponse:
+    """Self-register a restaurant. Requires a traveller JWT.
+
+    The row lands `is_active = false` and does not appear in search until an
+    operator activates it. Unauthenticated, this would be a search-poisoning
+    vector whose rows then sit in the cache; unreviewed, it would serve
+    unverified restaurants to travellers.
+
+    Rate limited per user, not per IP: there is an authenticated identity here,
+    and it is the more meaningful key.
+    """
+    limit, window = rate_limit.RESTAURANT_REGISTER_LIMIT
+    await rate_limit.enforce(rate_limit.restaurant_register_key(user.id), limit, window)
+
+    restaurant = await restaurants_service.register(db, payload, submitted_by=user)
+    return RestaurantRegisterResponse(
+        id=restaurant.id,
+        name=restaurant.name,
+        phone=restaurant.phone,
+        address=restaurant.address,
+        lat=payload.latitude,
+        lon=payload.longitude,
+        avg_prep_time_minutes=restaurant.avg_prep_time_minutes,
+        is_active=restaurant.is_active,
     )
 
 

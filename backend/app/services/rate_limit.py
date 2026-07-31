@@ -22,6 +22,7 @@ logger = logging.getLogger(__name__)
 # Limits from docs/10_SECURITY.md section 9, as (limit, window_seconds).
 LOGIN_LIMIT = (10, 3600)  # per phone
 REGISTER_LIMIT = (5, 3600)  # per IP
+RESTAURANT_REGISTER_LIMIT = (5, 3600)  # per user
 
 
 async def enforce(key: str, limit: int, window_seconds: int) -> None:
@@ -65,3 +66,9 @@ def login_key(phone: str) -> str:
 def register_key(client_ip: str) -> str:
     """Register is limited per IP: there is no account to key on yet."""
     return f"register:{client_ip}"
+
+
+def restaurant_register_key(user_id: int) -> str:
+    """Restaurant registration is limited per user — an authenticated identity
+    is a more meaningful key than a shared or rotating IP."""
+    return f"restaurant_register:{user_id}"
