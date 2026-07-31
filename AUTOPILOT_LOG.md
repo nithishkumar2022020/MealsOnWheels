@@ -7,25 +7,18 @@ at the bottom. Review the `NEEDS YOUR EYES` section first.
 
 ## NEEDS YOUR EYES
 
-**0. BLOCKED — the frozen frontend spec and this backend are two different contracts.**
-Audit written to `docs/15_FRONTEND_CONTRACT_AUDIT.md`. Wire-format compliance is **0%**: not
-one built endpoint matches the design spec field-for-field, and 11 of 16 endpoints do not
-exist yet.
+**0. Design vs backend — mostly aligned, five real gaps.** Review in
+`docs/15_DESIGN_BACKEND_ALIGNMENT.md`.
 
-I stopped rather than start rewriting, because three of the conflicts are not mine to
-resolve — a flat 30-minute cutoff vs per-restaurant prep time, hygiene-only vs composite
-rating, and whether `cancel` should return a `refund_amount` when payment is on arrival and
-no money was ever taken. Picking wrong on any of those means redoing bookings, dashboard,
-and ratings a second time. See §2 of the audit; §9 has the work order once you decide.
+They agree on the product. The one finding that changes the build order: the design has
+`booking_type` (bus boarding point / self-drive dine / self-drive takeaway) and the backend
+has a single fulfilment mode. Those are three different products sharing an order flow —
+different prep timing, different dashboard urgency, different cancellation risk — and it
+changes the `bookings` table, so it should land before bookings are built, which is next.
 
-Two things I would push back on regardless of the rest: the spec's booking request sends
-client-supplied item `price` (lets a caller book two dishes for ₹0.02 — the backend refuses
-this deliberately), and it specifies HTTP 500 when Overpass is down (its own checklist
-contradicts this two lines later). Everything else in the spec I would adopt as written.
-
-The spec also contradicts itself in four places that need resolving before it can be
-implemented at all — most importantly Part 8 mandates a `{data, message, status}` envelope
-while all 16 worked examples in Part 2 show bare objects. Details in §3.
+The backend is right on four points and the design should be amended: client-supplied item
+prices, the flat 30-minute cutoff, HTTP 500 on an Overpass outage, and `refund_amount` on a
+pay-on-arrival cancellation.
 
 **1. Commit authorship.** `git config user.name` / `user.email` were unset in this
 repository, which blocks every commit — and you asked for the work to be pushed. Rather
@@ -83,3 +76,16 @@ force-add it.
   (~half a day, 0% → ~90% on what exists) but pointless before the Group C answers land,
   and it would have reverted the `arrival_time` rename without you seeing why.
 - Verified before committing: 122 tests pass, ruff and black clean.
+
+### 2026-07-31 (later) — reframed the review
+
+- Owner clarified the design spec was a direction check, not an implementation contract.
+  The first version audited it as a contract and reported "0% compliance", which measured
+  whether field names matched rather than whether the two were heading the same place.
+  Rewrote as a judgment call per divergence; renamed the file to match.
+- Changed the recommendation on ratings after thinking it through properly: the design's
+  hygiene-only headline is good product thinking for highway food, where the anxiety is
+  illness rather than taste. Keep all three scores, show hygiene first, expose the
+  composite alongside — rather than picking one.
+- Same for the error envelope: `message` (displayable) and `code` (branchable) are not
+  substitutes, so emit both rather than choosing.
