@@ -1,7 +1,7 @@
 # Build Plan & Handoff Log
 
 **Document version:** 1.0
-**Last updated:** 2026-07-31 (Stage 9 complete)
+**Last updated:** 2026-07-31 (Stage 10 complete)
 **Purpose:** Single source of truth for build progress. Any agent or contributor picking
 this project up mid-stream starts here.
 
@@ -78,7 +78,7 @@ Each stage is independently runnable and independently testable.
 | 7 | Backend skeleton, config, DB schema, health check | DONE | `docker compose up` → `GET /api/health` returns 200 with db + redis status |
 | 8 | Auth module — register, login, JWT, profile | DONE | `pytest tests/test_auth.py` green; login returns a usable token |
 | 9 | Routes module + seed script | DONE | Seeded DB; `GET /api/routes` returns 5 routes |
-| 10 | Restaurant search, detail, register | TODO | `tests/test_restaurants.py` green including Overpass-down fallback |
+| 10 | Restaurant search, detail, register | DONE | `tests/test_restaurants.py` green including Overpass-down fallback |
 | 11 | Booking module + state machine | TODO | `tests/test_bookings.py` green including every invalid transition |
 | 12 | Dashboard module + restaurant token auth | TODO | `tests/test_dashboard.py` green including cross-restaurant denial |
 | 13 | Ratings module + aggregate recompute | TODO | `tests/test_ratings.py` green; restaurant aggregate updates on rating |
@@ -100,64 +100,56 @@ Deliberately unplanned in detail. Scope these when Phase B is done, not before.
 
 ## 4. Next Action
 
-**Stage 10 — restaurant search, detail, and register.**
+**Stage 11 — booking module and state machine.**
 
-Phase A and Stages 7–9 are complete and verified. Do not re-open the Phase A decisions; they
-are recorded in §5 with reasons.
+Phase A and Stages 7–10 are complete and verified. Do not re-open the Phase A decisions;
+they are recorded in §5 with reasons.
 
 ### What already exists (build on it, do not rewrite)
 
 | File | What it gives you |
 |------|-------------------|
-| `app/config.py` | `get_settings()`; `.otp_stub_allowed`, `.is_production`, `.OVERPASS_URL`, `.NOMINATIM_*` |
+| `app/config.py` | `get_settings()`; `.otp_stub_allowed`, `.is_production` |
 | `app/db.py` | `Base`, `SessionLocal`, `get_db`. `NullPool` under `ENVIRONMENT=test` — see §5 |
-| `app/cache.py` | `cache.get_json()` / `set_json()` / `incr_with_expiry()`. All fail open |
-| `app/errors.py` | `unauthorized()`, `not_found()`, `conflict()`, `validation_error()`, `service_unavailable()` |
-| `app/models.py` | `User`, `Restaurant` (`osm_id`, `is_from_osm`), `Route`, `Booking`, `Rating` |
-| `app/schemas.py` | `RequestModel` (`extra="forbid"`) / `ResponseModel` bases; `PHONE_PATTERN`, `normalise_phone()` |
+| `app/cache.py` | `get_json()` / `set_json()` / `incr_with_expiry()`. All fail open |
+| `app/errors.py` | `unauthorized()`, `forbidden()`, `not_found()`, `conflict()`, `validation_error()` |
+| `app/models.py` | `Booking`, `ALLOWED_TRANSITIONS`, and `Booking.can_transition_to()` |
+| `app/schemas.py` | `RequestModel` (`extra="forbid"`) / `ResponseModel` bases |
 | `app/deps.py` | `CurrentUser`, `DbSession`, `ClientIp` |
+| **`app/services/menu.py`** | **`price_of(restaurant_name, item_name)` — the authoritative price source. `None` means "not on this menu"** |
+| `app/services/restaurants.py` | `get_detail()`; the geography/`ST_DWithin` pattern |
 | `app/services/rate_limit.py` | `enforce(key, limit, window)`; add a `(limit, window)` constant per §9 of `10_SECURITY.md` |
-| `app/services/routes.py` | The geography-to-lat/lon pattern: `cast(col, Geometry)` then `ST_Y`/`ST_X` in SQL |
-| `scripts/seed_data.py` | `SEARCH_ORIGIN_LAT/LON`, `DEFAULT_RADIUS_KM`, `ROUTES`, `RESTAURANTS` — import these, do not re-type coordinates |
-| `tests/conftest.py` | `client` fixture; `seeded` fixture applies `scripts/seed.py` to the truncated test DB |
-
-**Subclass `RequestModel` / `ResponseModel` for new schemas.** A bare `BaseModel` loses
-`extra="forbid"`, which is the control behind the Stage 11 price promise.
+| `tests/conftest.py` | `client`, `seeded`, `db_exec`, `db_scalar`, `db_count` fixtures; Overpass blocked by default |
 
 ### Build
 
-1. `app/services/restaurants.py` — point-radius search with `ST_DWithin` on the
-   `GEOGRAPHY` column, ordered by distance. Cache on `(lat, lon, radius)` rounded, 6-hour
-   TTL, **not** keyed on `route_id` (§5).
-2. Overpass supplementation: promote OSM POIs into `restaurants` via upsert on `osm_id`, so
-   every result has a real integer `id` and is bookable. Overpass being down must degrade to
-   local-only results, not fail the request.
-3. `app/routers/restaurants.py` — `GET /api/restaurants/search`,
-   `GET /api/restaurants/{id}` (detail with the hardcoded menu),
-   `POST /api/restaurants/register` ([05_API_SPEC.md](./05_API_SPEC.md) §6).
-4. Hardcoded per-restaurant menus. This is the **authoritative** price source Stage 11 reads
-   — put it somewhere Stage 11 can import, not inline in a handler.
-5. Wire the router into `app/main.py`.
+1. `app/services/bookings.py` — creation, listing, cancellation, and the state machine.
+2. `app/routers/bookings.py` — `POST /api/bookings/create`, `GET /api/bookings`,
+   `GET /api/bookings/{id}`, `PUT /api/bookings/{id}/cancel`
+   ([05_API_SPEC.md](./05_API_SPEC.md) §7).
+3. Wire the router into `app/main.py`.
 
 ### The behaviours that must be exactly right
 
-- **`POST /restaurants/register` requires a JWT and lands `is_active = false`.** It is a
-  geospatial write; unauthenticated it is a search-poisoning vector whose rows then sit in
-  the cache.
-- **Every search result carries a real integer `id`.** `id: null` for OSM results made them
-  unbookable against the `NOT NULL` FK on `bookings.restaurant_id`.
-- **`composite_rating` is `null`, not `0`, when `rating_count` is 0** — an unrated
-  restaurant, not a zero-star one.
-- **Overpass and Nominatim are throttled to 1 req/sec** and must never be called from a
-  request path that cannot tolerate their latency.
+- **The server computes `total_price`. Always.** Resolve every line item's name against
+  `menu.price_of()`, reject any name not on the menu with a 400, and sum the result. A
+  client-sent price is refused by `extra="forbid"` — there is no field for it — and the old
+  contract that trusted one let two parathas be booked for ₹0.02.
+- **Resolved unit prices are frozen onto `bookings.items` at creation.** A later menu price
+  change must not retroactively alter a placed order.
+- **Minimum lead time is the restaurant's `avg_prep_time_minutes`, not a flat 30.**
+  Enforced server-side; `arrival_time` earlier than `now + prep` is `400 ARRIVAL_TOO_SOON`.
+- **Every invalid transition is a 400**, driven by `ALLOWED_TRANSITIONS` — including
+  reversals and any move out of a terminal state.
+- **Ownership is checked on every read and write.** A traveller may only see and cancel
+  their own bookings; another user's id is a 404, not a 403, so booking ids are not
+  enumerable.
 
 ### Done when
 
-`tests/test_restaurants.py` is green, including the Overpass-down fallback, and a real
-`curl` search from `29.02, 77.02` returns the seeded corridor restaurants ordered by
-distance.
-
-Plus `ruff check`, `black --check`, `pytest tests/ -q`.
+`tests/test_bookings.py` is green including **every** invalid transition, the price-tampering
+attempt, and the lead-time boundary. Plus `ruff check`, `black --check`, `pytest tests/ -q`,
+and a real `curl` creating a booking against the running container.
 
 ### Running the stack
 
@@ -228,6 +220,14 @@ Decisions taken during the build that are not obvious from the code. Append, nev
 | 2026-07-31 | Restaurant seed lookup is scoped to `osm_id IS NULL` | Otherwise a re-seed would overwrite a POI promoted from OpenStreetMap that happens to share a name with a seeded row |
 | 2026-07-31 | Route `geometry` seeded as NULL, not a fabricated LINESTRING | Polylines come from OSRM offline at seed time and no OSRM service exists in this compose file yet. Wrong data behind the Stage 16 corridor query is worse than no data; the column is nullable for this reason and the point-radius search does not read it |
 | 2026-07-31 | Seed constants live in `scripts/seed_data.py`, imported by both the script and the tests | A test that re-types a coordinate tests its own typo. `ST_X`/`ST_Y` swapped still returns 200 with plausible floats — it just puts Delhi in the Arctic |
+| 2026-07-31 | The OSM upsert conflict target carries `WHERE osm_id IS NOT NULL` | `idx_restaurants_osm_id` is a *partial* unique index, and Postgres will not infer a partial index as an arbiter without its predicate. The SQL documented in `04` §3.2.1 omitted it and so could never have run; the doc is now corrected |
+| 2026-07-31 | Promoted OSM rows are re-read through the same local query, not merged in Python | One SQL ordering is easier to trust than a hand-rolled merge, and dedupe falls to the `osm_id` unique index rather than application logic |
+| 2026-07-31 | Search cache key rounds coordinates to 4 decimals (~11 m) | A GPS fix jitters in the seventh decimal place, so unrounded keys would give nearly every request its own entry and the cache would never be hit |
+| 2026-07-31 | Menus live in `app/services/menu.py` with `Decimal` prices, never `float` | It is the authoritative price source Stage 11 reads, so it must be importable rather than inline in a handler. `0.1 + 0.2 != 0.3` in binary floating point and these values are summed into a `NUMERIC(10,2)` column that money is owed against |
+| 2026-07-31 | Unknown restaurants fall back to `DEFAULT_MENU` rather than an empty menu | An empty menu makes a restaurant unbookable, and OSM-promoted POIs exist precisely to cover corridors where seeded data is thin |
+| 2026-07-31 | Inactive restaurants 404 on detail, not just hidden from search | Otherwise a pending self-registration is readable by guessing the id the register response just returned |
+| 2026-07-31 | Restaurant registration is rate limited per user, not per IP | There is an authenticated identity on this endpoint, which is a more meaningful key than a shared or rotating address |
+| 2026-07-31 | The real Overpass API is blocked from every test by an autouse fixture | Its usage policy prohibits application traffic, and a suite depending on a volunteer service's uptime cannot be trusted. Tests that need POIs substitute their own |
 
 ---
 
@@ -261,6 +261,19 @@ Things noticed but deliberately not acted on. Keeps them from being silently los
 - The seeded restaurant names are real Murthal-area dhabas but the **phone numbers and
   precise coordinates are invented** — plausible placeholders on the NH-44 corridor, not
   surveyed positions. Fine for a demo; they must not be presented as a real directory.
+- **The Overpass throttle is per process, not per deployment.** A module-level lock gives
+  1 req/sec per worker, so N uvicorn workers permit N req/sec. Adequate for a single-worker
+  free-tier service and wrong the moment it scales; a shared limiter (Redis token bucket) is
+  needed before then. Self-hosting (Stage 19) removes the constraint entirely.
+- **OSM POIs are promoted on the search path and never cleaned up.** A POI that disappears
+  from OpenStreetMap keeps its `restaurants` row, and nothing revisits it. Harmless at demo
+  scale, but there is no reconciliation job and no `last_seen_at` column to build one from.
+- **Promotion writes on a GET.** Documented and intentional (§3.2.1) and idempotent, but it
+  means search is not read-only: a search against a read replica would fail. Worth
+  remembering before adding one.
+- Menu prices are hardcoded, so **a restaurant cannot change its own prices** without a code
+  deploy. This is the cost of keeping the price boundary server-side until `menu_items` CRUD
+  lands in Phase 1.
 
 ---
 
