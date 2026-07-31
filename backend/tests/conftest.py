@@ -115,6 +115,26 @@ async def clean_tables(database: None):
 
 
 @pytest.fixture
+async def seeded(clean_tables) -> None:
+    """Apply scripts/seed.py to the freshly truncated test database.
+
+    Opt-in rather than autouse: most tests are clearer starting from nothing,
+    and a test that needs seed data should say so. Runs after `clean_tables`,
+    which is what makes the idempotency assertion meaningful — the counts it
+    checks are against a known-empty start.
+    """
+    import psycopg2
+
+    from scripts.seed import seed
+
+    conn = psycopg2.connect(_sync_url(os.environ["DATABASE_URL"]))
+    try:
+        seed(conn)
+    finally:
+        conn.close()
+
+
+@pytest.fixture
 async def client():
     """HTTP client bound to the app without starting a server."""
     from app.main import app
