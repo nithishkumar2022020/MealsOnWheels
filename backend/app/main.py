@@ -18,6 +18,7 @@ from app.db import SessionLocal, engine
 from app.errors import AppError
 from app.logging_config import RequestContextMiddleware, configure_logging
 from app.routers import auth as auth_router
+from app.routers import routes as routes_router
 from app.routers import users as users_router
 
 settings = get_settings()
@@ -124,6 +125,7 @@ async def _unhandled_error_handler(request: Request, exc: Exception) -> JSONResp
 
 app.include_router(auth_router.router)
 app.include_router(users_router.router)
+app.include_router(routes_router.router)
 
 
 # --- Health ---------------------------------------------------------------

@@ -90,3 +90,33 @@ class LoginResponse(ResponseModel):
     token_type: str = "bearer"
     expires_in: int
     user: UserSummary
+
+
+# --- Routes ---------------------------------------------------------------
+
+
+class RouteResponse(ResponseModel):
+    """A route with its endpoints flattened to scalar lat/lon.
+
+    The database stores `origin_point` / `dest_point` as GEOGRAPHY(POINT, 4326);
+    the API flattens both so clients never parse WKB (docs/05_API_SPEC.md §5.1).
+
+    `geometry` is deliberately absent. The polyline is internal — corridor search
+    uses it server-side (Stage 16) and sending it would put a payload orders of
+    magnitude larger than the rest of the response on every list request.
+    """
+
+    id: int
+    name: str
+    origin_name: str
+    dest_name: str
+    origin_lat: float
+    origin_lon: float
+    dest_lat: float
+    dest_lon: float
+    distance_km: int | None = None
+
+
+class RouteListResponse(ResponseModel):
+    routes: list[RouteResponse]
+    total_count: int
