@@ -89,3 +89,24 @@ force-add it.
   composite alongside — rather than picking one.
 - Same for the error envelope: `message` (displayable) and `code` (branchable) are not
   substitutes, so emit both rather than choosing.
+
+### 2026-08-01 — product data is owner-managed, not fixtures
+
+- Owner clarified menus/hours/prep times must be functional. Verified the current state
+  first: menus really are hardcoded in `app/services/menu.py` keyed on restaurant name.
+- Wrote `docs/16_FUNCTIONAL_PRODUCT_DATA.md` with UI and backend changes. Linked from index.
+- Found the highest-value cheap fix: `is_active` already carries two meanings (ops approval,
+  search filter) and the design wants a third (owner open/closed toggle). An owner tapping
+  "Closed" would flip the flag meaning "unapproved" and need an operator to undo it. Split
+  into `approval_status` / `is_accepting_orders` / `opening_hours`.
+- Found a gap in both sides: neither models *who* a restaurant owner is. The design's
+  restaurant login returns a `restaurant_id` without saying what authenticates against it,
+  and `restaurants.phone` is a contact field. Proposed `restaurant_users`.
+- Recommended `menu_item_id` on booking lines as a plain integer, **not** an FK — booking
+  lines already freeze name and price, and an FK would make deleting a discontinued dish
+  either fail or cascade into historical orders.
+- Recommended rejecting a booking outright when an item goes unavailable mid-flow
+  (`ITEM_UNAVAILABLE`) rather than silently dropping the line and recomputing the total.
+  Changing what someone agreed to pay is a worse surprise than an error.
+- Did not write code. This is ~3 stages of work and a schema change; it needs sign-off
+  first, and the migration should be one migration rather than six interlocking ones.
