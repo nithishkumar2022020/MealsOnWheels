@@ -124,7 +124,10 @@ async def test_seed_is_idempotent(clean_tables) -> None:
     finally:
         conn.close()
 
-    assert first == {"routes": 5, "restaurants": 10, "users": 1}
+    # menu_items arrived when menus became owner-managed data the seed has to
+    # write. `users` stays 1: the seeded restaurant staff member is a
+    # restaurant_users row, which is a different table and a different actor.
+    assert first == {"routes": 5, "restaurants": 10, "users": 1, "menu_items": 42}
     assert second == first
 
 

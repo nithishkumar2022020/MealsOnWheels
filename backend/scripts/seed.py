@@ -27,12 +27,18 @@ import psycopg2
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+# Menus were hardcoded here before they became owner-managed data. The
+# constants survive as SEED data only — the running application reads
+# menu_items, never this module.
 from scripts.seed_data import (  # noqa: E402
     RESTAURANTS,
     ROUTES,
+    TEST_STAFF_NAME,
+    TEST_STAFF_PHONE,
     TEST_USER_NAME,
     TEST_USER_PHONE,
 )
+from scripts.seed_menus import menu_for  # noqa: E402
 
 
 def to_sync_url(url: str) -> str:
@@ -70,8 +76,9 @@ WHERE id = %s
 """
 
 RESTAURANT_INSERT = f"""
-INSERT INTO restaurants (name, phone, address, location, avg_prep_time_minutes, is_active)
-VALUES (%s, %s, %s, {_POINT}, %s, true)
+INSERT INTO restaurants (name, phone, address, location, avg_prep_time_minutes,
+                         is_active, approval_status)
+VALUES (%s, %s, %s, {_POINT}, %s, true, 'approved')
 """
 
 # composite_rating and rating_count are deliberately not touched: they are
@@ -84,8 +91,42 @@ UPDATE restaurants SET
     location = {_POINT},
     avg_prep_time_minutes = %s,
     is_active = true,
+    approval_status = 'approved',
     updated_at = now()
 WHERE id = %s
+"""
+
+# Keyed on the partial unique index over live names, so a re-seed refreshes
+# prices without duplicating dishes — and, because the index excludes
+# soft-deleted rows, without resurrecting a dish an owner has deleted.
+MENU_ITEM_UPSERT = """
+INSERT INTO menu_items (restaurant_id, name, price, category, display_order)
+VALUES (%s, %s, %s, %s, %s)
+ON CONFLICT (restaurant_id, name) WHERE deleted_at IS NULL DO UPDATE SET
+    price         = EXCLUDED.price,
+    category      = EXCLUDED.category,
+    display_order = EXCLUDED.display_order,
+    updated_at    = now()
+"""
+
+# Long days, not 24h: plausible for a highway dhaba and still exercises the
+# closed-at-3am path that absent hours would hide.
+HOURS_UPSERT = """
+INSERT INTO restaurant_hours (restaurant_id, weekday, opens_at, closes_at)
+VALUES (%s, %s, '06:00', '23:00')
+ON CONFLICT (restaurant_id, weekday) DO UPDATE SET
+    opens_at  = EXCLUDED.opens_at,
+    closes_at = EXCLUDED.closes_at
+"""
+
+STAFF_UPSERT = """
+INSERT INTO restaurant_users (restaurant_id, phone, name)
+VALUES (%s, %s, %s)
+ON CONFLICT (phone) DO UPDATE SET
+    restaurant_id = EXCLUDED.restaurant_id,
+    name          = EXCLUDED.name,
+    is_active     = true,
+    updated_at    = now()
 """
 
 # users.phone IS unique, so this one conflict target is real.
@@ -143,11 +184,53 @@ def seed(conn: psycopg2.extensions.connection) -> dict[str, int]:
                     RESTAURANT_INSERT,
                     (x.name, x.phone, x.address, x.lon, x.lat, x.avg_prep_time_minutes),
                 )
+                cur.execute(
+                    "SELECT id FROM restaurants WHERE name = %s AND osm_id IS NULL",
+                    (x.name,),
+                )
+                restaurant_id = cur.fetchone()[0]
             else:
+                restaurant_id = row[0]
                 cur.execute(
                     RESTAURANT_UPDATE,
-                    (x.phone, x.address, x.lon, x.lat, x.avg_prep_time_minutes, row[0]),
+                    (x.phone, x.address, x.lon, x.lat, x.avg_prep_time_minutes, restaurant_id),
                 )
+
+            # Menus now live in the database rather than in a Python constant, so
+            # the seed has to write them. Upserted on the partial unique index
+            # over live names — a re-seed refreshes prices without duplicating
+            # dishes, and without resurrecting one an owner has since deleted.
+            for order, item in enumerate(menu_for(x.name), start=1):
+                cur.execute(
+                    MENU_ITEM_UPSERT,
+                    (
+                        restaurant_id,
+                        item.name,
+                        item.price,
+                        item.category,
+                        order,
+                    ),
+                )
+
+            # Absent hours mean closed, so a seeded restaurant with none would be
+            # unbookable and every documented example would fail. Highway dhabas
+            # keep long days; 06:00-23:00 every day is deliberately plausible
+            # rather than 24h.
+            for weekday in range(7):
+                cur.execute(HOURS_UPSERT, (restaurant_id, weekday))
+
+        # One staff member on the first corridor restaurant, so the documented
+        # restaurant-login example works against a seeded database.
+        cur.execute(
+            "SELECT id FROM restaurants WHERE name = %s AND osm_id IS NULL",
+            (RESTAURANTS[0].name,),
+        )
+        first_restaurant = cur.fetchone()
+        if first_restaurant is not None:
+            cur.execute(
+                STAFF_UPSERT,
+                (first_restaurant[0], TEST_STAFF_PHONE, TEST_STAFF_NAME),
+            )
 
         cur.execute(USER_UPSERT, (TEST_USER_PHONE, TEST_USER_NAME))
 
@@ -157,9 +240,16 @@ def seed(conn: psycopg2.extensions.connection) -> dict[str, int]:
         restaurants = cur.fetchone()[0]
         cur.execute("SELECT count(*) FROM users")
         users = cur.fetchone()[0]
+        cur.execute("SELECT count(*) FROM menu_items WHERE deleted_at IS NULL")
+        menu_items = cur.fetchone()[0]
 
     conn.commit()
-    return {"routes": routes, "restaurants": restaurants, "users": users}
+    return {
+        "routes": routes,
+        "restaurants": restaurants,
+        "users": users,
+        "menu_items": menu_items,
+    }
 
 
 def main() -> int:
@@ -180,7 +270,8 @@ def main() -> int:
 
     print(
         f"seeded: {counts['routes']} routes, "
-        f"{counts['restaurants']} restaurants, {counts['users']} users"
+        f"{counts['restaurants']} restaurants, {counts['menu_items']} menu items, "
+        f"{counts['users']} users"
     )
     return 0
 

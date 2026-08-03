@@ -11,8 +11,8 @@ from decimal import Decimal
 
 import pytest
 
-from app.services.menu import DEFAULT_MENU, MENUS_BY_NAME, menu_for, price_of
 from scripts.seed_data import RESTAURANTS, SEARCH_ORIGIN_LAT, SEARCH_ORIGIN_LON
+from scripts.seed_menus import DEFAULT_MENU, MENUS_BY_NAME, menu_for, price_of
 
 SEARCH = "/api/restaurants/search"
 ORIGIN = {"latitude": SEARCH_ORIGIN_LAT, "longitude": SEARCH_ORIGIN_LON}
@@ -173,7 +173,10 @@ async def test_detail_returns_menu(client, seeded) -> None:
     body = response.json()
     assert body["name"] == "Murthal Dhaba"
     assert body["menu"]
-    assert {"name", "price", "category"} == set(body["menu"][0])
+    # is_available joined the payload when menus became owner-managed: a
+    # sold-out dish is returned and greyed out rather than hidden, because a
+    # traveller who cannot find a dish they know assumes the app is broken.
+    assert {"name", "price", "category", "is_available"} == set(body["menu"][0])
 
 
 async def test_detail_menu_matches_authoritative_source(client, seeded) -> None:

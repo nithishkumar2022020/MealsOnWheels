@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Sequence
+from datetime import UTC, datetime
 from decimal import Decimal
 
 from geoalchemy2 import Geography, Geometry
@@ -32,7 +33,9 @@ from app.schemas import (
     RestaurantSearchResult,
 )
 from app.services import overpass
-from app.services.menu import menu_for
+from app.services.bookability import NO_MENU, unbookable_reason
+from app.services.hours import list_hours
+from app.services.menus import list_items as list_menu_items
 from app.services.overpass import OverpassPoi
 
 logger = logging.getLogger(__name__)
@@ -272,14 +275,33 @@ async def register(
 
 
 async def get_detail(db: AsyncSession, restaurant_id: int) -> RestaurantDetailResponse:
-    """Restaurant detail with its authoritative menu.
+    """Restaurant detail with its authoritative menu and bookability.
 
     Inactive restaurants are 404, not 200: a pending self-registration must not
     be readable by guessing an id when search deliberately hides it.
+
+    Unavailable items are included. The client greys them out rather than hiding
+    them — a traveller who cannot find a dish they know assumes the app is
+    broken, whereas "sold out" is information.
+
+    **A restaurant with no menu is listed but not bookable.** Menus used to fall
+    back to a shared default, which kept OSM-promoted POIs bookable while every
+    menu was equally fictional. Now that menus are real, inventing one would show
+    a traveller a price no restaurant ever agreed to, and the failure would land
+    at the roadside rather than here. `is_bookable` carries that distinction
+    instead.
     """
     restaurant = await db.get(Restaurant, restaurant_id)
     if restaurant is None or not restaurant.is_active:
         raise not_found("Restaurant not found")
+
+    items = await list_menu_items(db, restaurant_id)
+    hours = await list_hours(db, restaurant_id)
+
+    reason = unbookable_reason(restaurant, hours, datetime.now(UTC))
+    if reason is None and not any(i.is_available for i in items):
+        # Approved, open, and staffed — but nothing on the menu can be cooked.
+        reason = NO_MENU
 
     return RestaurantDetailResponse(
         id=restaurant.id,
@@ -290,7 +312,15 @@ async def get_detail(db: AsyncSession, restaurant_id: int) -> RestaurantDetailRe
         rating_count=restaurant.rating_count,
         avg_prep_time_minutes=restaurant.avg_prep_time_minutes,
         menu=[
-            MenuItemResponse(name=i.name, price=i.price, category=i.category)
-            for i in menu_for(restaurant.name)
+            MenuItemResponse(
+                name=i.name,
+                price=i.price,
+                category=i.category,
+                is_available=i.is_available,
+            )
+            for i in items
         ],
+        is_bookable=reason is None,
+        unbookable_reason=reason,
+        supported_booking_types=list(restaurant.supported_booking_types or ()),
     )

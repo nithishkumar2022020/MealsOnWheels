@@ -67,8 +67,21 @@ async def test_osm_poi_is_returned_with_a_real_id(client, seeded, overpass_retur
     assert promoted["source"] == "osm"
 
 
-async def test_promoted_poi_is_bookable_via_detail(client, seeded, overpass_returns) -> None:
-    """A promoted row is a real restaurant: it has a detail page and a menu."""
+async def test_promoted_poi_is_discoverable_but_not_bookable(
+    client, seeded, overpass_returns
+) -> None:
+    """A promoted row is a real restaurant row, but not an onboarded business.
+
+    It gets an id and a detail page — that is what makes a thin corridor look
+    populated instead of empty. It does **not** get a menu.
+
+    This reverses an earlier decision. `menu_for()` used to fall back to a shared
+    DEFAULT_MENU so promoted POIs stayed bookable, which was reasonable while
+    every menu was equally fictional. Now that menus are owner-managed, a
+    fallback would quote a traveller "Paneer Paratha, ₹80" for a dhaba that never
+    agreed to either the dish or the price — and the failure would surface at the
+    roadside, not here. Listed-but-not-yet-bookable is the honest state.
+    """
     overpass_returns([POI])
     body = (await search(client)).json()
     promoted = next(r for r in body["restaurants"] if r["name"] == "Highway Kitchen OSM")
@@ -79,9 +92,14 @@ async def test_promoted_poi_is_bookable_via_detail(client, seeded, overpass_retu
     detail = response.json()
     # Empty phone: nobody was onboarded, so there is no contact to notify.
     assert detail["phone"] == ""
-    # Falls back to the default menu rather than being unbookable.
-    assert detail["menu"]
     assert detail["avg_prep_time_minutes"] == 30
+
+    assert detail["menu"] == []
+    assert detail["is_bookable"] is False
+    # A specific reason, so the client can say what is wrong rather than
+    # "unavailable". Approval is the more fundamental obstacle and is reported
+    # first: nobody has reviewed this listing.
+    assert detail["unbookable_reason"] == "not_approved"
 
 
 async def test_promotion_is_idempotent(client, seeded, overpass_returns, db_count) -> None:

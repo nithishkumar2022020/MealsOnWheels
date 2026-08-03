@@ -20,6 +20,11 @@ DEFAULT_RADIUS_KM = 15.0
 TEST_USER_PHONE = "+919876543210"
 TEST_USER_NAME = "Priya Sharma"
 
+# One restaurant staff member, attached to the first corridor restaurant, so
+# the documented restaurant-login example works against a seeded database.
+TEST_STAFF_PHONE = "+919555000111"
+TEST_STAFF_NAME = "Rajesh Kumar"
+
 
 class RouteSeed(NamedTuple):
     name: str

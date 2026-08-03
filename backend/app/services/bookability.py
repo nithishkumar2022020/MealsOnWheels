@@ -27,6 +27,10 @@ NOT_ACCEPTING = "not_accepting_orders"
 CLOSED_AT_TIME = "closed_at_requested_time"
 NO_HOURS_SET = "no_hours_configured"
 TYPE_UNSUPPORTED = "booking_type_unsupported"
+# Approved and open, but the kitchen has nothing orderable. Distinct from the
+# others because the remedy is the owner adding dishes, not waiting or
+# chasing an operator.
+NO_MENU = "no_menu_items"
 
 
 def resolve_timezone(name: str) -> ZoneInfo:

@@ -14,10 +14,17 @@ column cannot accidentally publish it.
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, time
 from decimal import Decimal
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    EmailStr,
+    Field,
+    field_validator,
+    model_validator,
+)
 
 # E.164: leading +, no leading zero on the country code, 7–15 digits total.
 PHONE_PATTERN = r"^\+[1-9]\d{6,14}$"
@@ -132,6 +139,9 @@ class MenuItemResponse(ResponseModel):
     # column that money is owed against.
     price: Decimal
     category: str
+    # Included rather than filtered out: the client greys a sold-out dish. A
+    # traveller who cannot find a dish they know assumes the app is broken.
+    is_available: bool = True
 
 
 class RestaurantSearchResult(ResponseModel):
@@ -165,6 +175,14 @@ class RestaurantDetailResponse(ResponseModel):
     rating_count: int
     avg_prep_time_minutes: int
     menu: list[MenuItemResponse]
+    # Discoverable and bookable are different things. An OSM-promoted POI is
+    # listed so a thin corridor does not look empty, but nobody onboarded it, so
+    # it has no menu and no agreed prices and cannot take an order yet.
+    is_bookable: bool
+    # Machine-readable why-not, so the client can say "Opens at 6am" rather than
+    # a generic "unavailable". None when is_bookable is true.
+    unbookable_reason: str | None = None
+    supported_booking_types: list[str] = Field(default_factory=list)
 
 
 class RestaurantLoginRequest(RequestModel):
@@ -193,6 +211,127 @@ class RestaurantLoginResponse(ResponseModel):
     approval_status: str
     is_accepting_orders: bool
     onboarding_complete: bool
+
+
+# --- Owner-managed menus --------------------------------------------------
+
+
+class MenuItemCreate(RequestModel):
+    name: str = Field(min_length=1, max_length=200)
+    price: Decimal = Field(ge=0, le=Decimal("99999.99"), decimal_places=2)
+    category: str = Field(min_length=1, max_length=50)
+    description: str | None = Field(default=None, max_length=1000)
+    # None means "use the restaurant's avg_prep_time_minutes" — the column is
+    # nullable for exactly this, so an owner need not repeat the default per dish.
+    prep_time_minutes: int | None = Field(default=None, ge=1, le=240)
+    image_url: str | None = Field(default=None, max_length=2000)
+    is_available: bool = True
+    # Omitted means "append". An owner adding a dish should not have to know how
+    # many they already have.
+    display_order: int | None = Field(default=None, ge=0)
+
+
+class MenuItemUpdate(RequestModel):
+    """Every field optional — a PATCH-shaped body on a PUT route.
+
+    `exclude_unset` in the service distinguishes "not sent" from "sent as null",
+    so clearing a description is possible and leaving it alone is the default.
+    """
+
+    name: str | None = Field(default=None, min_length=1, max_length=200)
+    price: Decimal | None = Field(default=None, ge=0, le=Decimal("99999.99"), decimal_places=2)
+    category: str | None = Field(default=None, min_length=1, max_length=50)
+    description: str | None = Field(default=None, max_length=1000)
+    prep_time_minutes: int | None = Field(default=None, ge=1, le=240)
+    image_url: str | None = Field(default=None, max_length=2000)
+    is_available: bool | None = None
+    display_order: int | None = Field(default=None, ge=0)
+
+
+class AvailabilityUpdate(RequestModel):
+    is_available: bool
+
+
+class OwnerMenuItemResponse(ResponseModel):
+    """The owner's view — everything, including soft state the traveller never sees."""
+
+    id: int
+    name: str
+    description: str | None = None
+    price: Decimal
+    category: str
+    prep_time_minutes: int | None = None
+    is_available: bool
+    image_url: str | None = None
+    display_order: int
+
+
+class OwnerMenuResponse(ResponseModel):
+    items: list[OwnerMenuItemResponse]
+    total_count: int
+
+
+# --- Owner-managed hours --------------------------------------------------
+
+
+class HoursWindow(RequestModel):
+    # 0 = Monday, matching Python's datetime.weekday().
+    weekday: int = Field(ge=0, le=6)
+    opens_at: time
+    closes_at: time
+
+    @model_validator(mode="after")
+    def _reject_zero_length(self) -> HoursWindow:
+        # closes_at < opens_at is a legitimate overnight window (22:00-02:00);
+        # equal is not — it describes a restaurant open for no time at all, which
+        # is almost certainly a typo for "closed" (omit the day) or 24h.
+        if self.opens_at == self.closes_at:
+            raise ValueError(
+                "opens_at and closes_at are identical. Omit the day to mark it closed."
+            )
+        return self
+
+
+class HoursReplaceRequest(RequestModel):
+    """The full weekly pattern. Omitted days are closed.
+
+    An empty list is valid and means closed all week — which is why this replaces
+    rather than merges.
+    """
+
+    windows: list[HoursWindow] = Field(default_factory=list, max_length=7)
+
+
+class HoursWindowResponse(ResponseModel):
+    weekday: int
+    opens_at: time
+    closes_at: time
+    # Surfaced so a client rendering "22:00 – 02:00" knows the close belongs to
+    # the following day rather than showing an apparently backwards range.
+    is_overnight: bool
+
+
+class HoursResponse(ResponseModel):
+    hours: list[HoursWindowResponse]
+    timezone: str
+
+
+class AcceptingOrdersUpdate(RequestModel):
+    is_accepting_orders: bool
+
+
+class OnboardingResponse(ResponseModel):
+    """What the owner still owes before the listing can go live.
+
+    `approval_status` sits alongside deliberately: the checklist answers "is the
+    ball in my court", and without the operator's decision next to it the owner
+    cannot tell "I am done, waiting on review" from "I am done and live".
+    """
+
+    approval_status: str
+    is_accepting_orders: bool
+    onboarding_complete: bool
+    missing: list[str]
 
 
 class RestaurantRegisterRequest(RequestModel):

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/theme/app_theme.dart';
+import 'core/theme/motion.dart';
 import 'features/auth/presentation/login_screen.dart';
 import 'features/auth/presentation/signed_in_screen.dart';
 import 'features/auth/presentation/welcome_screen.dart';
@@ -45,14 +46,37 @@ class AuthFlow extends StatefulWidget {
 class _AuthFlowState extends State<AuthFlow> {
   _Screen _screen = _Screen.welcome;
 
-  void _go(_Screen screen) => setState(() => _screen = screen);
+  /// Whether the last move was backwards, so the transition can mirror itself.
+  /// Compared by enum index because the flow is linear: welcome → login →
+  /// signedIn. A branching flow would need an explicit direction argument.
+  bool _reverse = false;
+
+  void _go(_Screen next) => setState(() {
+    _reverse = next.index < _screen.index;
+    _screen = next;
+  });
 
   @override
   Widget build(BuildContext context) {
-    return switch (_screen) {
-      _Screen.welcome => WelcomeScreen(onGetStarted: () => _go(_Screen.login)),
-      _Screen.login => LoginScreen(onSignedIn: () => _go(_Screen.signedIn)),
-      _Screen.signedIn => SignedInScreen(onSignedOut: () => _go(_Screen.welcome)),
+    final screen = switch (_screen) {
+      _Screen.welcome => WelcomeScreen(
+        key: const ValueKey(_Screen.welcome),
+        onGetStarted: () => _go(_Screen.login),
+      ),
+      _Screen.login => LoginScreen(
+        key: const ValueKey(_Screen.login),
+        onSignedIn: () => _go(_Screen.signedIn),
+        onBack: () => _go(_Screen.welcome),
+      ),
+      _Screen.signedIn => SignedInScreen(
+        key: const ValueKey(_Screen.signedIn),
+        onSignedOut: () => _go(_Screen.welcome),
+      ),
     };
+
+    // The key is what tells AnimatedSwitcher these are different screens; two
+    // screens of the same runtime type without distinct keys would cross-fade
+    // into themselves and appear not to animate at all.
+    return SlideFadeSwitcher(reverse: _reverse, child: screen);
   }
 }

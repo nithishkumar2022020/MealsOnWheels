@@ -16,14 +16,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/api_exception.dart';
+import '../../../core/theme/motion.dart';
 import '../../../core/theme/tokens.dart';
 import '../domain/phone.dart';
 import 'login_controller.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
-  const LoginScreen({super.key, this.onSignedIn});
+  const LoginScreen({super.key, this.onSignedIn, this.onBack});
 
   final VoidCallback? onSignedIn;
+
+  /// Back to welcome. Also wired to the system back gesture so Android's
+  /// hardware back does not drop the user out of the app mid-sign-in.
+  final VoidCallback? onBack;
 
   @override
   ConsumerState<LoginScreen> createState() => _LoginScreenState();
@@ -74,104 +79,81 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final state = ref.watch(loginControllerProvider);
     final isRegistering = state.step == LoginStep.profile;
 
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(MowSpace.containerMargin),
-            child: ConstrainedBox(
-              // Keeps the form readable on a tablet or a wide simulator rather
-              // than stretching inputs the full width.
-              constraints: const BoxConstraints(maxWidth: 420),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const _Brand(),
-                    const SizedBox(height: MowSpace.section),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) return;
+        // On the register step, back returns to the phone/OTP step rather than
+        // leaving the screen — the user is one field from an account, and
+        // dropping them to welcome would discard a verified OTP.
+        if (isRegistering) {
+          ref.read(loginControllerProvider.notifier).resetToCredentials();
+        } else {
+          widget.onBack?.call();
+        }
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(MowSpace.containerMargin),
+              child: ConstrainedBox(
+                // Keeps the form readable on a tablet or a wide simulator rather
+                // than stretching inputs the full width.
+                constraints: const BoxConstraints(maxWidth: 420),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const _Brand(),
+                      const SizedBox(height: MowSpace.section),
 
-                    if (state.failure != null) ...[
-                      _FailureBanner(state.failure!),
-                      const SizedBox(height: MowSpace.gutter),
-                    ],
-
-                    _Label('Phone number'),
-                    const SizedBox(height: MowSpace.base),
-                    TextFormField(
-                      controller: _phone,
-                      keyboardType: TextInputType.phone,
-                      textInputAction: TextInputAction.next,
-                      autofillHints: const [AutofillHints.telephoneNumber],
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(18),
-                      ],
-                      decoration: const InputDecoration(
-                        hintText: 'Enter 10-digit mobile number',
-                        prefixIcon: _CountryCodePrefix(),
-                        prefixIconConstraints: BoxConstraints(minWidth: 56),
+                      // Errors arrive rather than appear — an inline jump is
+                      // easy to miss when you are looking at the field you just
+                      // corrected.
+                      AnimatedSize(
+                        duration: MowMotion.respecting(context, MowMotion.status),
+                        curve: MowMotion.enterCurve,
+                        alignment: Alignment.topCenter,
+                        child: state.failure == null
+                            ? const SizedBox(width: double.infinity)
+                            : Padding(
+                                padding: const EdgeInsets.only(
+                                  bottom: MowSpace.gutter,
+                                ),
+                                child: FadeSlideIn(
+                                  key: ValueKey(state.failure!.code),
+                                  child: _FailureBanner(state.failure!),
+                                ),
+                              ),
                       ),
-                      validator: validatePhoneInput,
-                    ),
-                    const SizedBox(height: MowSpace.gutter),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _Label('Verification code'),
-                        Text(
-                          'Use 123456',
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            color: MowColors.onSurfaceVariant,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: MowSpace.base),
-                    TextFormField(
-                      controller: _otp,
-                      keyboardType: TextInputType.number,
-                      textInputAction:
-                          isRegistering ? TextInputAction.next : TextInputAction.done,
-                      autofillHints: const [AutofillHints.oneTimeCode],
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(8),
-                      ],
-                      style: const TextStyle(
-                        fontFeatures: [FontFeature.tabularFigures()],
-                        letterSpacing: 8,
-                      ),
-                      decoration: const InputDecoration(hintText: '––––––'),
-                      validator: validateOtp,
-                      onFieldSubmitted: (_) => isRegistering ? null : _submit(),
-                    ),
-
-                    // The register branch. Only ever shown after the server has
-                    // told us this verified number has no account.
-                    if (isRegistering) ...[
-                      const SizedBox(height: MowSpace.gutter),
-                      const _NewAccountNotice(),
-                      const SizedBox(height: MowSpace.gutter),
-                      _Label('Your name'),
+                      _Label('Phone number'),
                       const SizedBox(height: MowSpace.base),
                       TextFormField(
-                        controller: _name,
-                        textCapitalization: TextCapitalization.words,
+                        controller: _phone,
+                        keyboardType: TextInputType.phone,
                         textInputAction: TextInputAction.next,
-                        autofillHints: const [AutofillHints.name],
-                        decoration: const InputDecoration(hintText: 'Priya Sharma'),
-                        validator: (v) => (v ?? '').trim().isEmpty
-                            ? 'Enter your name'
-                            : null,
+                        autofillHints: const [AutofillHints.telephoneNumber],
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(18),
+                        ],
+                        decoration: const InputDecoration(
+                          hintText: 'Enter 10-digit mobile number',
+                          prefixIcon: _CountryCodePrefix(),
+                          prefixIconConstraints: BoxConstraints(minWidth: 56),
+                        ),
+                        validator: validatePhoneInput,
                       ),
                       const SizedBox(height: MowSpace.gutter),
+
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _Label('Email'),
-                          const SizedBox(width: MowSpace.base),
+                          _Label('Verification code'),
                           Text(
-                            'optional',
+                            'Use 123456',
                             style: theme.textTheme.labelSmall?.copyWith(
                               color: MowColors.onSurfaceVariant,
                             ),
@@ -180,45 +162,153 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                       const SizedBox(height: MowSpace.base),
                       TextFormField(
-                        controller: _email,
-                        keyboardType: TextInputType.emailAddress,
-                        textInputAction: TextInputAction.done,
-                        autofillHints: const [AutofillHints.email],
-                        decoration: const InputDecoration(
-                          hintText: 'priya@example.com',
+                        controller: _otp,
+                        keyboardType: TextInputType.number,
+                        textInputAction:
+                            isRegistering ? TextInputAction.next : TextInputAction.done,
+                        autofillHints: const [AutofillHints.oneTimeCode],
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(8),
+                        ],
+                        style: const TextStyle(
+                          fontFeatures: [FontFeature.tabularFigures()],
+                          letterSpacing: 8,
                         ),
-                        validator: (v) {
-                          final value = (v ?? '').trim();
-                          if (value.isEmpty) return null;
-                          // Deliberately loose. The server does the real check;
-                          // rejecting an address the server would accept is
-                          // worse than letting one 422 through.
-                          return value.contains('@') && value.contains('.')
-                              ? null
-                              : 'Enter a valid email, or leave it blank';
-                        },
-                        onFieldSubmitted: (_) => _submit(),
+                        decoration: const InputDecoration(hintText: '––––––'),
+                        validator: validateOtp,
+                        onFieldSubmitted: (_) => isRegistering ? null : _submit(),
                       ),
-                    ],
 
-                    const SizedBox(height: MowSpace.section),
-                    ElevatedButton(
-                      onPressed: state.isSubmitting ? null : _submit,
-                      child: state.isSubmitting
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: MowColors.onPrimary,
+                      // The register branch. Only ever shown after the server
+                      // has told us this verified number has no account, so it
+                      // animates in as a consequence of an action rather than
+                      // appearing unprompted.
+                      AnimatedSize(
+                        duration: MowMotion.respecting(context, MowMotion.status),
+                        curve: MowMotion.enterCurve,
+                        alignment: Alignment.topCenter,
+                        child: !isRegistering
+                            ? const SizedBox(width: double.infinity)
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  const SizedBox(height: MowSpace.gutter),
+                                  const FadeSlideIn(child: _NewAccountNotice()),
+                                  const SizedBox(height: MowSpace.gutter),
+                                  FadeSlideIn(
+                                    delay: const Duration(milliseconds: 60),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        _Label('Your name'),
+                                        const SizedBox(height: MowSpace.base),
+                                        TextFormField(
+                                          controller: _name,
+                                          textCapitalization:
+                                              TextCapitalization.words,
+                                          textInputAction: TextInputAction.next,
+                                          autofillHints: const [
+                                            AutofillHints.name,
+                                          ],
+                                          decoration: const InputDecoration(
+                                            hintText: 'Priya Sharma',
+                                          ),
+                                          validator: (v) =>
+                                              (v ?? '').trim().isEmpty
+                                              ? 'Enter your name'
+                                              : null,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: MowSpace.gutter),
+                                  FadeSlideIn(
+                                    delay: const Duration(milliseconds: 120),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            _Label('Email'),
+                                            const SizedBox(width: MowSpace.base),
+                                            Text(
+                                              'optional',
+                                              style: theme.textTheme.labelSmall
+                                                  ?.copyWith(
+                                                    color: MowColors
+                                                        .onSurfaceVariant,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: MowSpace.base),
+                                        TextFormField(
+                                          controller: _email,
+                                          keyboardType:
+                                              TextInputType.emailAddress,
+                                          textInputAction: TextInputAction.done,
+                                          autofillHints: const [
+                                            AutofillHints.email,
+                                          ],
+                                          decoration: const InputDecoration(
+                                            hintText: 'priya@example.com',
+                                          ),
+                                          validator: (v) {
+                                            final value = (v ?? '').trim();
+                                            if (value.isEmpty) return null;
+                                            // Deliberately loose. The server
+                                            // does the real check; rejecting an
+                                            // address the server would accept is
+                                            // worse than letting one 422 through.
+                                            return value.contains('@') &&
+                                                    value.contains('.')
+                                                ? null
+                                                : 'Enter a valid email, or leave it blank';
+                                          },
+                                          onFieldSubmitted: (_) => _submit(),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
-                            )
-                          : Text(isRegistering ? 'Create account' : 'Continue'),
-                    ),
+                      ),
 
-                    const SizedBox(height: MowSpace.section),
-                    const _RestaurantLink(),
-                  ],
+                      const SizedBox(height: MowSpace.section),
+                      // Not wrapped in PressScale: an ElevatedButton already
+                      // has its own press feedback, and a GestureDetector over
+                      // it would compete for the tap.
+                      ElevatedButton(
+                        onPressed: state.isSubmitting ? null : _submit,
+                        child: AnimatedSwitcher(
+                          duration: MowMotion.respecting(
+                            context,
+                            MowMotion.status,
+                          ),
+                          child: state.isSubmitting
+                              ? const SizedBox(
+                                  key: ValueKey('busy'),
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: MowColors.onPrimary,
+                                  ),
+                                )
+                              : Text(
+                                  isRegistering ? 'Create account' : 'Continue',
+                                  key: ValueKey(isRegistering),
+                                ),
+                        ),
+                      ),
+
+                      const SizedBox(height: MowSpace.section),
+                      const _RestaurantLink(),
+                    ],
+                  ),
                 ),
               ),
             ),

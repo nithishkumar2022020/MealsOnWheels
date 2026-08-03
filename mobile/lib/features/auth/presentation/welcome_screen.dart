@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/motion.dart';
 import '../../../core/theme/tokens.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -22,56 +23,60 @@ class WelcomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Spacer(flex: 2),
-              Center(
-                child: Container(
-                  height: 96,
-                  width: 96,
-                  decoration: BoxDecoration(
-                    color: MowColors.primary,
-                    borderRadius: BorderRadius.circular(MowRadius.xl),
-                  ),
-                  child: const Icon(
-                    Icons.local_shipping_outlined,
-                    color: MowColors.onPrimary,
-                    size: 48,
-                  ),
+              // Staggered in reading order — mark, then name, then promise.
+              // 60 ms apart is enough to feel sequential without making anyone
+              // wait for the button.
+              const FadeSlideIn(child: _Mark()),
+              const SizedBox(height: MowSpace.section),
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 60),
+                child: Text(
+                  'Welcome to\nMealsOnWheels',
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.displaySmall,
                 ),
               ),
-              const SizedBox(height: MowSpace.section),
-              Text(
-                'Welcome to\nMealsOnWheels',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.displaySmall,
-              ),
               const SizedBox(height: MowSpace.gutter),
-              Text(
-                'Pre-book meals along your route. '
-                'Your food is ready the moment you arrive — no queue.',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: MowColors.onSurfaceVariant,
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 120),
+                child: Text(
+                  'Pre-book meals along your route. '
+                  'Your food is ready the moment you arrive — no queue.',
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: MowColors.onSurfaceVariant,
+                  ),
                 ),
               ),
               const Spacer(flex: 3),
-              ElevatedButton(
-                onPressed: onGetStarted,
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 180),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text('Get started'),
-                    SizedBox(width: MowSpace.base),
-                    Icon(Icons.arrow_forward, size: 20),
+                    ElevatedButton(
+                      onPressed: onGetStarted,
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Get started'),
+                          SizedBox(width: MowSpace.base),
+                          Icon(Icons.arrow_forward, size: 20),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: MowSpace.gutter),
+                    // Single entry point: the login screen decides whether this
+                    // is a sign-in or a sign-up once it knows the number. Two
+                    // buttons here would make the user answer a question they
+                    // cannot know.
+                    Text(
+                      'Sign in or create an account with your phone number',
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.labelSmall,
+                    ),
                   ],
                 ),
-              ),
-              const SizedBox(height: MowSpace.gutter),
-              // Single entry point: the login screen decides whether this is a
-              // sign-in or a sign-up once it knows the number. Two buttons here
-              // would make the user answer a question they cannot know.
-              Text(
-                'Sign in or create an account with your phone number',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.labelSmall,
               ),
               const SizedBox(height: MowSpace.base),
             ],
@@ -80,4 +85,25 @@ class WelcomeScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+class _Mark extends StatelessWidget {
+  const _Mark();
+
+  @override
+  Widget build(BuildContext context) => Center(
+    child: Container(
+      height: 96,
+      width: 96,
+      decoration: BoxDecoration(
+        color: MowColors.primary,
+        borderRadius: BorderRadius.circular(MowRadius.xl),
+      ),
+      child: const Icon(
+        Icons.local_shipping_outlined,
+        color: MowColors.onPrimary,
+        size: 48,
+      ),
+    ),
+  );
 }

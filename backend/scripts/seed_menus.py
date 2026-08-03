@@ -1,18 +1,19 @@
-"""Hardcoded menus — the authoritative price source.
+"""Seed menus. **Not** the runtime price source any more.
 
-**This module is the only place a price comes from.** `POST /bookings/create`
-resolves every line item against it and computes the total itself; a client-sent
-price is refused by `extra="forbid"` and never read
-(docs/05_API_SPEC.md sections 6.2 and 7.1). What `GET /restaurants/{id}` displays
-is therefore exactly what the booking will charge.
+Retained solely so `scripts/seed.py` has plausible dishes to write into
+`menu_items` for the seeded corridor. Nothing in the request path reads this
+module: prices are resolved from the database by `app/services/menus.py`, and
+`GET /restaurants/{id}` renders whatever rows the owner actually maintains.
+
+**Do not add a lookup here.** If a restaurant has no menu rows it is listed but
+not bookable, and that is deliberate. Falling back to these constants would quote
+a traveller a dish and a price that the restaurant never agreed to — for an
+OSM-promoted dhaba, one nobody has even spoken to — and the failure would surface
+at the roadside rather than in the API. `is_bookable` and `unbookable_reason` on
+the detail response carry that state instead.
 
 Prices are `Decimal`, never `float`. `0.1 + 0.2 != 0.3` in binary floating point,
-and these values are summed into a `NUMERIC(10,2)` column that money is owed
-against.
-
-Menus are per-restaurant and hardcoded in MVP; `menu_items` CRUD is Phase 1
-(docs/04_DATABASE_DESIGN.md section 4.1). Adding a dish is a code change until
-then, which is a known cost of keeping the price boundary server-side.
+and these values land in a `NUMERIC(10,2)` column that money is owed against.
 """
 
 from __future__ import annotations
@@ -33,9 +34,10 @@ def _item(name: str, price: str, category: str) -> MenuItem:
     return MenuItem(name, Decimal(price), category)
 
 
-# The menu served to any restaurant without a specific one — every OSM-promoted
-# POI, and any self-registered restaurant. They were never onboarded, so nobody
-# supplied a menu; serving a plausible default keeps them bookable.
+# Fallback dishes for a seeded restaurant with no named menu above, so every
+# seeded row has something orderable. This is NOT served to OSM-promoted POIs
+# or self-registrations — nothing writes menu rows for those, and they are
+# listed as unbookable until an owner supplies a real menu.
 DEFAULT_MENU: tuple[MenuItem, ...] = (
     _item("Paneer Paratha", "80.00", "Main"),
     _item("Aloo Paratha", "60.00", "Main"),
@@ -114,20 +116,21 @@ MENUS_BY_NAME: dict[str, tuple[MenuItem, ...]] = {
 
 
 def menu_for(restaurant_name: str) -> tuple[MenuItem, ...]:
-    """The menu a restaurant serves.
+    """Seed dishes for a named restaurant, or a generic set.
 
-    Falls back to DEFAULT_MENU rather than returning empty: an empty menu makes a
-    restaurant unbookable, and OSM-promoted POIs exist precisely to cover
-    corridors where seeded data is thin.
+    Called only by scripts/seed.py. The DEFAULT_MENU fallback is a seeding
+    convenience — every seeded restaurant should have something orderable — and
+    emphatically not a runtime fallback: a restaurant with no menu rows is listed
+    and unbookable, not silently given someone else's dishes.
     """
     return MENUS_BY_NAME.get(restaurant_name, DEFAULT_MENU)
 
 
 def price_of(restaurant_name: str, item_name: str) -> Decimal | None:
-    """Resolve one item's unit price. `None` means "not on this menu".
+    """Seed-time price lookup. `None` means "not in the seed data".
 
-    Stage 11 turns `None` into a 400 rather than a guess — an unknown dish must
-    not be silently priced at zero.
+    **Not the booking path.** That reads `app/services/menus.price_lookup`, which
+    queries menu_items and excludes anything currently unavailable.
     """
     for item in menu_for(restaurant_name):
         if item.name == item_name:
