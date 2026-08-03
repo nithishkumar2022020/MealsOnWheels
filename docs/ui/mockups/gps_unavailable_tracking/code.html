@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tracking Unavailable | Sophisticated Transit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e1e3e4",
+                        "primary-fixed-dim": "#9acee1",
+                        "primary": "#003441",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-error-container": "#93000a",
+                        "secondary": "#a04100",
+                        "secondary-fixed-dim": "#ffb693",
+                        "primary-fixed": "#b6ebfe",
+                        "inverse-surface": "#2e3132",
+                        "surface-container": "#edeeef",
+                        "on-primary-container": "#87bbce",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d9dadb",
+                        "on-secondary-container": "#5e2300",
+                        "on-surface-variant": "#40484b",
+                        "outline": "#70787c",
+                        "on-tertiary-fixed-variant": "#92001b",
+                        "surface": "#f8f9fa",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#90001b",
+                        "surface-tint": "#306576",
+                        "background": "#f8f9fa",
+                        "on-secondary-fixed-variant": "#7a3000",
+                        "outline-variant": "#c0c8cb",
+                        "on-surface": "#191c1d",
+                        "surface-variant": "#e1e3e4",
+                        "error": "#ba1a1a",
+                        "tertiary": "#660010",
+                        "surface-container-low": "#f3f4f5",
+                        "secondary-container": "#fd7729",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#9acee1",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#f8f9fa",
+                        "secondary-fixed": "#ffdbcc",
+                        "on-primary-fixed-variant": "#114d5d",
+                        "on-primary-fixed": "#001f28",
+                        "tertiary-fixed-dim": "#ffb3b0",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#ff9694",
+                        "primary-container": "#0f4c5c",
+                        "on-secondary-fixed": "#351000",
+                        "surface-container-high": "#e7e8e9",
+                        "on-tertiary-fixed": "#410007",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#191c1d",
+                        "tertiary-fixed": "#ffdad8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "md": "24px",
+                        "sm": "12px",
+                        "gutter": "24px",
+                        "base": "8px",
+                        "margin-desktop": "48px",
+                        "lg": "40px",
+                        "xl": "64px",
+                        "margin-mobile": "16px",
+                        "touch-target-min": "48px",
+                        "container-margin": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Montserrat"],
+                        "display-lg": ["Montserrat"],
+                        "label-md": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "display-lg-mobile": ["Montserrat"],
+                        "headline-md": ["Montserrat"],
+                        "headline-lg-mobile": ["Montserrat"],
+                        "body-md": ["Montserrat"],
+                        "body-lg": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #EDF2F4;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-shadow {
+            box-shadow: 0px 4px 20px rgba(15, 76, 92, 0.08);
+        }
+        /* Pulse for checking status */
+        @keyframes subtle-pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+        .pulse-indicator {
+            animation: subtle-pulse 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- Top App Bar (As specified in JSON) -->
+<header class="fixed top-0 left-0 w-full z-[60] bg-surface dark:bg-surface-dim shadow-sm flex justify-between items-center px-container-margin py-base h-touch-target-min">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim" data-icon="location_on">location_on</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary dark:text-primary-fixed-dim">En route: New Delhi Exp</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant dark:text-secondary hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors p-2 rounded-full" data-icon="notifications">notifications</button>
+</div>
+</header>
+<!-- Error Banner: Tracking Unavailable -->
+<div class="fixed top-[48px] left-0 w-full z-[55] bg-surface-container-highest border-b border-outline-variant flex items-center justify-between px-md py-sm">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-surface-dim flex items-center justify-center">
+<span class="material-symbols-outlined text-outline" data-icon="location_off">location_off</span>
+</div>
+<div>
+<p class="font-label-md text-on-surface">Live tracking unavailable</p>
+<p class="font-label-sm text-on-surface-variant flex items-center gap-1">
+                    We can't get real-time location. Checking status every 30 seconds.
+                    <span class="w-2 h-2 rounded-full bg-outline pulse-indicator inline-block"></span>
+</p>
+</div>
+</div>
+<button class="text-primary font-label-md hover:underline">Retry Now</button>
+</div>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-[112px] pb-[80px] relative">
+<!-- Map Background (Placeholder with Location Data) -->
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full bg-cover bg-center grayscale-[0.2] brightness-[0.95]" data-alt="A sophisticated, high-end digital map interface showing a transit route through New Delhi. The map uses a silver and cool gray color scheme with muted streets and prominent transit hubs. A thick Sunset Amber line represents the static train route. The atmosphere is professional, clean, and highly editorial, following a corporate transit aesthetic with no chaotic elements." data-location="New Delhi Railway Station" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCZHVY3QptGt_zSB1IyQit_KWxHjVt9Yi7lzNCskMf8m_qLCAFleFlOhNRrouWODtKSdejsKvhstHaY7bGeb2cdC-_LAFwzTfyzy8grLhRySBLd3Gglwf4Bkp18vo8Bx67n0uDoR8biq0OGOdENxRfM4qrLeSMEBO9nw6ZMk4RwEnaFjq-3DNa0IonCxI5rAiaaPActBNLOJ16wmigZpuqA-rWvuTiK4SseDLLZ8-Q99uYNU9KbHqIxyw')"></div>
+<!-- Last Known Location Marker (Static) -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+<div class="relative">
+<!-- Marker Pulse (Static/Greyed) -->
+<div class="w-12 h-12 bg-outline/20 rounded-full flex items-center justify-center animate-ping absolute -inset-0"></div>
+<div class="relative w-8 h-8 bg-surface-container shadow-md border-2 border-outline rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-outline text-[18px]" data-icon="train">train</span>
+</div>
+<!-- Label -->
+<div class="absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-surface px-3 py-1 rounded-lg border border-outline-variant custom-shadow whitespace-nowrap">
+<p class="font-label-sm text-outline">Last seen: 4m ago</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Info Card (Bento-style Overlay) -->
+<div class="absolute bottom-md left-md right-md z-20 md:max-w-md md:left-margin-desktop md:bottom-xl">
+<div class="bg-surface/95 backdrop-blur-md border border-outline-variant rounded-xl custom-shadow overflow-hidden">
+<div class="p-md">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<h3 class="font-headline-sm text-primary mb-xs">New Delhi Express</h3>
+<p class="font-label-sm text-secondary uppercase tracking-widest">Train No. 12002</p>
+</div>
+<div class="bg-surface-container px-3 py-1 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-label-sm text-on-surface">Scheduled</span>
+</div>
+</div>
+<!-- Static Progress Line -->
+<div class="relative h-1 bg-surface-container-highest rounded-full mb-md mt-sm">
+<div class="absolute left-0 top-0 h-full w-2/3 bg-outline/40 rounded-full"></div>
+<div class="absolute left-[66%] top-1/2 -translate-y-1/2 w-3 h-3 bg-surface border-2 border-outline rounded-full"></div>
+</div>
+<div class="grid grid-cols-2 gap-md">
+<div class="flex flex-col">
+<span class="font-label-sm text-on-surface-variant">Next Stop</span>
+<span class="font-label-md text-on-surface">Agra Cantt</span>
+</div>
+<div class="flex flex-col text-right">
+<span class="font-label-sm text-on-surface-variant">Est. Arrival</span>
+<span class="font-label-md text-on-surface">08:15 AM</span>
+</div>
+</div>
+</div>
+<!-- Interaction Footer -->
+<div class="bg-surface-container-low px-md py-sm flex justify-between items-center border-t border-outline-variant">
+<button class="flex items-center gap-2 text-primary font-label-md hover:bg-surface-variant px-3 py-1.5 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="share">share</span>
+                        Share Journey
+                    </button>
+<button class="flex items-center gap-2 text-primary font-label-md hover:bg-surface-variant px-3 py-1.5 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="restaurant_menu">restaurant_menu</span>
+                        Pre-order Food
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (As specified in JSON) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface dark:bg-surface-container-lowest shadow-lg flex justify-around items-center px-container-margin pb-4 pt-2 rounded-t-xl">
+<!-- Home -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-dim transition-all group" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<!-- Stops (Active) -->
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-full px-4 py-1 scale-90 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="departure_board">departure_board</span>
+<span class="font-label-sm text-label-sm">Stops</span>
+</a>
+<!-- Orders -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-dim transition-all group" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-dim transition-all group" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions for the Retry button
+        document.addEventListener('DOMContentLoaded', () => {
+            const retryBtn = document.querySelector('button.text-primary');
+            if(retryBtn) {
+                retryBtn.addEventListener('click', (e) => {
+                    const originalText = e.target.innerText;
+                    e.target.innerText = "Re-scanning...";
+                    e.target.classList.add('opacity-50');
+                    setTimeout(() => {
+                        e.target.innerText = originalText;
+                        e.target.classList.remove('opacity-50');
+                        // Simple visual feedback: Flash the banner
+                        const banner = e.target.closest('div');
+                        banner.classList.add('bg-surface-container-high');
+                        setTimeout(() => banner.classList.remove('bg-surface-container-high'), 300);
+                    }, 1500);
+                });
+            }
+        });
+    </script>
+</body></html>

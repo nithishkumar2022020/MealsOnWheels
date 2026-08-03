@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>How It Works - MealsOnWheels</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed": "#b6ebfe",
+                    "on-tertiary-fixed": "#410007",
+                    "tertiary-fixed": "#ffdad8",
+                    "surface-container": "#edeeef",
+                    "secondary": "#a04100",
+                    "surface-container-highest": "#e1e3e4",
+                    "surface": "#f8f9fa",
+                    "outline-variant": "#c0c8cb",
+                    "error": "#ba1a1a",
+                    "surface-container-low": "#f3f4f5",
+                    "primary-container": "#0f4c5c",
+                    "on-tertiary-container": "#ff9694",
+                    "secondary-container": "#fd7729",
+                    "surface-container-lowest": "#ffffff",
+                    "primary": "#003441",
+                    "on-secondary-fixed": "#351000",
+                    "inverse-primary": "#9acee1",
+                    "on-background": "#191c1d",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "surface-container-high": "#e7e8e9",
+                    "on-surface": "#191c1d",
+                    "on-error": "#ffffff",
+                    "inverse-on-surface": "#f0f1f2",
+                    "background": "#f8f9fa",
+                    "surface-variant": "#e1e3e4",
+                    "on-secondary-container": "#5e2300",
+                    "outline": "#70787c",
+                    "on-surface-variant": "#40484b",
+                    "on-primary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "primary-fixed-dim": "#9acee1",
+                    "on-primary-fixed-variant": "#114d5d",
+                    "on-primary-fixed": "#001f28",
+                    "surface-tint": "#306576",
+                    "secondary-fixed-dim": "#ffb693",
+                    "secondary-fixed": "#ffdbcc",
+                    "surface-dim": "#d9dadb",
+                    "inverse-surface": "#2e3132",
+                    "on-primary-container": "#87bbce",
+                    "tertiary-container": "#90001b",
+                    "surface-bright": "#f8f9fa",
+                    "tertiary-fixed-dim": "#ffb3b0",
+                    "on-tertiary-fixed-variant": "#92001b",
+                    "tertiary": "#660010",
+                    "on-secondary-fixed-variant": "#7a3000",
+                    "on-error-container": "#93000a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "margin-desktop": "48px",
+                    "base": "8px",
+                    "gutter": "24px",
+                    "sm": "12px",
+                    "xs": "4px",
+                    "lg": "40px",
+                    "xl": "64px",
+                    "md": "24px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Montserrat"],
+                    "headline-md": ["Montserrat"],
+                    "body-lg": ["Montserrat"],
+                    "label-md": ["Montserrat"],
+                    "label-sm": ["Montserrat"],
+                    "headline-sm": ["Montserrat"],
+                    "display-lg": ["Montserrat"],
+                    "body-md": ["Montserrat"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        .route-path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawPath 2s ease-out forwards;
+        }
+        @keyframes drawPath {
+            to { stroke-dashoffset: 0; }
+        }
+        .pin-bounce {
+            animation: pinBounce 2s infinite ease-in-out;
+        }
+        @keyframes pinBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col overflow-hidden">
+<!-- Secondary Navigation: Skip Button -->
+<div class="fixed top-0 left-0 w-full px-margin-mobile py-8 flex justify-end z-50">
+<button class="font-label-md text-label-md text-outline hover:text-primary transition-colors duration-300">
+            Skip
+        </button>
+</div>
+<!-- Main Content Canvas (Focused Journey) -->
+<main class="flex-1 flex flex-col items-center justify-center px-margin-mobile pt-16 pb-24">
+<!-- Illustration Area: Bento-inspired Map Card -->
+<div class="w-full max-w-md aspect-square mb-12 relative animate-fade-in" style="animation-delay: 0.2s;">
+<div class="absolute inset-0 bg-surface border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<!-- Map Background -->
+<div class="absolute inset-0 opacity-40" data-alt="A minimalist, cool-toned silver and gray vector map of a metropolitan area. The style is editorial and sophisticated, featuring clean lines for streets and subtle blocks for buildings. The color palette is dominated by #EDF2F4 with light slate accents. The lighting is soft and even, suggesting a high-end corporate navigation interface." data-location="San Francisco" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC1x6VWTHV_X579Qjj9fyOgEZeUod979ug_3gz32f6bv6JsekppRI4yhskpYsldwVuP6F_9K8Oxm3UQF1w2E2xZmI6cqCLAlwOCjT3JMghIK2xC_sE1_MBkiolIw0QClkHwZt65HJRRNDdgXIs4fIyn9kD42DIXnD7Vz9cl0DQuQBib2beHwYfrFeMEPZ3HpzpOuIRIPJ2cd0kDF1dyRxR_UZUg_UP2L1FYGeNGTCrYoZa8DyJhQZBEMA')">
+</div>
+<!-- Animated Route Overlay -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" viewbox="0 0 400 400">
+<path class="route-path" d="M 50,350 C 100,300 150,320 200,200 S 300,100 350,50" fill="none" stroke="#fd7729" stroke-linecap="round" stroke-width="4"></path>
+<!-- Restaurant Pins -->
+<g class="pin-bounce" style="animation-delay: 0.5s;">
+<circle cx="160" cy="240" fill="#003441" r="12"></circle>
+<text fill="white" font-family="Material Symbols Outlined" font-size="16" text-anchor="middle" x="160" y="244">restaurant</text>
+</g>
+<g class="pin-bounce" style="animation-delay: 0.8s;">
+<circle cx="230" cy="170" fill="#003441" r="12"></circle>
+<text fill="white" font-family="Material Symbols Outlined" font-size="16" text-anchor="middle" x="230" y="174">local_pizza</text>
+</g>
+<g class="pin-bounce" style="animation-delay: 1.1s;">
+<circle cx="310" cy="90" fill="#003441" r="12"></circle>
+<text fill="white" font-family="Material Symbols Outlined" font-size="16" text-anchor="middle" x="310" y="94">bakery_dining</text>
+</g>
+</svg>
+<!-- Floating Route Indicator -->
+<div class="absolute bottom-4 left-4 right-4 bg-surface-container-lowest/90 backdrop-blur-md p-4 rounded-lg border border-outline-variant flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-container rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container" style="font-size: 20px;">route</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-outline">Current Route</p>
+<p class="font-label-md text-label-md text-primary">Downtown Express • 12:30 PM</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Copy Content -->
+<div class="text-center max-w-sm space-y-4 animate-fade-in" style="animation-delay: 0.4s;">
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">
+                Search restaurants along your route
+            </h1>
+<p class="font-body-md text-body-md text-on-surface-variant px-4">
+                Select your route and time to discover restaurants waiting for you.
+            </p>
+</div>
+</main>
+<!-- Bottom Controls Footer -->
+<footer class="fixed bottom-0 left-0 w-full bg-surface pb-10 pt-4 px-margin-mobile flex flex-col items-center gap-8 z-50">
+<!-- Pagination Indicator -->
+<div class="flex gap-2">
+<div class="w-2.5 h-2.5 rounded-full bg-primary-container"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-outline-variant"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-outline-variant"></div>
+</div>
+<!-- Primary Action -->
+<div class="w-full max-w-md">
+<button class="w-full h-[48px] bg-primary text-on-primary rounded-xl font-label-md text-label-md shadow-sm active:scale-95 transition-all duration-150 flex items-center justify-center gap-2">
+                Next
+                <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
+</button>
+</div>
+</footer>
+<!-- Interactive micro-effects script -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Subtle parallax effect on the map card
+            const card = document.querySelector('.animate-fade-in');
+            document.addEventListener('mousemove', (e) => {
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 50;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 50;
+                card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            });
+        });
+    </script>
+</body></html>

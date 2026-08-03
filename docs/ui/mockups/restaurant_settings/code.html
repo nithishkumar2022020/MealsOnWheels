@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TransitFood | Restaurant Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-high": "#e7e8e9",
+                    "outline-variant": "#c0c8cb",
+                    "inverse-primary": "#9acee1",
+                    "on-secondary-fixed-variant": "#7a3000",
+                    "secondary-container": "#fd7729",
+                    "primary-container": "#0f4c5c",
+                    "tertiary-fixed": "#ffdad8",
+                    "on-secondary-fixed": "#351000",
+                    "secondary-fixed-dim": "#ffb693",
+                    "primary-fixed-dim": "#9acee1",
+                    "inverse-surface": "#2e3132",
+                    "surface-dim": "#d9dadb",
+                    "surface-container": "#edeeef",
+                    "on-secondary-container": "#5e2300",
+                    "tertiary-container": "#90001b",
+                    "surface-container-low": "#f3f4f5",
+                    "on-tertiary-fixed": "#410007",
+                    "on-tertiary-fixed-variant": "#92001b",
+                    "on-primary-fixed-variant": "#114d5d",
+                    "background": "#f8f9fa",
+                    "surface-container-highest": "#e1e3e4",
+                    "inverse-on-surface": "#f0f1f2",
+                    "surface-tint": "#306576",
+                    "secondary": "#a04100",
+                    "surface-variant": "#e1e3e4",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error": "#ffffff",
+                    "primary": "#003441",
+                    "primary-fixed": "#b6ebfe",
+                    "on-primary": "#ffffff",
+                    "on-background": "#191c1d",
+                    "error-container": "#ffdad6",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb3b0",
+                    "on-primary-fixed": "#001f28",
+                    "surface-bright": "#f8f9fa",
+                    "outline": "#70787c",
+                    "tertiary": "#660010",
+                    "surface": "#f8f9fa",
+                    "error": "#ba1a1a",
+                    "secondary-fixed": "#ffdbcc",
+                    "on-surface": "#191c1d",
+                    "on-primary-container": "#87bbce",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-container": "#ff9694",
+                    "on-surface-variant": "#40484b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "12px",
+                    "base": "8px",
+                    "xs": "4px",
+                    "lg": "40px",
+                    "md": "24px",
+                    "xl": "64px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "48px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Montserrat"],
+                    "display-lg": ["Montserrat"],
+                    "label-sm": ["Montserrat"],
+                    "headline-md": ["Montserrat"],
+                    "body-md": ["Montserrat"],
+                    "headline-sm": ["Montserrat"],
+                    "body-lg": ["Montserrat"],
+                    "label-md": ["Montserrat"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #fd7729;
+        }
+        .toggle-checkbox:checked + .toggle-label .toggle-dot {
+            transform: translateX(100%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- Top Navigation Bar -->
+<header class="w-full top-0 sticky bg-surface shadow-sm flex justify-between items-center px-margin-mobile md:px-margin-desktop h-12 z-50">
+<div class="flex items-center gap-base">
+<span class="material-symbols-outlined text-primary" data-icon="directions_bus">directions_bus</span>
+<h1 class="font-display-lg-mobile text-display-lg-mobile md:font-headline-sm md:text-headline-sm text-primary tracking-tight">TransitFood</h1>
+</div>
+<div class="flex items-center gap-md">
+<div class="hidden md:flex gap-md">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="font-label-md text-label-md text-primary font-bold transition-colors" href="#">Management</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Analytics</a>
+</div>
+<span class="material-symbols-outlined text-primary cursor-pointer" data-icon="location_on">location_on</span>
+</div>
+</header>
+<main class="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-lg pb-32">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-lg gap-md">
+<div>
+<h2 class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-primary tracking-tight">Restaurant Management</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Update your facility status and logistical parameters.</p>
+</div>
+<!-- Quick Toggle Status Card -->
+<div class="bg-surface-container-low border border-outline-variant p-md rounded-xl flex items-center gap-md shadow-sm">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline">Live Status</span>
+<span class="font-label-md text-label-md text-primary" id="statusText">Accepting Orders</span>
+</div>
+<div class="relative inline-block w-12 h-6 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 checked:right-0 right-6" id="toggle" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-outline-variant cursor-pointer transition-colors duration-200" for="toggle"></label>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Settings Form -->
+<div class="lg:col-span-8 space-y-gutter">
+<!-- Operating Hours Card -->
+<div class="bg-surface border border-outline-variant rounded-xl p-md md:p-lg">
+<div class="flex items-center gap-base mb-md">
+<span class="material-symbols-outlined text-secondary" data-icon="schedule">schedule</span>
+<h3 class="font-headline-sm text-headline-sm text-primary">Operating Hours</h3>
+</div>
+<div class="space-y-md">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md items-center py-sm border-b border-surface-container-high">
+<span class="font-label-md text-label-md text-on-surface">Monday - Friday</span>
+<div class="flex items-center gap-xs">
+<input class="bg-surface-container-low border-outline-variant rounded-lg px-base py-xs text-on-surface-variant focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all w-full" type="time" value="08:00"/>
+<span class="text-outline">to</span>
+<input class="bg-surface-container-low border-outline-variant rounded-lg px-base py-xs text-on-surface-variant focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all w-full" type="time" value="22:00"/>
+</div>
+<span class="md:text-right text-secondary font-label-sm text-label-sm">Active</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md items-center py-sm border-b border-surface-container-high">
+<span class="font-label-md text-label-md text-on-surface">Saturday</span>
+<div class="flex items-center gap-xs">
+<input class="bg-surface-container-low border-outline-variant rounded-lg px-base py-xs text-on-surface-variant focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all w-full" type="time" value="10:00"/>
+<span class="text-outline">to</span>
+<input class="bg-surface-container-low border-outline-variant rounded-lg px-base py-xs text-on-surface-variant focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all w-full" type="time" value="23:00"/>
+</div>
+<span class="md:text-right text-secondary font-label-sm text-label-sm">Active</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md items-center py-sm">
+<span class="font-label-md text-label-md text-on-surface">Sunday</span>
+<div class="flex items-center gap-xs">
+<input class="bg-surface-container-low border-outline-variant rounded-lg px-base py-xs text-on-surface-variant focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all w-full" type="time" value="10:00"/>
+<span class="text-outline">to</span>
+<input class="bg-surface-container-low border-outline-variant rounded-lg px-base py-xs text-on-surface-variant focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all w-full" type="time" value="20:00"/>
+</div>
+<span class="md:text-right text-outline font-label-sm text-label-sm">Reduced</span>
+</div>
+</div>
+</div>
+<!-- Contact & Performance Card -->
+<div class="bg-surface border border-outline-variant rounded-xl p-md md:p-lg">
+<div class="flex items-center gap-base mb-md">
+<span class="material-symbols-outlined text-secondary" data-icon="settings_input_component">settings_input_component</span>
+<h3 class="font-headline-sm text-headline-sm text-primary">Logistics &amp; Contact</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface-variant">Contact Number</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant" data-icon="call">call</span>
+<input class="pl-10 w-full bg-surface-container-low border-outline-variant rounded-lg h-12 text-on-surface focus:border-primary-container focus:ring-2 focus:ring-primary-container outline-none transition-all" type="text" value="+1 (555) 012-3456"/>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface-variant">Avg Prep Time (mins)</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant" data-icon="timer">timer</span>
+<select class="pl-10 w-full bg-surface-container-low border-outline-variant rounded-lg h-12 text-on-surface focus:border-primary-container focus:ring-2 focus:ring-primary-container outline-none transition-all appearance-none">
+<option>10-15 mins</option>
+<option selected="">15-20 mins</option>
+<option>20-30 mins</option>
+<option>30-45 mins</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+<div class="flex justify-end pt-md">
+<button class="bg-primary text-white font-label-md text-label-md px-xl h-12 rounded-lg hover:bg-primary-container transition-all active:scale-95 shadow-md">
+                        Save Changes
+                    </button>
+</div>
+</div>
+<!-- Right Column: Sidebar / Stats -->
+<div class="lg:col-span-4 space-y-gutter">
+<!-- Restaurant Card Preview -->
+<div class="bg-surface border border-outline-variant rounded-xl overflow-hidden shadow-sm group hover:shadow-lg transition-shadow">
+<div class="w-full h-40 bg-cover bg-center" data-alt="A high-end restaurant interior with moody warm lighting, clean architectural lines, and sophisticated furniture. The aesthetic is corporate yet welcoming with a palette of deep teals and warm ambers, capturing a premium dining atmosphere with a sense of logistical precision." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCDnAqHIIopuh_ip3o12GcE7vUeg3ISYQvDNqoShN7lP1f6WXVW6fO6XyJwdJwW7JDKxDq_XRK_qT7FVr-hTJE79zwzFYYxmgdxcrhNkFmhGxYidr6n8ySqp9yDoYb02vkU82wAGOPDJeAzjuHE5NuQTsEyCtlyHz-O4zoEFfEZBeXH7KqIyCIRdgbNrV0T4pjG6z4fXHRTMLwsaHImewSF6R2EZ-2VazEbeQ9N7JEWobBfHvf-ZRx5GQ')"></div>
+<div class="p-md">
+<div class="flex justify-between items-start mb-sm">
+<h4 class="font-headline-sm text-headline-sm text-primary">Transit Diner</h4>
+<span class="bg-primary-container/10 text-primary-container px-base py-xs rounded-full font-label-sm text-label-sm">Track #1294</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md">Premium Transit Member since 2022. Top-rated for punctuality and heat retention.</p>
+<div class="flex items-center gap-sm text-secondary">
+<span class="material-symbols-outlined" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md font-bold">4.9 (1,200+ Reviews)</span>
+</div>
+</div>
+</div>
+<!-- Logistics Overview Card -->
+<div class="bg-surface-container-highest border border-outline-variant rounded-xl p-md">
+<h4 class="font-label-md text-label-md text-primary mb-md uppercase tracking-widest">Active Fleet Metrics</h4>
+<div class="space-y-sm">
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-on-surface-variant">Avg Delivery Range</span>
+<span class="font-label-md text-label-md text-on-surface">4.5 km</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-on-surface-variant">Live Couriers Nearby</span>
+<span class="font-label-md text-label-md text-on-surface">12 active</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-on-surface-variant">Terminal Proximity</span>
+<span class="font-label-md text-label-md text-on-surface">350m</span>
+</div>
+</div>
+<button class="w-full mt-md bg-white border border-outline-variant text-primary font-label-md text-label-md h-12 rounded-lg hover:bg-surface-container-low transition-all">
+                        View Map Analytics
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mobile only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 flex justify-around items-center h-16 px-2 pb-safe bg-surface-container-lowest shadow-[0px_-4px_20px_rgba(15,76,92,0.08)]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="departure_board">departure_board</span>
+<span class="font-label-sm text-label-sm">Stops</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<!-- Navigation Drawer (Desktop Sidebar Hidden by default) -->
+<aside class="fixed left-0 top-0 h-full w-72 bg-surface shadow-lg transform -translate-x-full transition-transform duration-300 ease-out z-[60] border-r border-outline-variant" id="drawer">
+<div class="flex flex-col py-md gap-xs">
+<!-- Drawer Header -->
+<div class="px-md pb-md border-b border-surface-container-high mb-sm">
+<div class="w-12 h-12 rounded-full bg-primary-container/20 flex items-center justify-center mb-base">
+<span class="material-symbols-outlined text-primary" data-icon="storefront">storefront</span>
+</div>
+<h3 class="font-label-md text-label-md text-primary">Transit Diner</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Premium Member</p>
+</div>
+<a class="flex items-center gap-md py-sm px-md mx-2 rounded-lg bg-primary-container text-on-primary-container font-bold" href="#">
+<span class="material-symbols-outlined" data-icon="storefront">storefront</span>
+<span class="font-label-md text-label-md">Restaurant Login</span>
+</a>
+<a class="flex items-center gap-md py-sm px-md mx-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="font-label-md text-label-md">Notifications</span>
+</a>
+<a class="flex items-center gap-md py-sm px-md mx-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="help_center">help_center</span>
+<span class="font-label-md text-label-md">Help/FAQ</span>
+</a>
+<a class="flex items-center gap-md py-sm px-md mx-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<a class="flex items-center gap-md py-sm px-md mx-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="font-label-md text-label-md">Privacy</span>
+</a>
+</div>
+</aside>
+<!-- Drawer Backdrop -->
+<div class="fixed inset-0 bg-black/50 hidden z-[55]" id="backdrop" onclick="toggleDrawer()"></div>
+<script>
+        const toggleBtn = document.getElementById('toggle');
+        const statusText = document.getElementById('statusText');
+        
+        toggleBtn.addEventListener('change', function() {
+            if (this.checked) {
+                statusText.innerText = "Accepting Orders";
+                statusText.classList.replace('text-outline', 'text-primary');
+            } else {
+                statusText.innerText = "Paused / Closed";
+                statusText.classList.replace('text-primary', 'text-outline');
+            }
+        });
+
+        function toggleDrawer() {
+            const drawer = document.getElementById('drawer');
+            const backdrop = document.getElementById('backdrop');
+            drawer.classList.toggle('-translate-x-full');
+            backdrop.classList.toggle('hidden');
+        }
+
+        // Simulating some UI interaction logic
+        document.querySelector('[data-icon="directions_bus"]').parentElement.addEventListener('click', toggleDrawer);
+    </script>
+</body></html>

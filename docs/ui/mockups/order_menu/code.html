@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TransitFood - Menu</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-variant": "#e1e3e4",
+                        "primary-container": "#0f4c5c",
+                        "tertiary-container": "#90001b",
+                        "outline": "#70787c",
+                        "on-secondary-fixed": "#351000",
+                        "on-primary-fixed": "#001f28",
+                        "surface-dim": "#d9dadb",
+                        "on-tertiary-fixed-variant": "#92001b",
+                        "tertiary": "#660010",
+                        "inverse-on-surface": "#f0f1f2",
+                        "inverse-primary": "#9acee1",
+                        "on-primary-fixed-variant": "#114d5d",
+                        "surface-tint": "#306576",
+                        "background": "#f8f9fa",
+                        "on-tertiary-fixed": "#410007",
+                        "surface-container-high": "#e7e8e9",
+                        "on-error": "#ffffff",
+                        "primary": "#003441",
+                        "secondary-container": "#fd7729",
+                        "on-surface": "#191c1d",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed": "#ffdbcc",
+                        "outline-variant": "#c0c8cb",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#ff9694",
+                        "tertiary-fixed-dim": "#ffb3b0",
+                        "surface": "#f8f9fa",
+                        "secondary-fixed-dim": "#ffb693",
+                        "secondary": "#a04100",
+                        "on-secondary-fixed-variant": "#7a3000",
+                        "inverse-surface": "#2e3132",
+                        "tertiary-fixed": "#ffdad8",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface-container": "#edeeef",
+                        "on-secondary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#40484b",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#87bbce",
+                        "error": "#ba1a1a",
+                        "on-secondary-container": "#5e2300",
+                        "primary-fixed": "#b6ebfe",
+                        "surface-bright": "#f8f9fa",
+                        "on-background": "#191c1d",
+                        "surface-container-low": "#f3f4f5",
+                        "primary-fixed-dim": "#9acee1"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "base": "8px",
+                        "md": "24px",
+                        "margin-mobile": "16px",
+                        "xl": "64px",
+                        "margin-desktop": "48px",
+                        "sm": "12px",
+                        "lg": "40px"
+                    },
+                    fontFamily: {
+                        "headline-sm": ["Montserrat"],
+                        "display-lg": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "body-md": ["Montserrat"],
+                        "label-md": ["Montserrat"],
+                        "headline-md": ["Montserrat"],
+                        "body-lg": ["Montserrat"],
+                        "display-lg-mobile": ["Montserrat"]
+                    },
+                    fontSize: {
+                        "headline-sm": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+                        "display-lg": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "label-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "500" }],
+                        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "label-md": ["14px", { lineHeight: "20px", letterSpacing: "0.01em", fontWeight: "600" }],
+                        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+                        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                        "display-lg-mobile": ["32px", { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "700" }]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background antialiased min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-inverse-surface w-full top-0 bg-surface-container dark:bg-surface-container-highest shadow-sm dark:shadow-none flex justify-between items-center px-margin-mobile md:px-margin-desktop h-12 w-full z-40 sticky">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim">local_shipping</span>
+<h1 class="font-headline-md text-headline-md text-primary dark:text-primary-fixed-dim tracking-tight">TransitFood</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim cursor-pointer active:scale-95 duration-150">account_circle</span>
+</div>
+</header>
+<main class="flex-grow pb-32">
+<!-- Restaurant Header -->
+<section class="w-full relative h-64 md:h-80 bg-surface-variant flex items-end pb-8 px-margin-mobile md:px-margin-desktop bg-cover bg-center" data-alt="A sophisticated, high-end photograph of a pristine, modern airport terminal kitchen or lounge area. The scene is brightly lit with cool, white lighting, creating a clean and efficient atmosphere. The aesthetic matches a corporate, premium transit style with sleek surfaces, subtle teal accents, and generous whitespace. The mood is calm, reliable, and professional, avoiding any chaotic energy." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC0cMouDb_fukh_5tQkdFZlGSedtwI699TOzfpVSek3P2199PUNf2Hn_Gac49io5wUdWvpDtvSnGc5GwFfJqSJXqVE0KNIQ0qs16du-R9-7bqW3RJiwHutudlDxluZhQDRRzoGnewFtnAImlzqWdnfuIDmm10IfaL9b9_XR0oqcZp3E9B5UxvK8fG4-vBcRioWrlKxWoqQ__ayQG14Jxq8LmQ5rPQiw_ZzOBsTEEezg-SgY5yXwkK-SRA')">
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent"></div>
+<div class="relative z-10 w-full max-w-[1280px] mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+<div>
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-2">Terminal 4 Bistro</h2>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">schedule</span> Open until 22:00
+                    </p>
+</div>
+<div class="bg-surface border border-outline-variant rounded-lg p-3 flex items-center gap-3 shadow-sm">
+<div class="flex flex-col items-center">
+<span class="font-headline-md text-headline-md text-primary">A</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Hygiene Rating</span>
+</div>
+<div class="h-10 w-px bg-outline-variant"></div>
+<p class="font-label-sm text-label-sm text-on-surface-variant max-w-[120px]">Inspected: Oct 12, 2023</p>
+</div>
+</div>
+</section>
+<!-- Menu Content -->
+<div class="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop mt-lg">
+<!-- Filters -->
+<div class="flex gap-3 overflow-x-auto pb-4 mb-md hide-scrollbar">
+<button class="h-12 px-6 rounded-full bg-primary-container text-on-primary-container font-label-md text-label-md whitespace-nowrap flex items-center justify-center">All Items</button>
+<button class="h-12 px-6 rounded-full bg-surface border border-outline-variant text-primary font-label-md text-label-md whitespace-nowrap hover:bg-surface-variant transition-colors flex items-center justify-center">Hot Meals</button>
+<button class="h-12 px-6 rounded-full bg-surface border border-outline-variant text-primary font-label-md text-label-md whitespace-nowrap hover:bg-surface-variant transition-colors flex items-center justify-center">Quick Grab</button>
+<button class="h-12 px-6 rounded-full bg-surface border border-outline-variant text-primary font-label-md text-label-md whitespace-nowrap hover:bg-surface-variant transition-colors flex items-center justify-center">Beverages</button>
+</div>
+<!-- Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Item 1: Available -->
+<article class="bg-surface border border-outline-variant rounded-lg overflow-hidden flex flex-col hover:shadow-[0px_4px_20px_rgba(15,76,92,0.08)] transition-shadow group relative">
+<div class="h-48 w-full bg-surface-container relative" data-alt="A pristine overhead shot of a gourmet salmon bowl on a minimalist white ceramic plate. The dish features perfectly seared salmon, vibrant edamame, and precise dollops of sauce. The lighting is crisp, studio-quality, emphasizing clarity and freshness. The background is a clean, neutral surface, fitting a sophisticated, high-end editorial style typical of a premium transit lounge." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDP0XZ3ffdeeW_ujbpLi4zjMkv58CkQdg9EiR5ttEBrb1GnhUqBbFeC9QcDitVqvSILUvGUPrcXdmbKhLqQ2BYHrYliXe2HQXg3Q7AhsbjcdTU9F8tdAAjK_isgQUq1XhLewPRegSa5tQn6uF8fXZX2vdWxQTh_RVS9RWWpnOiHa2pCYnz_O_GQ5OF61JH7pSbdEG31G20wzLyOSCO0GiukKQMWDIsGFB9YXAd4QUkXrWrIeKFKbxWkZQ')">
+<div class="absolute top-3 right-3 bg-surface/90 backdrop-blur-sm px-2 py-1 rounded border border-outline-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary-container">timer</span>
+<span class="font-label-sm text-label-sm text-on-surface">Prep: 15 mins</span>
+</div>
+</div>
+<div class="p-4 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm text-headline-sm text-primary">Seared Salmon Bowl</h3>
+<span class="font-headline-sm text-headline-sm text-primary">$24.00</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4 flex-grow">Quinoa, edamame, pickled ginger, and soy-yuzu dressing. Served chilled.</p>
+<button class="h-12 w-full bg-surface border border-primary text-primary font-label-md text-label-md rounded hover:bg-surface-variant transition-colors flex justify-center items-center gap-2 group-hover:bg-primary group-hover:text-on-primary">
+<span class="material-symbols-outlined">add</span> Add to Order
+                        </button>
+</div>
+</article>
+<!-- Item 2: Unavailable (Greyed Out) -->
+<article class="bg-surface border border-outline-variant rounded-lg overflow-hidden flex flex-col opacity-60 grayscale relative">
+<div class="absolute inset-0 bg-surface/40 z-10 pointer-events-none"></div>
+<div class="h-48 w-full bg-surface-container relative" data-alt="A beautifully plated roasted chicken breast with seasonal vegetables on a sleek, modern dish. The image is crisp and clear, photographed in a high-key, minimalist style. The lighting is soft and even, highlighting the textures of the food without harsh shadows. The overall aesthetic is premium, corporate, and clean, suitable for a sophisticated travel app." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDEBJh_akjDYMeoIZsjkaxeOxF-08cGQRnwokw-5IFLXQg6tfLbaho_wZVAJKSlzC6NsYCYhvniNBnPnkAzteKPAYNw22mQzl3YcP7YbqrTXSgs2Zdlu91pGRIwcmdP1pZRfsmQsxGPdIfDPuVYcqbzB5BFPOaI-l0hDzlqnphxfXuSdUSP8GmJIsJQGXZRGSyEe7VbR8e5-Eol_kDxiqhsvBdjYyjlW2weHZxZn9ZVCDT4dJl4oTOuRA')">
+<div class="absolute inset-0 flex items-center justify-center z-20">
+<div class="bg-inverse-surface text-inverse-on-surface font-label-md text-label-md px-4 py-2 rounded uppercase tracking-wider">Out of stock</div>
+</div>
+</div>
+<div class="p-4 flex flex-col flex-grow relative z-0">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Herb Roasted Chicken</h3>
+<span class="font-headline-sm text-headline-sm text-on-surface">$18.50</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4 flex-grow">Root vegetables, thyme jus. Served hot.</p>
+<button class="h-12 w-full bg-surface-container text-outline font-label-md text-label-md rounded cursor-not-allowed flex justify-center items-center" disabled="">
+                            Unavailable
+                        </button>
+</div>
+</article>
+<!-- Item 3: Available -->
+<article class="bg-surface border border-outline-variant rounded-lg overflow-hidden flex flex-col hover:shadow-[0px_4px_20px_rgba(15,76,92,0.08)] transition-shadow group relative">
+<div class="h-48 w-full bg-surface-container relative" data-alt="An elegant, minimalist shot of a fresh artisan baguette sandwich wrapped partially in premium, unbleached parchment paper. The sandwich rests on a flawless white marble counter. The lighting is bright and airy, reflecting a clean, modern aesthetic. The mood is efficient and appetizing, perfectly aligned with high-end editorial food photography." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAdS9yLuiHoCVZbXP1mi3PpMS75KQynv7q7iGKn1gxWwaEsGjlF1izqUX6yl7wfbzLnHYEFnKLDRJrcWi9igWGzJcjiEV0bafDsnhDvZ5_oLXtLvWiyoG-k_MyLc_Pu0e8sF1nwF9tHU2uCnbguTmHkeon7x-zD3mxMcaClGw7C1gdrsewE9Wv8_8zfQLSLR_RXx_gXrnyrRgGEkdH8QSbQ9G4OR1Z5ofpK2mCyj9lE0ARVjfDMr-pp5g')">
+<div class="absolute top-3 right-3 bg-surface/90 backdrop-blur-sm px-2 py-1 rounded border border-outline-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary-container">timer</span>
+<span class="font-label-sm text-label-sm text-on-surface">Prep: 5 mins</span>
+</div>
+</div>
+<div class="p-4 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm text-headline-sm text-primary">Artisan Baguette</h3>
+<span class="font-headline-sm text-headline-sm text-primary">$12.00</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4 flex-grow">Prosciutto, brie, fig jam, arugula. Quick grab item.</p>
+<button class="h-12 w-full bg-surface border border-primary text-primary font-label-md text-label-md rounded hover:bg-surface-variant transition-colors flex justify-center items-center gap-2 group-hover:bg-primary group-hover:text-on-primary">
+<span class="material-symbols-outlined">add</span> Add to Order
+                        </button>
+</div>
+</article>
+</div>
+</div>
+</main>
+<!-- Cart Summary & Arrival Time -->
+<div class="fixed bottom-[64px] md:bottom-0 left-0 right-0 bg-surface border-t border-outline-variant shadow-[0px_-4px_20px_rgba(15,76,92,0.08)] z-40">
+<div class="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
+<div class="flex items-center gap-3 bg-surface-container rounded p-2 border border-outline-variant w-full md:w-auto">
+<span class="material-symbols-outlined text-on-surface-variant">schedule</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Arrival Time</span>
+<select class="bg-transparent border-none p-0 font-label-md text-label-md text-primary focus:ring-0 cursor-pointer h-8">
+<option value="18:00">18:00 (Today)</option>
+<option value="18:15">18:15 (Today)</option>
+<option value="18:30">18:30 (Today)</option>
+<option value="18:45">18:45 (Today)</option>
+</select>
+</div>
+</div>
+<div class="text-center md:text-left hidden md:block">
+<p class="font-label-sm text-label-sm text-on-surface-variant">2 Items</p>
+<p class="font-headline-sm text-headline-sm text-primary">$36.00</p>
+</div>
+</div>
+<button class="h-12 w-full md:w-auto px-8 bg-secondary-container text-on-secondary-container font-label-md text-label-md rounded hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                Checkout <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- BottomNavBar -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 rounded-t-xl bg-surface dark:bg-surface-container-low shadow-[0px_-4px_20px_rgba(15,76,92,0.08)] h-16 flex justify-around items-center px-4 pb-safe">
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline active:scale-90 transition-transform h-12 w-16">
+<span class="material-symbols-outlined mb-1">route</span>
+<span class="font-label-sm text-label-sm">Route</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline active:scale-90 transition-transform h-12 w-16">
+<span class="material-symbols-outlined mb-1">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-secondary-container dark:bg-primary-container text-on-secondary-container dark:text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-transform h-12 w-20">
+<span class="material-symbols-outlined mb-1">restaurant_menu</span>
+<span class="font-label-sm text-label-sm">Menu</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline active:scale-90 transition-transform h-12 w-16">
+<span class="material-symbols-outlined mb-1">arrow_back_ios_new</span>
+<span class="font-label-sm text-label-sm">Kitchen</span>
+</button>
+</nav>
+<style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body></html>

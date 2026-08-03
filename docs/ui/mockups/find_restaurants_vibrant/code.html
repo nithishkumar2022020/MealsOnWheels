@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Traveler Search Results - TransitFood</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e1e3e4",
+                        "primary-container": "#ffdad7",
+                        "tertiary-container": "#ffdaae",
+                        "outline": "#777777",
+                        "on-secondary-fixed": "#2c1511",
+                        "on-primary-fixed": "#3f0015",
+                        "surface-dim": "#dadada",
+                        "on-tertiary-fixed-variant": "#623f00",
+                        "tertiary": "#805500",
+                        "inverse-on-surface": "#f1f1f1",
+                        "inverse-primary": "#ffb2bd",
+                        "on-primary-fixed-variant": "#71002b",
+                        "surface-tint": "#a52037",
+                        "background": "#f9f9f9",
+                        "on-tertiary-fixed": "#291800",
+                        "surface-container-high": "#e8e8e8",
+                        "on-error": "#ffffff",
+                        "primary": "#a52037",
+                        "secondary-container": "#ffdad4",
+                        "on-surface": "#1a1c1e",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed": "#ffdad4",
+                        "outline-variant": "#c7c7c7",
+                        "on-error-container": "#410002",
+                        "on-tertiary-container": "#291800",
+                        "tertiary-fixed-dim": "#fcba4f",
+                        "surface": "#f9f9f9",
+                        "secondary-fixed-dim": "#e7bdb6",
+                        "secondary": "#775651",
+                        "on-secondary-fixed-variant": "#5d3f3b",
+                        "inverse-surface": "#2f3033",
+                        "tertiary-fixed": "#ffddaf",
+                        "surface-container-highest": "#e2e2e2",
+                        "surface-container": "#eeeeee",
+                        "on-secondary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#44474e",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#400014",
+                        "error": "#ba1a1a",
+                        "on-secondary-container": "#2c1511",
+                        "primary-fixed": "#ffdae0",
+                        "surface-bright": "#f9f9f9",
+                        "on-background": "#1a1c1e",
+                        "surface-container-low": "#f3f3f3",
+                        "primary-fixed-dim": "#ffb2bc"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "base": "8px",
+                        "md": "24px",
+                        "margin-mobile": "16px",
+                        "xl": "64px",
+                        "margin-desktop": "48px",
+                        "sm": "12px",
+                        "lg": "40px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Montserrat"],
+                        "display-lg": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "body-md": ["Montserrat"],
+                        "label-md": ["Montserrat"],
+                        "headline-md": ["Montserrat"],
+                        "body-lg": ["Montserrat"],
+                        "display-lg-mobile": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+                    }
+                },
+            }
+        }
+    </script>
+<style>
+        body { background-color: #f9f9f9; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .icon-filled { font-variation-settings: 'FILL' 1; }
+        
+        /* Ambient Extra-diffused shadow */
+        .shadow-ambient {
+            box-shadow: 0px 4px 20px rgba(165, 32, 55, 0.08);
+        }
+        
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="text-on-background font-body-md antialiased pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-inverse-surface w-full top-0 shadow-sm dark:shadow-none flex justify-between items-center px-margin-mobile md:px-margin-desktop h-12 sticky z-40 bg-surface-container dark:bg-surface-container-highest">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim icon-filled text-[24px]">local_shipping</span>
+<span class="font-headline-md text-headline-md text-primary dark:text-primary-fixed-dim tracking-tight">TransitFood</span>
+</div>
+<!-- Desktop Nav -->
+<nav class="hidden md:flex items-center gap-md">
+<a class="text-on-surface-variant dark:text-outline-variant font-label-md text-label-md hover:bg-surface-variant dark:hover:bg-surface-container-high transition-colors px-3 py-2 rounded-lg" href="#">Route</a>
+<a class="text-on-surface-variant dark:text-outline-variant font-label-md text-label-md hover:bg-surface-variant dark:hover:bg-surface-container-high transition-colors px-3 py-2 rounded-lg" href="#">Orders</a>
+<a class="text-primary dark:text-primary-fixed font-bold font-label-md text-label-md hover:bg-surface-variant dark:hover:bg-surface-container-high transition-colors px-3 py-2 rounded-lg bg-secondary-container dark:bg-primary-container text-on-secondary-container dark:text-on-primary-container" href="#">Menu</a>
+<a class="text-on-surface-variant dark:text-outline-variant font-label-md text-label-md hover:bg-surface-variant dark:hover:bg-surface-container-high transition-colors px-3 py-2 rounded-lg" href="#">Kitchen</a>
+</nav>
+<button class="active:scale-95 duration-150 p-2 rounded-full hover:bg-surface-variant dark:hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim text-[24px]">account_circle</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop pt-md pb-xl">
+<!-- Search & Filter Header -->
+<div class="mb-md">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-sm mb-sm">
+<div>
+<h1 class="font-headline-md text-headline-md text-on-surface">Station 4, Terminal B</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">45 mins to next departure</p>
+</div>
+<!-- View Toggle -->
+<div class="flex bg-surface-container-high rounded-full p-1 border border-outline-variant">
+<button class="flex items-center gap-xs px-4 py-1.5 rounded-full bg-surface shadow-ambient font-label-md text-label-md text-primary">
+<span class="material-symbols-outlined text-[18px]">list</span>
+                        List
+                    </button>
+<button class="flex items-center gap-xs px-4 py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">map</span>
+                        Map
+                    </button>
+</div>
+</div>
+<!-- Arrival Time Filter (Prominent) -->
+<div class="bg-surface rounded-xl p-md border border-outline-variant mb-md flex flex-col sm:flex-row items-start sm:items-center gap-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary icon-filled">schedule</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Arrival time</span>
+</div>
+<div class="flex-1 w-full">
+<input class="w-full h-2 bg-surface-container-high rounded-lg appearance-none cursor-pointer accent-primary" max="120" min="0" type="range" value="45"/>
+<div class="flex justify-between text-label-sm font-label-sm text-on-surface-variant mt-2">
+<span>Now</span>
+<span class="text-primary font-bold">In 45 mins</span>
+<span>2 hrs+</span>
+</div>
+</div>
+</div>
+<!-- Quick Filters (Chips) -->
+<div class="flex gap-sm overflow-x-auto no-scrollbar pb-2">
+<button class="flex-shrink-0 px-4 py-2 rounded-full border border-primary text-primary bg-primary-fixed-dim/20 font-label-md text-label-md hover:bg-primary-fixed-dim/30 transition-colors">All Types</button>
+<button class="flex-shrink-0 px-4 py-2 rounded-full border border-outline-variant text-on-surface-variant bg-surface font-label-md text-label-md hover:bg-surface-variant transition-colors">Quick Grab</button>
+<button class="flex-shrink-0 px-4 py-2 rounded-full border border-outline-variant text-on-surface-variant bg-surface font-label-md text-label-md hover:bg-surface-variant transition-colors">Sit-down</button>
+<button class="flex-shrink-0 px-4 py-2 rounded-full border border-outline-variant text-on-surface-variant bg-surface font-label-md text-label-md hover:bg-surface-variant transition-colors">Vegan</button>
+<button class="flex-shrink-0 px-4 py-2 rounded-full border border-outline-variant text-on-surface-variant bg-surface font-label-md text-label-md hover:bg-surface-variant transition-colors">Coffee</button>
+</div>
+</div>
+<!-- Restaurant List (Bento-ish Grid) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
+<!-- Card 1: Open, High Priority -->
+<div class="bg-surface border border-outline-variant rounded-xl overflow-hidden group hover:shadow-ambient transition-shadow cursor-pointer flex flex-col h-full relative">
+<div class="absolute top-sm right-sm bg-surface/90 backdrop-blur-sm px-2 py-1 rounded border border-outline-variant z-10 flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary text-[16px] icon-filled">verified</span>
+<span class="font-label-sm text-label-sm text-on-surface font-bold">Hygiene: 4.8 ★</span>
+</div>
+<div class="h-48 w-full relative bg-surface-container">
+<img alt="Terminal Roast" class="w-full h-full object-cover" data-alt="A bright, modern cafe interior with sleek teal seating, sunlight streaming through large transit station windows, glowing digital menu boards. The atmosphere is sophisticated and clean, high-end corporate style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhxGQnc6EaOKhFK86rQ1hLXl_pDLawoSnvskQHmtU7LcH3ClC0RdOOkUAmcv7XsF7LaJ8gzBECpe4aLaJj1jsv7J_6rGQi7pSvBeF_mctXCwB022u6qqvfkg4ZN3F0SBQq7ailxpnPDOCaa9jqeQBuAjTIVCd86e9YjIK5hPjxeCtXRo_osuYHOXfdglBA2SUqwEGQ3Fy5iFBCi8nQw65ULWVSyZcyS2B0D996hPv4ELBOXNMDil2VQw"/>
+<!-- Status Indicator -->
+<div class="absolute bottom-sm left-sm bg-primary text-on-primary px-3 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-xs">
+<div class="w-2 h-2 rounded-full bg-secondary-container animate-pulse"></div>
+                        Open Now
+                    </div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Terminal Roast</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md flex-grow">Artisan coffee and quick pastries. 2 min walk from your gate.</p>
+<div class="flex justify-between items-center mt-auto pt-sm border-t border-surface-variant">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Est. wait: 5 mins</span>
+<button class="bg-primary hover:bg-primary/90 text-on-primary px-4 py-2 rounded-lg font-label-md text-label-md transition-colors h-[48px] flex items-center justify-center">View Menu</button>
+</div>
+</div>
+</div>
+<!-- Card 2: Open -->
+<div class="bg-surface border border-outline-variant rounded-xl overflow-hidden group hover:shadow-ambient transition-shadow cursor-pointer flex flex-col h-full relative">
+<div class="absolute top-sm right-sm bg-surface/90 backdrop-blur-sm px-2 py-1 rounded border border-outline-variant z-10 flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary text-[16px] icon-filled">verified</span>
+<span class="font-label-sm text-label-sm text-on-surface font-bold">Hygiene: 4.5 ★</span>
+</div>
+<div class="h-48 w-full relative bg-surface-container">
+<img alt="Zenith Sushi" class="w-full h-full object-cover" data-alt="A clean, minimalist sushi counter inside a premium airport terminal. Bright, even lighting highlights fresh ingredients. Sleek metallic finishes and light wood accents. High-end, sophisticated aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9pTQH3Hm9H7IRj1TR8IwbD5PHZqhKg55A7Sk9L50TQKY0lcNTZxWKYnZrcmn5r2oKH98gd4OGk4poJDVhK0rTsEmqi_4evZNB2bwG-rF2Mv79D3si_ESVeYNLsSs8foEwXCogfY4UJOn1hPTRzmgQgNNr2LwiDQfDTdwK_ZyLIpTesILHCkMzugzQ4OuXnMARoxRHCu-ux7hmWBttJiiJz9a-1ep-d8hBiMkpSIwfFsMFurRORsSVCg"/>
+<div class="absolute bottom-sm left-sm bg-primary text-on-primary px-3 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-xs">
+<div class="w-2 h-2 rounded-full bg-secondary-container animate-pulse"></div>
+                        Open Now
+                    </div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Zenith Sushi</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md flex-grow">Premium rolls and bentos ready for transit.</p>
+<div class="flex justify-between items-center mt-auto pt-sm border-t border-surface-variant">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Est. wait: 12 mins</span>
+<button class="bg-primary hover:bg-primary/90 text-on-primary px-4 py-2 rounded-lg font-label-md text-label-md transition-colors h-[48px] flex items-center justify-center">View Menu</button>
+</div>
+</div>
+</div>
+<!-- Card 3: Closed (Greyed out) -->
+<div class="bg-surface-container-high border border-outline-variant rounded-xl overflow-hidden flex flex-col h-full relative opacity-60 grayscale-[50%] select-none">
+<div class="absolute top-sm right-sm bg-surface-variant/90 backdrop-blur-sm px-2 py-1 rounded border border-outline-variant z-10 flex items-center gap-xs">
+<span class="material-symbols-outlined text-outline text-[16px]">verified</span>
+<span class="font-label-sm text-label-sm text-outline font-bold">Hygiene: 4.9 ★</span>
+</div>
+<div class="h-48 w-full relative bg-surface-variant">
+<img alt="Iron Grid Burgers" class="w-full h-full object-cover opacity-70" data-alt="A softly lit, empty high-end burger restaurant in a transit hub. The lights are dimmed, chairs are stacked neatly. Minimalist aesthetic, cool grey tones indicating it is currently closed." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6_6q78sQs_mw7KTt5UA_Pno3hAwSM2i4QO1cVjRokDXiXxfi_AK12yFY9QaeKlTB5ygw74G5TlrqqIwEY0VKR-pcGwNicazKMRIJ69btmFfqoRZv4kZxHgClSlMgYZduLUdSrGLkvMf8Q6DxSHwc7H1gjnZ9mFThLTt8rSUCJ8bQtgrbyKnUFLAKfEtyZiQhK3fnaLSjRXJcn-RG5EjCfEsjIdXzl5sSQSdLGSeBt120yp-uNYWxE7w"/>
+<div class="absolute inset-0 bg-surface/40 flex items-center justify-center">
+<div class="bg-surface-variant text-on-surface-variant px-4 py-2 rounded-full font-label-md text-label-md border border-outline-variant shadow-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">lock_clock</span>
+                            Opens at 6:00 AM
+                        </div>
+</div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface-variant">Iron Grid Burgers</h3>
+</div>
+<p class="font-body-md text-body-md text-outline mb-md flex-grow">Gourmet burgers and thick shakes.</p>
+<div class="flex justify-between items-center mt-auto pt-sm border-t border-outline-variant">
+<span class="font-label-sm text-label-sm text-outline">Currently closed</span>
+<button class="bg-surface-variant text-outline px-4 py-2 rounded-lg font-label-md text-label-md h-[48px] flex items-center justify-center cursor-not-allowed border border-outline-variant" disabled="">Closed</button>
+</div>
+</div>
+</div>
+<!-- Card 4: Open -->
+<div class="bg-surface border border-outline-variant rounded-xl overflow-hidden group hover:shadow-ambient transition-shadow cursor-pointer flex flex-col h-full relative">
+<div class="absolute top-sm right-sm bg-surface/90 backdrop-blur-sm px-2 py-1 rounded border border-outline-variant z-10 flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary text-[16px] icon-filled">verified</span>
+<span class="font-label-sm text-label-sm text-on-surface font-bold">Hygiene: 4.1 ★</span>
+</div>
+<div class="h-48 w-full relative bg-surface-container">
+<img alt="Verdant Greens" class="w-full h-full object-cover" data-alt="A modern, brightly lit salad bar with pristine white counters and vibrant green fresh produce. Sleek typography on menus. The aesthetic is clean, healthy, and premium corporate style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcSVciTfyMPKxz2_0_XyI5jNLzgrr_rwjp98SgiuDZg7927wgIhHJRNz6f-VxkoSZuf8-5Iwo63yl9LKKpXZA0kN1DcdIkVrkExbVYTn6DOVbJsEN57ZdV9lEqpMWLkRd2fqXxFBOlvG2GB5TH2gsuaYoCj5ea0AEXF-huODFHEzvWRnRwQCqcD2_x84Ekyb4MGR9SbdxXfLmoeKNNmMaajbKzF9ap0alAcndj3cc0qIR4uLoxOeCa-w"/>
+<div class="absolute bottom-sm left-sm bg-primary text-on-primary px-3 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-xs">
+<div class="w-2 h-2 rounded-full bg-secondary-container animate-pulse"></div>
+                        Open Now
+                    </div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Verdant Greens</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md flex-grow">Custom salads and cold-pressed juices.</p>
+<div class="flex justify-between items-center mt-auto pt-sm border-t border-surface-variant">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Est. wait: 8 mins</span>
+<button class="bg-primary hover:bg-primary/90 text-on-primary px-4 py-2 rounded-lg font-label-md text-label-md transition-colors h-[48px] flex items-center justify-center">View Menu</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-surface dark:bg-surface-container-low text-primary dark:text-primary-fixed-dim font-label-md text-label-md fixed bottom-0 w-full z-50 rounded-t-xl shadow-[0px_-4px_20px_rgba(165,32,55,0.08)] shadow-lg fixed bottom-0 left-0 right-0 h-16 flex justify-around items-center px-4 pb-safe bg-surface dark:bg-surface-container border-t-0">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-variant dark:hover:bg-surface-dim active:scale-90 transition-transform w-16 h-14 rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1">route</span>
+<span class="text-[10px]">Route</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-variant dark:hover:bg-surface-dim active:scale-90 transition-transform w-16 h-14 rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1">receipt_long</span>
+<span class="text-[10px]">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-primary-container text-on-secondary-container dark:text-on-primary-container rounded-full px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-dim active:scale-90 transition-transform w-16 h-14" href="#">
+<span class="material-symbols-outlined mb-1 icon-filled">restaurant_menu</span>
+<span class="text-[10px] font-bold">Menu</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-variant dark:hover:bg-surface-dim active:scale-90 transition-transform w-16 h-14 rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1">arrow_back_ios_new</span>
+<span class="text-[10px]">Kitchen</span>
+</a>
+</nav>
+</body></html>

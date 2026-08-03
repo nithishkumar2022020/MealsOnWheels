@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Onboarding Step 3: Sophisticated Transit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .step-active {
+            font-variation-settings: 'FILL' 1;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed-variant": "#114d5d",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#40484b",
+                        "surface-container-low": "#f3f4f5",
+                        "error-container": "#ffdad6",
+                        "on-primary-container": "#87bbce",
+                        "on-error-container": "#93000a",
+                        "surface-container": "#edeeef",
+                        "primary-fixed": "#b6ebfe",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#f0f1f2",
+                        "primary-fixed-dim": "#9acee1",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#9acee1",
+                        "on-tertiary-container": "#ff9694",
+                        "on-secondary-fixed-variant": "#7a3000",
+                        "on-secondary-container": "#5e2300",
+                        "tertiary-container": "#90001b",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#ffb693",
+                        "secondary-fixed": "#ffdbcc",
+                        "outline": "#70787c",
+                        "surface": "#f8f9fa",
+                        "surface-container-high": "#e7e8e9",
+                        "tertiary-fixed": "#ffdad8",
+                        "tertiary": "#660010",
+                        "primary": "#003441",
+                        "outline-variant": "#c0c8cb",
+                        "surface-variant": "#e1e3e4",
+                        "on-surface": "#191c1d",
+                        "on-secondary-fixed": "#351000",
+                        "inverse-surface": "#2e3132",
+                        "surface-bright": "#f8f9fa",
+                        "on-tertiary-fixed": "#410007",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-background": "#191c1d",
+                        "on-tertiary-fixed-variant": "#92001b",
+                        "primary-container": "#0f4c5c",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb3b0",
+                        "secondary-container": "#fd7729",
+                        "surface-dim": "#d9dadb",
+                        "on-primary-fixed": "#001f28",
+                        "surface-tint": "#306576",
+                        "secondary": "#a04100",
+                        "on-error": "#ffffff",
+                        "background": "#f8f9fa"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "40px",
+                        "xl": "64px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "margin-desktop": "48px",
+                        "xs": "4px",
+                        "md": "24px",
+                        "base": "8px",
+                        "sm": "12px",
+                        "touch-target-min": "48px",
+                        "container-margin": "20px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Montserrat"],
+                        "headline-sm": ["Montserrat"],
+                        "body-md": ["Montserrat"],
+                        "body-lg": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "label-md": ["Montserrat"],
+                        "headline-md": ["Montserrat"],
+                        "headline-lg-mobile": ["Montserrat"],
+                        "display-lg": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md overflow-x-hidden">
+<!-- Top Navigation Anchor -->
+<header class="bg-surface docked full-width top-0 shadow-sm flex justify-between items-center w-full px-container-margin py-base h-touch-target-min z-50">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="location_on">location_on</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">En route</h1>
+</div>
+<button class="material-symbols-outlined text-primary hover:bg-surface-container-low transition-colors p-2 rounded-full" data-icon="notifications">notifications</button>
+</header>
+<main class="flex-grow w-full max-w-2xl mx-auto px-margin-mobile py-lg flex flex-col items-center justify-center relative">
+<!-- Background Ambient Glow -->
+<div class="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+<div class="absolute -top-[20%] -right-[10%] w-96 h-96 rounded-full bg-primary/5 blur-3xl"></div>
+<div class="absolute bottom-0 -left-[10%] w-72 h-72 rounded-full bg-secondary-container/10 blur-3xl"></div>
+</div>
+<!-- Featured Image/Icon for Final Step -->
+<div class="w-full mb-lg relative">
+<div class="aspect-[16/9] w-full rounded-xl overflow-hidden shadow-sm border border-outline-variant/30 bg-surface-container-low group">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A professional courier in a modern teal uniform handing over a gourmet food package to a passenger inside a sleek, high-tech transit vehicle. The lighting is soft and warm, reflecting a premium service experience. The color palette features midnight teal and sunset amber accents against a clean, light grey interior. High-end editorial photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgcXA8zYB-n8T4SCAgQLkyF81KdFhXH-bDBURwA2eD9_kqsC1kdp6XtORR6Fpo52uip1KZyz9m-ZfBjfNovGAuNvK9kQiqLSfHmXXJuLqfswvgM11OnYydPhtm6wwyyxwljnZ6Sb-LREv6kp2NhHj5Jw7RWbXwWDFbr-ajZK4oz3uK-6eE5k1Y-ELotcP50EEAlNPiuck8UtLTRrKBSNTcAZGD9xxHI_emlYQUQzm8zofUPTfZ3RWdjA"/>
+<div class="absolute top-4 left-4 bg-primary text-on-primary px-3 py-1 rounded-full text-label-md">Step 3 of 3</div>
+</div>
+<div class="absolute -bottom-6 right-6 w-16 h-16 bg-secondary-container rounded-full flex items-center justify-center shadow-lg animate-float text-on-secondary-container">
+<span class="material-symbols-outlined text-3xl" data-icon="airline_seat_recline_extra" style="font-variation-settings: 'FILL' 1;">airline_seat_recline_extra</span>
+</div>
+</div>
+<!-- Onboarding Narrative -->
+<div class="text-center mb-xl">
+<h2 class="font-display-lg-mobile text-display-lg-mobile text-primary mb-4">Complete the Journey</h2>
+<p class="text-on-surface-variant font-body-lg">Precision delivery from kitchen to seat. Here is how you complete your mission.</p>
+</div>
+<!-- Step List (Card Based) -->
+<div class="w-full space-y-4 mb-xl">
+<!-- Step 1 (Completed) -->
+<div class="flex items-center p-4 bg-surface rounded-xl border border-outline-variant/50 opacity-60">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mr-4 shrink-0">
+<span class="material-symbols-outlined text-primary" data-icon="restaurant">restaurant</span>
+</div>
+<div class="flex-grow">
+<p class="font-label-md text-primary">Step 1</p>
+<p class="font-body-md text-on-surface">Accept Order from local restaurants.</p>
+</div>
+<span class="material-symbols-outlined text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<!-- Step 2 (Completed) -->
+<div class="flex items-center p-4 bg-surface rounded-xl border border-outline-variant/50 opacity-60">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mr-4 shrink-0">
+<span class="material-symbols-outlined text-primary" data-icon="directions_run">directions_run</span>
+</div>
+<div class="flex-grow">
+<p class="font-label-md text-primary">Step 2</p>
+<p class="font-body-md text-on-surface">Reach the Bus Stop before the bus arrives.</p>
+</div>
+<span class="material-symbols-outlined text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<!-- Step 3 (Active) -->
+<div class="flex items-center p-6 bg-surface-container-highest rounded-xl border-2 border-primary shadow-sm transform scale-[1.02]">
+<div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center mr-4 shrink-0 text-on-primary">
+<span class="material-symbols-outlined" data-icon="delivery_dining" style="font-variation-settings: 'FILL' 1;">delivery_dining</span>
+</div>
+<div class="flex-grow">
+<p class="font-label-md text-primary">Step 3</p>
+<p class="font-headline-sm text-on-surface">Handover to seat number.</p>
+<p class="font-label-sm text-on-surface-variant mt-1">Verify identity and finalize the delivery.</p>
+</div>
+</div>
+</div>
+<!-- Progress Indicator -->
+<div class="flex gap-2 mb-xl">
+<div class="w-8 h-1.5 rounded-full bg-primary-container"></div>
+<div class="w-8 h-1.5 rounded-full bg-primary-container"></div>
+<div class="w-12 h-1.5 rounded-full bg-primary"></div>
+</div>
+<!-- Primary Actions -->
+<div class="w-full space-y-4">
+<button class="w-full h-touch-target-min bg-primary text-on-primary rounded-xl font-label-md hover:bg-primary-container transition-all active:scale-[0.98] shadow-md flex items-center justify-center gap-2">
+                Go to Dashboard
+                <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<button class="w-full h-touch-target-min bg-transparent text-secondary font-label-md hover:bg-surface-variant transition-colors rounded-xl">
+                Re-watch Tutorial
+            </button>
+</div>
+</main>
+<!-- Bottom Navigation Suppressed for Onboarding as per "Semantic Shell Mandate" (Transactional/Onboarding Flow) -->
+<!-- However, providing the shell as requested by JSON schema but keeping it hidden for the onboarding specific context or keeping minimal -->
+<script>
+        // Micro-interaction: Button scale effect
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                button.classList.add('scale-95');
+            });
+            button.addEventListener('mouseup', () => {
+                button.classList.remove('scale-95');
+            });
+            button.addEventListener('mouseleave', () => {
+                button.classList.remove('scale-95');
+            });
+        });
+
+        // Simulating completion delay
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log("Onboarding Flow: Step 3 Active");
+        });
+    </script>
+</body></html>

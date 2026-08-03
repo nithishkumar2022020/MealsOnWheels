@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Menu - Order Cutoff</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .grayed-out {
+            filter: grayscale(1);
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        .sophisticated-shadow {
+            box-shadow: 0px 4px 20px rgba(15, 76, 92, 0.08);
+        }
+        .banner-glow {
+            animation: pulse-border 2s infinite ease-in-out;
+        }
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(186, 26, 26, 0.2); }
+            70% { box-shadow: 0 0 0 10px rgba(186, 26, 26, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(186, 26, 26, 0); }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e1e3e4",
+                        "primary-fixed-dim": "#9acee1",
+                        "primary": "#003441",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-error-container": "#93000a",
+                        "secondary": "#a04100",
+                        "secondary-fixed-dim": "#ffb693",
+                        "primary-fixed": "#b6ebfe",
+                        "inverse-surface": "#2e3132",
+                        "surface-container": "#edeeef",
+                        "on-primary-container": "#87bbce",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d9dadb",
+                        "on-secondary-container": "#5e2300",
+                        "on-surface-variant": "#40484b",
+                        "outline": "#70787c",
+                        "on-tertiary-fixed-variant": "#92001b",
+                        "surface": "#f8f9fa",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#90001b",
+                        "surface-tint": "#306576",
+                        "background": "#f8f9fa",
+                        "on-secondary-fixed-variant": "#7a3000",
+                        "outline-variant": "#c0c8cb",
+                        "on-surface": "#191c1d",
+                        "surface-variant": "#e1e3e4",
+                        "error": "#ba1a1a",
+                        "tertiary": "#660010",
+                        "surface-container-low": "#f3f4f5",
+                        "secondary-container": "#fd7729",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#9acee1",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#f8f9fa",
+                        "secondary-fixed": "#ffdbcc",
+                        "on-primary-fixed-variant": "#114d5d",
+                        "on-primary-fixed": "#001f28",
+                        "tertiary-fixed-dim": "#ffb3b0",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#ff9694",
+                        "primary-container": "#0f4c5c",
+                        "on-secondary-fixed": "#351000",
+                        "surface-container-high": "#e7e8e9",
+                        "on-tertiary-fixed": "#410007",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#191c1d",
+                        "tertiary-fixed": "#ffdad8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "md": "24px",
+                        "sm": "12px",
+                        "gutter": "24px",
+                        "base": "8px",
+                        "margin-desktop": "48px",
+                        "lg": "40px",
+                        "xl": "64px",
+                        "margin-mobile": "16px",
+                        "touch-target-min": "48px",
+                        "container-margin": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Montserrat"],
+                        "display-lg": ["Montserrat"],
+                        "label-md": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "display-lg-mobile": ["Montserrat"],
+                        "headline-md": ["Montserrat"],
+                        "body-md": ["Montserrat"],
+                        "body-lg": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface">
+<!-- Top AppBar (from JSON) -->
+<header class="fixed top-0 left-0 w-full z-40 bg-surface dark:bg-surface-dim shadow-sm flex justify-between items-center px-container-margin py-base h-touch-target-min">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim" data-icon="location_on">location_on</span>
+<span class="font-bold text-primary dark:text-primary-fixed-dim font-headline-sm text-headline-sm">En route: New Delhi Exp</span>
+</div>
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low transition-colors p-2 rounded-full" data-icon="notifications">notifications</button>
+</div>
+</header>
+<main class="pt-16 pb-32">
+<!-- Error Banner Section -->
+<section class="sticky top-[48px] z-30 px-container-margin py-sm" style="background-color: #FFE5E5;">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-sm">
+<div class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-error mt-1" data-icon="timer_off">timer_off</span>
+<div>
+<p class="font-label-md text-label-md text-[#93000a] font-bold">Order cutoff was 5 minutes ago</p>
+<p class="font-body-md text-body-md text-[#93000a] opacity-80">This restaurant is no longer accepting orders for your arrival time.</p>
+</div>
+</div>
+<button class="bg-error text-on-error font-label-md text-label-md px-md py-2 rounded-lg hover:brightness-110 transition-all sophistication-shadow">
+                    Select different time
+                </button>
+</div>
+</section>
+<!-- Restaurant Header -->
+<section class="px-container-margin mt-lg max-w-7xl mx-auto">
+<div class="relative h-64 w-full rounded-xl overflow-hidden mb-md shadow-sm">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A premium close-up shot of gourmet North Indian cuisine with steam rising from a clay pot of dal makhani, set against a dark teal background with amber lighting. The scene is shot with high-end editorial lighting, focusing on textures and rich colors to evoke a sense of warmth and professional transit hospitality." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDwVkvrpOd8pTEk8NJHwQt0dQwIoZse-h4yyu0YdVWPbzfIX-zlKwoUnRlQSvd7vWugHVr8qt6t5Xu8kmoapVOKwg7z-zfJMmfLLAty46oRFerGX1WDlLc8x9O0jjL_PBI0bsaARJY8gIxODT-S427bD795l3wOut41042jneU383tQhH6gU8C-Hi_-cNc6ZOJpB1AB0SIRpTBWJsTttUmfgafW-xUdMfScxOdTNTMMG2_vTdM90mxBaQ')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent"></div>
+<div class="absolute bottom-md left-md text-on-primary">
+<h1 class="font-display-lg text-display-lg mb-xs">The Blue Spice Bistro</h1>
+<div class="flex items-center gap-sm">
+<span class="flex items-center gap-1 font-label-md text-label-md"><span class="material-symbols-outlined text-[16px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span> 4.8 (200+)</span>
+<span class="opacity-70 text-label-md">•</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">Coach Delivery Specialist</span>
+</div>
+</div>
+</div>
+<!-- Grayed-out Menu Content -->
+<div class="grayed-out">
+<div class="flex items-center gap-md mb-lg overflow-x-auto pb-2 scrollbar-hide">
+<button class="whitespace-nowrap bg-primary text-on-primary px-md py-2 rounded-full font-label-md text-label-md">All Items</button>
+<button class="whitespace-nowrap border border-outline-variant text-on-surface-variant px-md py-2 rounded-full font-label-md text-label-md">Signature Curries</button>
+<button class="whitespace-nowrap border border-outline-variant text-on-surface-variant px-md py-2 rounded-full font-label-md text-label-md">Tandoori Bread</button>
+<button class="whitespace-nowrap border border-outline-variant text-on-surface-variant px-md py-2 rounded-full font-label-md text-label-md">Beverages</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
+<!-- Menu Item Card 1 -->
+<div class="bg-surface border border-outline-variant rounded-xl overflow-hidden flex flex-col">
+<div class="h-48 w-full bg-cover bg-center" data-alt="A top-down view of a silver tray holding a steaming bowl of butter chicken with a swirl of fresh cream and a garnish of cilantro. Beside it lies a perfectly charred garlic naan. The lighting is bright and clean, emphasizing the rich orange gravy against a minimalist light gray background." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB3r2NAZSpCOXgxwt_OswwDqI5OyWpEBE0U71BgSMcKuS8ihtj647qxzSdRxNY7rEaOnISjAzmN7uq9UiHm596D2y2eAoI8zplY3E05iLXbPJqLYZknWHxJq42W9bczyayupIiMzxAJlNeGxafZZA0FLVqav_WJ4VEXyQT0E2tp0JnwMYbXzm3rCFbPiIEE4JI2DhNpLtzSfPVGTjh62bGA6jB0rbE-I0HzWEhj6c9aFRGVCbkQu8W7jg')"></div>
+<div class="p-md flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-xs">
+<h3 class="font-headline-sm text-headline-sm text-primary">Classic Butter Chicken</h3>
+<span class="font-label-md text-label-md text-secondary">₹450</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md flex-grow">Tender chicken pieces simmered in a velvety tomato and cream gravy with aromatic spices.</p>
+<button class="w-full h-touch-target-min border-2 border-primary text-primary rounded-lg font-label-md text-label-md">Add to Order</button>
+</div>
+</div>
+<!-- Menu Item Card 2 -->
+<div class="bg-surface border border-outline-variant rounded-xl overflow-hidden flex flex-col">
+<div class="h-48 w-full bg-cover bg-center" data-alt="A gourmet presentation of Paneer Tikka, featuring thick cubes of grilled cottage cheese marinated in saffron-infused yogurt, served with mint chutney and onion rings on a minimalist white ceramic plate. The lighting highlights the charred edges and vibrant colors of the dish." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBBTSzVcAvxDoRl6GFjoB1tQXKykc63c1tavM2NlzevhObCw0UIsgMFv2sPDZZeNkjdnP4qPUHNqyoQvG2e1PHDdGhuELwH3iKK_QH2o-cJ8KRwAYfIHzwgfp8pP-qACAVgKdxCt2zsZS7IOm4fSIiqNSr1t0xsSd7MnhspNKMMsd5921jqoJSKDv7KmgIwuyt_pkSTMUsxDaxIxMnar6KfqFZBaSUQJILaj8ssZMePiEc1m6ZPio2p9A')"></div>
+<div class="p-md flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-xs">
+<h3 class="font-headline-sm text-headline-sm text-primary">Saffron Paneer Tikka</h3>
+<span class="font-label-md text-label-md text-secondary">₹380</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md flex-grow">Chargrilled cottage cheese marinated in a luxurious blend of saffron, yogurt, and hand-ground spices.</p>
+<button class="w-full h-touch-target-min border-2 border-primary text-primary rounded-lg font-label-md text-label-md">Add to Order</button>
+</div>
+</div>
+<!-- Menu Item Card 3 -->
+<div class="bg-surface border border-outline-variant rounded-xl overflow-hidden flex flex-col">
+<div class="h-48 w-full bg-cover bg-center" data-alt="A close-up shot of a long-grain Basmati Rice Biryani, steam rising, with visible whole spices like cardamom and star anise. The dish is garnished with golden fried onions and fresh mint leaves, presented in a traditional copper handi with a modern minimalist lighting approach." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC1T_sIJEsW_VP5RvbYUthD0ESrvnHPZm5bBWdpatZWSF8O_3uiIirmlD2on4WIdVJpXSgtD7LVAveB0PVrjQbsI_Zou1h_P7K5-PGAV3RIxSN7lquDfSJGPlIHXZV5FSLWFxkl0kLRZNaR80-k-3dEWeBIUAEO9dmp677xdWcUDxXAcJVPYuwm0JmzTSaC40CTZGXGR9rBgSKj2P_H2xFs5FiS_2Pk9XAMhEyIfRP5XmPffHq7cLvvng')"></div>
+<div class="p-md flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-xs">
+<h3 class="font-headline-sm text-headline-sm text-primary">Awadhi Mutton Biryani</h3>
+<span class="font-label-md text-label-md text-secondary">₹550</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md flex-grow">Slow-cooked fragrant basmati rice with succulent mutton, infused with saffron and kewra essence.</p>
+<button class="w-full h-touch-target-min border-2 border-primary text-primary rounded-lg font-label-md text-label-md">Add to Order</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation (from JSON) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-container-margin pb-4 pt-2 bg-surface dark:bg-surface-container-lowest shadow-lg rounded-t-xl">
+<button class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-dim transition-all">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-full px-4 py-1 scale-90 transition-all duration-150">
+<span class="material-symbols-outlined" data-icon="departure_board" style="font-variation-settings: 'FILL' 1;">departure_board</span>
+<span class="font-label-sm text-label-sm">Stops</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-dim transition-all">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-dim transition-all">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</button>
+</nav>
+<script>
+        // Micro-interaction for the "Select different time" button
+        const timeBtn = document.querySelector('button.bg-error');
+        if (timeBtn) {
+            timeBtn.addEventListener('mousedown', () => {
+                timeBtn.classList.add('scale-95');
+            });
+            timeBtn.addEventListener('mouseup', () => {
+                timeBtn.classList.remove('scale-95');
+            });
+            timeBtn.addEventListener('click', () => {
+                // Simulate time selection trigger
+                alert('Time selection modal would open here.');
+            });
+        }
+
+        // Handle navigation clicks for visual feedback
+        const navButtons = document.querySelectorAll('nav button');
+        navButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                navButtons.forEach(b => {
+                    b.classList.remove('bg-primary-container', 'dark:bg-primary', 'text-on-primary-container', 'dark:text-on-primary', 'rounded-full', 'scale-90');
+                    b.classList.add('text-secondary', 'dark:text-secondary-fixed-dim');
+                });
+                btn.classList.add('bg-primary-container', 'dark:bg-primary', 'text-on-primary-container', 'dark:text-on-primary', 'rounded-full', 'scale-90');
+                btn.classList.remove('text-secondary', 'dark:text-secondary-fixed-dim');
+            });
+        });
+    </script>
+</body></html>

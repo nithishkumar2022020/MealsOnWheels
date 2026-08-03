@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cancellation Confirmation</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary": "#660010",
+            "on-primary-container": "#87bbce",
+            "surface-container-low": "#f3f4f5",
+            "on-tertiary": "#ffffff",
+            "error": "#ba1a1a",
+            "surface-bright": "#f8f9fa",
+            "on-primary": "#ffffff",
+            "inverse-primary": "#9acee1",
+            "surface-tint": "#306576",
+            "surface": "#f8f9fa",
+            "inverse-on-surface": "#f0f1f2",
+            "on-tertiary-fixed": "#410007",
+            "on-error": "#ffffff",
+            "on-surface": "#191c1d",
+            "surface-variant": "#e1e3e4",
+            "on-secondary": "#ffffff",
+            "primary-container": "#0f4c5c",
+            "secondary-fixed": "#ffdbcc",
+            "outline-variant": "#c0c8cb",
+            "on-surface-variant": "#40484b",
+            "primary-fixed": "#b6ebfe",
+            "tertiary-container": "#90001b",
+            "surface-container-lowest": "#ffffff",
+            "secondary-fixed-dim": "#ffb693",
+            "tertiary-fixed-dim": "#ffb3b0",
+            "surface-container-highest": "#e1e3e4",
+            "tertiary-fixed": "#ffdad8",
+            "secondary-container": "#fd7729",
+            "primary": "#003441",
+            "inverse-surface": "#2e3132",
+            "on-background": "#191c1d",
+            "on-primary-fixed-variant": "#114d5d",
+            "on-error-container": "#93000a",
+            "secondary": "#a04100",
+            "on-secondary-container": "#5e2300",
+            "surface-dim": "#d9dadb",
+            "surface-container": "#edeeef",
+            "on-tertiary-container": "#ff9694",
+            "surface-container-high": "#e7e8e9",
+            "primary-fixed-dim": "#9acee1",
+            "error-container": "#ffdad6",
+            "background": "#f8f9fa",
+            "on-tertiary-fixed-variant": "#92001b",
+            "on-secondary-fixed-variant": "#7a3000",
+            "on-primary-fixed": "#001f28",
+            "outline": "#70787c",
+            "on-secondary-fixed": "#351000"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin-desktop": "48px",
+            "gutter": "24px",
+            "lg": "40px",
+            "xl": "64px",
+            "xs": "4px",
+            "base": "8px",
+            "sm": "12px",
+            "md": "24px",
+            "margin-mobile": "16px"
+          },
+          "fontFamily": {
+            "label-sm": ["Montserrat"],
+            "headline-md": ["Montserrat"],
+            "body-md": ["Montserrat"],
+            "body-lg": ["Montserrat"],
+            "label-md": ["Montserrat"],
+            "display-lg-mobile": ["Montserrat"],
+            "display-lg": ["Montserrat"],
+            "headline-sm": ["Montserrat"]
+          },
+          "fontSize": {
+            "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+            "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+            "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+            "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #EDF2F4;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .elevation-2 {
+      box-shadow: 0px 4px 20px rgba(15, 76, 92, 0.08);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface overflow-hidden">
+<!-- Background Content (Dimmed Checkout Screen) -->
+<div class="relative w-full h-screen overflow-hidden flex flex-col pointer-events-none opacity-40 grayscale-[0.2]">
+<!-- Top Bar (From JSON Anchor Logic) -->
+<header class="bg-surface shadow-sm docked full-width top-0 flex justify-between items-center w-full px-margin-mobile py-base h-16">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">location_on</span>
+<h1 class="font-bold text-headline-sm text-primary">En route: New Delhi Exp</h1>
+</div>
+<span class="material-symbols-outlined text-primary">notifications</span>
+</header>
+<main class="flex-grow p-margin-mobile space-y-md overflow-y-auto">
+<!-- Checkout Header -->
+<section class="space-y-xs">
+<h2 class="font-headline-md text-headline-md">Your Order</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Order #9821 • New Delhi Express Gourmet</p>
+</section>
+<!-- Order Tracking Card Mimic -->
+<div class="bg-surface-bright border border-outline-variant p-md rounded-xl space-y-md">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-base">
+<span class="material-symbols-outlined text-secondary">local_shipping</span>
+<span class="font-label-md text-label-md text-secondary">PREPARING</span>
+</div>
+<span class="font-label-sm text-label-sm">Est. 12 mins</span>
+</div>
+<div class="h-2 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-1/3 rounded-full"></div>
+</div>
+</div>
+<!-- Map Mockup -->
+<div class="relative h-48 w-full bg-surface-container-high rounded-xl overflow-hidden border border-outline-variant">
+<div class="absolute inset-0 grayscale contrast-75 brightness-105" data-alt="A sophisticated transit map styled with silver and cool tones, showcasing a minimalist street grid of New Delhi. A thin, elegant Sunset Amber line indicates a delivery route from a premium kitchen to a high-end destination, maintaining the Corporate Modern aesthetic of the Sophisticated Transit brand." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAMPAAZ84-WAqVajRTU0jCDRTkTa8AT9C1FINRmQ91fmmCq_9W3a_8PTH0kBgwY_Zxq6QWGX0un8oyrdFMRCHbbu5jf3Y0gNYPrh539CJufG-wpYT9JWXqShFp6kqIc-CdoPIponQz4R6v_PuDdkiV7Fq3P6tAZOWqDvQftRyt2URXkUUbv-IOza0lV_wTixUDZueo8Nyx_J3qVBSn54AGxGfiixas6ydl8kj5uYFm1z4_ME9uW5CF5bQ')"></div>
+</div>
+<!-- Item List Mockup -->
+<div class="space-y-sm">
+<div class="flex justify-between items-center py-sm border-b border-outline-variant">
+<span class="font-body-md text-body-md">Mughlai Paneer Handi × 1</span>
+<span class="font-label-md text-label-md">₹345</span>
+</div>
+<div class="flex justify-between items-center py-sm border-b border-outline-variant">
+<span class="font-body-md text-body-md">Butter Garlic Naan × 2</span>
+<span class="font-label-md text-label-md">₹92</span>
+</div>
+</div>
+</main>
+<!-- Bottom Nav (From JSON Anchor Logic) -->
+<nav class="fixed bottom-0 left-0 w-full z-10 flex justify-around items-center px-margin-mobile pb-4 pt-2 bg-surface shadow-lg rounded-t-xl border-t border-outline-variant">
+<div class="flex flex-col items-center justify-center text-secondary px-4 py-1">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary px-4 py-1">
+<span class="material-symbols-outlined">departure_board</span>
+<span class="font-label-sm text-label-sm">Stops</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary px-4 py-1">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</div>
+</nav>
+</div>
+<!-- Modal Overlay -->
+<div class="fixed inset-0 z-[60] flex items-center justify-center p-md bg-primary/40 backdrop-blur-sm animate-in fade-in duration-300">
+<!-- Cancellation Modal Card -->
+<div class="bg-surface-bright w-full max-w-sm rounded-xl elevation-2 border border-outline-variant overflow-hidden flex flex-col p-lg space-y-md transform transition-transform duration-200 scale-100">
+<!-- Icon & Title Cluster -->
+<div class="flex flex-col items-center text-center space-y-base">
+<div class="w-16 h-16 rounded-full bg-error-container flex items-center justify-center mb-base">
+<span class="material-symbols-outlined text-on-error-container text-[32px]">report</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Cancel this order?</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+          You'll lose ₹437 paid for this order
+        </p>
+</div>
+<!-- Warning Indicator -->
+<div class="flex items-center gap-base justify-center p-sm bg-tertiary-fixed rounded-lg">
+<span class="material-symbols-outlined text-tertiary text-sm">notification_important</span>
+<p class="font-label-md text-label-md text-tertiary">Restaurant will be notified</p>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-sm pt-md">
+<button class="h-12 w-full bg-tertiary text-on-tertiary font-label-md text-label-md rounded-lg active:scale-95 transition-transform">
+          Yes, cancel
+        </button>
+<button class="h-12 w-full bg-primary text-on-primary font-label-md text-label-md rounded-lg active:scale-95 transition-transform">
+          Keep order
+        </button>
+</div>
+<!-- Dismiss Hint -->
+<button class="font-label-sm text-label-sm text-outline hover:text-primary transition-colors text-center w-full">
+        I changed my mind
+      </button>
+</div>
+</div>
+<script>
+    // Subtle parallax or motion effect for the backdrop
+    document.addEventListener('mousemove', (e) => {
+      const modal = document.querySelector('.transform');
+      if (modal) {
+        const x = (window.innerWidth / 2 - e.pageX) / 50;
+        const y = (window.innerHeight / 2 - e.pageY) / 50;
+        modal.style.transform = `translate(${x}px, ${y}px)`;
+      }
+    });
+
+    // Close buttons logic (mock)
+    const primaryBtn = document.querySelector('.bg-tertiary');
+    const secondaryBtn = document.querySelector('.bg-primary');
+    
+    [primaryBtn, secondaryBtn].forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.add('opacity-80', 'scale-90');
+        setTimeout(() => {
+          document.querySelector('.fixed.inset-0').style.display = 'none';
+          document.querySelector('.relative.w-full').style.opacity = '1';
+          document.querySelector('.relative.w-full').style.filter = 'none';
+        }, 150);
+      });
+    });
+  </script>
+</body></html>

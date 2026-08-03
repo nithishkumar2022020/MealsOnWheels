@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Help &amp; FAQ | TransitFood</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-high": "#e7e8e9",
+                    "outline-variant": "#c0c8cb",
+                    "inverse-primary": "#9acee1",
+                    "on-secondary-fixed-variant": "#7a3000",
+                    "secondary-container": "#fd7729",
+                    "primary-container": "#0f4c5c",
+                    "tertiary-fixed": "#ffdad8",
+                    "on-secondary-fixed": "#351000",
+                    "secondary-fixed-dim": "#ffb693",
+                    "primary-fixed-dim": "#9acee1",
+                    "inverse-surface": "#2e3132",
+                    "surface-dim": "#d9dadb",
+                    "surface-container": "#edeeef",
+                    "on-secondary-container": "#5e2300",
+                    "tertiary-container": "#90001b",
+                    "surface-container-low": "#f3f4f5",
+                    "on-tertiary-fixed": "#410007",
+                    "on-tertiary-fixed-variant": "#92001b",
+                    "on-primary-fixed-variant": "#114d5d",
+                    "background": "#f8f9fa",
+                    "surface-container-highest": "#e1e3e4",
+                    "inverse-on-surface": "#f0f1f2",
+                    "surface-tint": "#306576",
+                    "secondary": "#a04100",
+                    "surface-variant": "#e1e3e4",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error": "#ffffff",
+                    "primary": "#003441",
+                    "primary-fixed": "#b6ebfe",
+                    "on-primary": "#ffffff",
+                    "on-background": "#191c1d",
+                    "error-container": "#ffdad6",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb3b0",
+                    "on-primary-fixed": "#001f28",
+                    "surface-bright": "#f8f9fa",
+                    "outline": "#70787c",
+                    "tertiary": "#660010",
+                    "surface": "#f8f9fa",
+                    "error": "#ba1a1a",
+                    "secondary-fixed": "#ffdbcc",
+                    "on-surface": "#191c1d",
+                    "on-primary-container": "#87bbce",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-container": "#ff9694",
+                    "on-surface-variant": "#40484b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "12px",
+                    "base": "8px",
+                    "xs": "4px",
+                    "lg": "40px",
+                    "md": "24px",
+                    "xl": "64px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "48px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Montserrat"],
+                    "display-lg": ["Montserrat"],
+                    "label-sm": ["Montserrat"],
+                    "headline-md": ["Montserrat"],
+                    "body-md": ["Montserrat"],
+                    "headline-sm": ["Montserrat"],
+                    "body-lg": ["Montserrat"],
+                    "label-md": ["Montserrat"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Montserrat', sans-serif; background-color: #f8f9fa; }
+        .faq-accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .faq-accordion-item.active .faq-accordion-content { max-height: 500px; transition: max-height 0.5s ease-in; }
+        .faq-accordion-item.active .chevron-icon { transform: rotate(180px); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-surface shadow-sm flex justify-between items-center px-margin-mobile md:px-margin-desktop h-12 w-full">
+<div class="flex items-center gap-base">
+<span class="material-symbols-outlined text-primary" data-icon="directions_bus">directions_bus</span>
+<h1 class="font-display-lg-mobile text-display-lg-mobile md:text-headline-sm text-primary tracking-tight">TransitFood</h1>
+</div>
+<div class="flex items-center gap-base">
+<button class="p-2 transition-colors duration-200 ease-in-out hover:bg-surface-variant/20 rounded-full">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="search">search</span>
+</button>
+<button class="p-2 transition-colors duration-200 ease-in-out hover:bg-surface-variant/20 rounded-full">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="location_on">location_on</span>
+</button>
+</div>
+</header>
+<main class="min-h-screen pb-24 md:pb-12">
+<!-- Hero Section -->
+<section class="relative h-64 md:h-80 w-full bg-primary-container overflow-hidden flex items-center justify-center">
+
+<div class="relative z-10 text-center px-margin-mobile">
+<h2 class="font-display-lg-mobile text-display-lg-mobile md:text-display-lg text-on-primary-container mb-xs">How can we assist?</h2>
+<p class="font-body-lg text-body-lg text-on-primary-container opacity-80 max-w-xl mx-auto">Get answers to frequently asked questions about your journey and dining experience.</p>
+</div>
+</section>
+<!-- Search & Categories -->
+<section class="max-w-screen-xl mx-auto px-margin-mobile md:px-margin-desktop -mt-8 relative z-20">
+<div class="bg-surface-container-lowest rounded-xl shadow-md p-md border border-outline-variant">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-base">
+<!-- Category Chips -->
+<button class="flex flex-col items-center justify-center p-md border border-outline-variant rounded-lg hover:bg-surface-container-high transition-all active:scale-95 group" onclick="filterCategory('Ordering')">
+<span class="material-symbols-outlined text-primary mb-xs" data-icon="restaurant_menu">restaurant_menu</span>
+<span class="font-label-md text-label-md">Ordering</span>
+</button>
+<button class="flex flex-col items-center justify-center p-md border border-outline-variant rounded-lg hover:bg-surface-container-high transition-all active:scale-95 group" onclick="filterCategory('Payments')">
+<span class="material-symbols-outlined text-primary mb-xs" data-icon="payments">payments</span>
+<span class="font-label-md text-label-md">Payments</span>
+</button>
+<button class="flex flex-col items-center justify-center p-md border border-outline-variant rounded-lg hover:bg-surface-container-high transition-all active:scale-95 group" onclick="filterCategory('Cancellations')">
+<span class="material-symbols-outlined text-primary mb-xs" data-icon="event_busy">event_busy</span>
+<span class="font-label-md text-label-md">Cancellations</span>
+</button>
+<button class="flex flex-col items-center justify-center p-md border border-outline-variant rounded-lg hover:bg-surface-container-high transition-all active:scale-95 group" onclick="filterCategory('Deliveries')">
+<span class="material-symbols-outlined text-primary mb-xs" data-icon="local_shipping">local_shipping</span>
+<span class="font-label-md text-label-md">Deliveries</span>
+</button>
+</div>
+</div>
+</section>
+<!-- FAQ Accordion -->
+<section class="max-w-3xl mx-auto mt-xl px-margin-mobile">
+<div class="space-y-sm" id="faq-container">
+<!-- Ordering Category -->
+<div class="faq-category" data-category="Ordering">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-md mt-lg border-l-4 border-secondary-container pl-sm">Ordering</h3>
+<div class="space-y-sm">
+<div class="faq-accordion-item border border-outline-variant rounded-lg bg-surface-container-lowest transition-all hover:shadow-sm">
+<button class="w-full flex justify-between items-center p-md text-left focus:outline-none" onclick="toggleAccordion(this)">
+<span class="font-label-md text-label-md text-on-surface">Can I place an order for a future train journey?</span>
+<span class="material-symbols-outlined transition-transform duration-300 chevron-icon" data-icon="expand_more">expand_more</span>
+</button>
+<div class="faq-accordion-content px-md">
+<p class="font-body-md text-body-md text-on-surface-variant pb-md">Yes! You can pre-order your meals up to 48 hours before your departure. Simply enter your train number and seat details during checkout to ensure synchronization with your transit schedule.</p>
+</div>
+</div>
+<div class="faq-accordion-item border border-outline-variant rounded-lg bg-surface-container-lowest transition-all hover:shadow-sm">
+<button class="w-full flex justify-between items-center p-md text-left focus:outline-none" onclick="toggleAccordion(this)">
+<span class="font-label-md text-label-md text-on-surface">How do I specify dietary requirements?</span>
+<span class="material-symbols-outlined transition-transform duration-300 chevron-icon" data-icon="expand_more">expand_more</span>
+</button>
+<div class="faq-accordion-content px-md">
+<p class="font-body-md text-body-md text-on-surface-variant pb-md">Dietary filters are available on the restaurant listings. Once you select an item, you can add specific instructions for the chef regarding allergies or preferences in the 'Special Requests' field.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Payments Category -->
+<div class="faq-category" data-category="Payments">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-md mt-lg border-l-4 border-secondary-container pl-sm">Payments</h3>
+<div class="space-y-sm">
+<div class="faq-accordion-item border border-outline-variant rounded-lg bg-surface-container-lowest transition-all hover:shadow-sm">
+<button class="w-full flex justify-between items-center p-md text-left focus:outline-none" onclick="toggleAccordion(this)">
+<span class="font-label-md text-label-md text-on-surface">Which payment methods are accepted?</span>
+<span class="material-symbols-outlined transition-transform duration-300 chevron-icon" data-icon="expand_more">expand_more</span>
+</button>
+<div class="faq-accordion-content px-md">
+<p class="font-body-md text-body-md text-on-surface-variant pb-md">We accept all major credit/debit cards, Apple Pay, Google Pay, and TransitFood vouchers. We do not accept cash on delivery due to security protocols in transit hubs.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Deliveries Category -->
+<div class="faq-category" data-category="Deliveries">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-md mt-lg border-l-4 border-secondary-container pl-sm">Deliveries</h3>
+<div class="space-y-sm">
+<div class="faq-accordion-item border border-outline-variant rounded-lg bg-surface-container-lowest transition-all hover:shadow-sm">
+<button class="w-full flex justify-between items-center p-md text-left focus:outline-none" onclick="toggleAccordion(this)">
+<span class="font-label-md text-label-md text-on-surface">What happens if my train is delayed?</span>
+<span class="material-symbols-outlined transition-transform duration-300 chevron-icon" data-icon="expand_more">expand_more</span>
+</button>
+<div class="faq-accordion-content px-md">
+<p class="font-body-md text-body-md text-on-surface-variant pb-md">Our system tracks train schedules in real-time. If your train is delayed by more than 15 minutes, we notify the restaurant to adjust preparation times. Your delivery will be synchronized with the new arrival time.</p>
+</div>
+</div>
+<div class="faq-accordion-item border border-outline-variant rounded-lg bg-surface-container-lowest transition-all hover:shadow-sm">
+<button class="w-full flex justify-between items-center p-md text-left focus:outline-none" onclick="toggleAccordion(this)">
+<span class="font-label-md text-label-md text-on-surface">Where exactly is the delivery point?</span>
+<span class="material-symbols-outlined transition-transform duration-300 chevron-icon" data-icon="expand_more">expand_more</span>
+</button>
+<div class="faq-accordion-content px-md">
+<p class="font-body-md text-body-md text-on-surface-variant pb-md">Delivery points vary by station. Usually, it is either your designated coach entrance or a specific TransitFood kiosk on the platform. Check your tracking link for the precise location map.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Contact Support Footer -->
+<section class="max-w-4xl mx-auto mt-xl px-margin-mobile mb-xl">
+<div class="bg-primary text-on-primary rounded-xl p-xl flex flex-col md:flex-row items-center justify-between gap-md overflow-hidden relative">
+<div class="relative z-10 text-center md:text-left">
+<h3 class="font-headline-md text-headline-md mb-xs">Need more help?</h3>
+<p class="font-body-md text-body-md opacity-80 mb-md">Our support team is available 24/7 for travelers.</p>
+<div class="flex flex-wrap gap-base justify-center md:justify-start">
+<a class="flex items-center gap-xs bg-surface/10 hover:bg-surface/20 px-4 py-2 rounded-full transition-colors" href="tel:1800TRANSIT">
+<span class="material-symbols-outlined text-secondary-fixed" data-icon="call">call</span>
+<span class="font-label-md text-label-md">Phone Support</span>
+</a>
+<a class="flex items-center gap-xs bg-surface/10 hover:bg-surface/20 px-4 py-2 rounded-full transition-colors" href="mailto:support@transitfood.com">
+<span class="material-symbols-outlined text-secondary-fixed" data-icon="mail">mail</span>
+<span class="font-label-md text-label-md">Email Support</span>
+</a>
+<button class="flex items-center gap-xs bg-secondary-container text-on-secondary-container px-4 py-2 rounded-full hover:brightness-110 transition-all">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+<span class="font-label-md text-label-md">Live Chat</span>
+</button>
+</div>
+</div>
+<div class="hidden md:block w-48 h-48 rounded-full border-8 border-surface/5 absolute -right-8 -bottom-8"></div>
+<div class="hidden md:block w-32 h-32 rounded-full border-4 border-surface/10 absolute -right-16 top-0"></div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface-container-lowest shadow-md flex justify-around items-center w-full h-16 px-2 pb-safe md:hidden">
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="departure_board">departure_board</span>
+<span class="font-label-sm text-label-sm">Stops</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="help_center" style="font-variation-settings: 'FILL' 1;">help_center</span>
+<span class="font-label-sm text-label-sm">Help</span>
+</button>
+</nav>
+<script>
+        function toggleAccordion(button) {
+            const item = button.closest('.faq-accordion-item');
+            const isActive = item.classList.contains('active');
+            
+            // Close all items
+            document.querySelectorAll('.faq-accordion-item').forEach(i => {
+                i.classList.remove('active');
+                i.querySelector('.chevron-icon').style.transform = 'rotate(0deg)';
+            });
+
+            // If it wasn't active, open it
+            if (!isActive) {
+                item.classList.add('active');
+                button.querySelector('.chevron-icon').style.transform = 'rotate(180deg)';
+            }
+        }
+
+        function filterCategory(category) {
+            const categories = document.querySelectorAll('.faq-category');
+            categories.forEach(cat => {
+                if (cat.getAttribute('data-category') === category) {
+                    cat.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    // Highlight effect
+                    cat.classList.add('ring-2', 'ring-secondary-container', 'rounded-lg', 'p-xs');
+                    setTimeout(() => {
+                        cat.classList.remove('ring-2', 'ring-secondary-container', 'rounded-lg', 'p-xs');
+                    }, 2000);
+                }
+            });
+        }
+    </script>
+</body></html>

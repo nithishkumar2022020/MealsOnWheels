@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Edit Item - Menu Manager</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e2e2e2",
+                        "on-tertiary-fixed-variant": "#633f00",
+                        "primary-fixed": "#ffdad8",
+                        "surface-container-high": "#e8e8e8",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#f3f3f3",
+                        "on-background": "#1a1c1c",
+                        "on-tertiary-container": "#fffbff",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#a06900",
+                        "tertiary": "#805200",
+                        "tertiary-fixed": "#ffddb4",
+                        "primary": "#b7122a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#92001c",
+                        "inverse-surface": "#2f3131",
+                        "inverse-on-surface": "#f1f1f1",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#5b403f",
+                        "background": "#f9f9f9",
+                        "inverse-primary": "#ffb3b1",
+                        "on-primary-container": "#fffbff",
+                        "on-secondary-container": "#656464",
+                        "tertiary-fixed-dim": "#ffb954",
+                        "surface-tint": "#bb162c",
+                        "primary-fixed-dim": "#ffb3b1",
+                        "outline": "#8f6f6e",
+                        "surface-bright": "#f9f9f9",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#e4e2e1",
+                        "surface-variant": "#e2e2e2",
+                        "secondary": "#5f5e5e",
+                        "outline-variant": "#e4bebc",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed-dim": "#c8c6c6",
+                        "primary-container": "#db313f",
+                        "surface-dim": "#dadada",
+                        "on-tertiary-fixed": "#291800",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "secondary-fixed": "#e4e2e1",
+                        "on-surface": "#1a1c1c",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#eeeeee",
+                        "on-secondary": "#ffffff",
+                        "surface": "#f9f9f9",
+                        "on-secondary-fixed-variant": "#474747",
+                        "on-primary-fixed": "#410007"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "gutter": "16px",
+                        "card-padding": "16px",
+                        "touch-target-min": "48px",
+                        "container-margin": "20px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Montserrat"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-xl": ["Montserrat"],
+                        "headline-lg-mobile": ["Montserrat"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .modal-overlay {
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .modal-card {
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+<!-- TOP APP BAR (The Shell) -->
+<header class="bg-surface shadow-sm docked full-width top-0 z-40 fixed w-full">
+<div class="flex items-center justify-between px-container-margin h-16 w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="restaurant_menu">restaurant_menu</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">Menu Manager</h1>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a restaurant partner or manager in a crisp white shirt, standing in a brightly lit, modern commercial kitchen with stainless steel appliances. The photography uses high-contrast lighting to emphasize a clean, energetic, and dependable brand identity, consistent with a high-end corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCVPNZWSCXk7s4WrrdhnaN-2bjzWTk9NrvSRZGqFInJfzh4HNfl_YUx48QbKysfm9INHWBuddF83PiqhVTkkk_PJ-fPejBCMssU_6uaseiQQhN13PStyNQprX-hf2hyLQebqWzQBx8tOTaX3Fz7NHWGCcqJv3s0SxSF3fjCKmkTIaNhXM9Y7MXWhOL_Q4Q1FvZMdGVfEhtMCNX7dEKyKwOcXhgc3iFg295Hx9FYVSG0obBUmlCnvi96g"/>
+</div>
+</div>
+</header>
+<!-- MAIN CONTENT (Background List - Blurred) -->
+<main class="pt-20 pb-24 px-container-margin max-w-7xl mx-auto opacity-40 select-none pointer-events-none">
+<div class="mb-8">
+<h2 class="font-headline-xl text-headline-xl mb-2">Breakfast Menu</h2>
+<div class="h-1 bg-primary w-16 rounded-full"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Mock items for background -->
+<div class="bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.06)] overflow-hidden">
+<div class="h-48 bg-surface-container w-full"></div>
+<div class="p-card-padding">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-label-md text-label-md text-on-surface">Masala Dosa</h3>
+<span class="text-primary font-bold">₹90</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.06)] overflow-hidden">
+<div class="h-48 bg-surface-container w-full"></div>
+<div class="p-card-padding">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-label-md text-label-md text-on-surface">Paneer Kulcha</h3>
+<span class="text-primary font-bold">₹120</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- MODAL OVERLAY -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay bg-on-background/60">
+<!-- MODAL CARD -->
+<div class="bg-surface-container-lowest w-full max-w-lg rounded-[24px] shadow-2xl overflow-hidden modal-card flex flex-col max-h-[90vh]">
+<!-- Modal Header -->
+<div class="px-6 py-5 border-b border-outline-variant flex items-center justify-between">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Edit Item</h2>
+<button class="p-2 hover:bg-surface-container-high rounded-full transition-colors active:scale-95">
+<span class="material-symbols-outlined text-secondary" data-icon="close">close</span>
+</button>
+</div>
+<!-- Scrollable Content -->
+<div class="overflow-y-auto px-6 py-6 hide-scrollbar">
+<form class="space-y-6">
+<!-- Image Upload -->
+<div class="space-y-2">
+<label class="font-label-md text-label-md text-on-surface-variant">Item Image</label>
+<div class="border-2 border-dashed border-outline-variant rounded-xl p-8 flex flex-col items-center justify-center bg-surface-container-low hover:bg-surface-container-high transition-colors cursor-pointer group">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary" data-icon="upload">upload</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Upload Image</span>
+<span class="font-label-sm text-label-sm text-secondary mt-1">JPG, PNG or WEBP (Max. 5MB)</span>
+</div>
+</div>
+<!-- Item Name -->
+<div class="space-y-2">
+<label class="font-label-md text-label-md text-on-surface-variant" for="item-name">Item Name</label>
+<input class="w-full px-4 py-3 bg-surface-container rounded-xl border-none focus:ring-2 focus:ring-primary text-on-surface font-body-md placeholder:text-secondary/60" id="item-name" type="text" value="Paneer Kulcha"/>
+</div>
+<!-- Price & Prep Time Row -->
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="font-label-md text-label-md text-on-surface-variant" for="price">Price (₹)</label>
+<input class="w-full px-4 py-3 bg-surface-container rounded-xl border-none focus:ring-2 focus:ring-primary text-on-surface font-body-md" id="price" type="number" value="120"/>
+</div>
+<div class="space-y-2">
+<label class="font-label-md text-label-md text-on-surface-variant" for="prep-time">Prep Time (mins)</label>
+<div class="relative">
+<input class="w-full px-4 py-3 bg-surface-container rounded-xl border-none focus:ring-2 focus:ring-primary text-on-surface font-body-md" id="prep-time" type="number" value="15"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-secondary text-lg" data-icon="timer">timer</span>
+</div>
+</div>
+</div>
+<!-- Category -->
+<div class="space-y-2">
+<label class="font-label-md text-label-md text-on-surface-variant" for="category">Category</label>
+<div class="relative">
+<select class="w-full px-4 py-3 bg-surface-container rounded-xl border-none focus:ring-2 focus:ring-primary text-on-surface font-body-md appearance-none" id="category">
+<option selected="">Breakfast</option>
+<option>Lunch</option>
+<option>Snacks</option>
+<option>Beverages</option>
+</select>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-secondary pointer-events-none" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- Description -->
+<div class="space-y-2">
+<label class="font-label-md text-label-md text-on-surface-variant" for="description">Description (Optional)</label>
+<textarea class="w-full px-4 py-3 bg-surface-container rounded-xl border-none focus:ring-2 focus:ring-primary text-on-surface font-body-md resize-none" id="description" rows="3">Soft leavened bread stuffed with spiced cottage cheese, served with pickles.</textarea>
+</div>
+</form>
+</div>
+<!-- Modal Actions -->
+<div class="p-6 bg-surface-container-low border-t border-outline-variant space-y-3">
+<button class="w-full min-h-[56px] bg-primary text-on-primary font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-surface-tint transition-colors active:scale-[0.98] duration-150 shadow-lg">
+<span>Save Changes</span>
+<span class="material-symbols-outlined text-lg" data-icon="check_circle">check_circle</span>
+</button>
+<button class="w-full min-h-[48px] bg-transparent border-2 border-secondary text-secondary font-bold rounded-xl hover:bg-surface-container-highest transition-colors active:scale-[0.98] duration-150">
+                    Cancel
+                </button>
+</div>
+</div>
+</div>
+<!-- BOTTOM NAV BAR (Hidden on web, visible on mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center h-20 px-2 pb-2 bg-surface-container rounded-t-xl shadow-[0px_-4px_20px_rgba(0,0,0,0.06)] border-t border-outline-variant z-50">
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 duration-150 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="breakfast_dining">breakfast_dining</span>
+<span class="font-label-sm text-label-sm">Breakfast</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary hover:bg-surface-container-highest transition-all px-4 py-1 rounded-full cursor-pointer">
+<span class="material-symbols-outlined" data-icon="lunch_dining">lunch_dining</span>
+<span class="font-label-sm text-label-sm">Lunch</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary hover:bg-surface-container-highest transition-all px-4 py-1 rounded-full cursor-pointer">
+<span class="material-symbols-outlined" data-icon="icecream">icecream</span>
+<span class="font-label-sm text-label-sm">Snacks</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary hover:bg-surface-container-highest transition-all px-4 py-1 rounded-full cursor-pointer">
+<span class="material-symbols-outlined" data-icon="local_bar">local_bar</span>
+<span class="font-label-sm text-label-sm">Beverages</span>
+</div>
+</nav>
+<script>
+        // Simple Interaction logic
+        document.querySelectorAll('button, div[role="button"]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if(btn.textContent.includes('Cancel') || btn.querySelector('[data-icon="close"]')) {
+                    document.querySelector('.modal-overlay').style.display = 'none';
+                    document.querySelector('main').classList.remove('opacity-40', 'pointer-events-none');
+                }
+            });
+        });
+    </script>
+</body></html>

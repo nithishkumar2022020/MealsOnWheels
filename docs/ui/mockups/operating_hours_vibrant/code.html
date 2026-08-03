@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Restaurant Opening Hours - TransitFood</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-variant": "#e0e2ec",
+                      "primary-container": "#ffdad7",
+                      "tertiary-container": "#d7e3ff",
+                      "outline": "#74777f",
+                      "on-secondary-fixed": "#2c1513",
+                      "on-primary-fixed": "#410005",
+                      "surface-dim": "#dadada",
+                      "on-tertiary-fixed-variant": "#344568",
+                      "tertiary": "#4d5c81",
+                      "inverse-on-surface": "#f1f0f4",
+                      "inverse-primary": "#ffb3af",
+                      "on-primary-fixed-variant": "#73000f",
+                      "surface-tint": "#a8353d",
+                      "background": "#fdf8f8",
+                      "on-tertiary-fixed": "#06173b",
+                      "surface-container-high": "#e8e8e8",
+                      "on-error": "#ffffff",
+                      "primary": "#a8353d",
+                      "secondary-container": "#ffdad7",
+                      "on-surface": "#1a1b1f",
+                      "error-container": "#ffdad6",
+                      "on-tertiary": "#ffffff",
+                      "secondary-fixed": "#ffb3af",
+                      "outline-variant": "#c4c6cf",
+                      "on-error-container": "#410002",
+                      "on-tertiary-container": "#001b3f",
+                      "tertiary-fixed-dim": "#b5c4ea",
+                      "surface": "#f9f9f9",
+                      "secondary-fixed-dim": "#e7b9b7",
+                      "secondary": "#775654",
+                      "on-secondary-fixed-variant": "#5d3f3d",
+                      "inverse-surface": "#2f3033",
+                      "tertiary-fixed": "#d7e3ff",
+                      "surface-container-highest": "#e2e2e2",
+                      "surface-container": "#ededed",
+                      "on-secondary": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "on-surface-variant": "#43474e",
+                      "on-primary": "#ffffff",
+                      "on-primary-container": "#410005",
+                      "error": "#ba1a1a",
+                      "on-secondary-container": "#2c1513",
+                      "primary-fixed": "#ffdad7",
+                      "surface-bright": "#f9f9f9",
+                      "on-background": "#1a1b1f",
+                      "surface-container-low": "#f3f3f3",
+                      "primary-fixed-dim": "#ffb3af"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "gutter": "24px",
+                      "base": "8px",
+                      "md": "24px",
+                      "margin-mobile": "16px",
+                      "xl": "64px",
+                      "margin-desktop": "48px",
+                      "sm": "12px",
+                      "lg": "40px"
+              },
+              "fontFamily": {
+                      "headline-sm": [
+                              "Montserrat"
+                      ],
+                      "display-lg": [
+                              "Montserrat"
+                      ],
+                      "label-sm": [
+                              "Montserrat"
+                      ],
+                      "body-md": [
+                              "Montserrat"
+                      ],
+                      "label-md": [
+                              "Montserrat"
+                      ],
+                      "headline-md": [
+                              "Montserrat"
+                      ],
+                      "body-lg": [
+                              "Montserrat"
+                      ],
+                      "display-lg-mobile": [
+                              "Montserrat"
+                      ]
+              },
+              "fontSize": {
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body {
+            background-color: #fdf8f8; /* background color */
+        }
+        /* Custom toggle switch styling */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #a8353d; /* primary color */
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #a8353d; /* primary color */
+        }
+        .toggle-checkbox {
+            right: 0;
+            z-index: 1;
+            border-color: #74777f; /* outline */
+            transition: all 0.3s;
+        }
+        .toggle-label {
+            width: 3rem;
+            height: 1.5rem;
+            background-color: #c4c6cf; /* outline-variant */
+            border-radius: 9999px;
+            transition: all 0.3s;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="bg-surface w-full top-0 shadow-sm flex justify-between items-center px-margin-mobile md:px-margin-desktop h-12 w-full sticky z-50">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary text-headline-sm" data-icon="arrow_back">arrow_back</span>
+<span class="font-headline-sm text-headline-sm text-primary tracking-tight">Settings</span>
+</div>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-variant transition-colors p-1 rounded-full cursor-pointer" data-icon="help_outline">help_outline</span>
+</div>
+</header>
+<!-- Main Content -->
+<main class="max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop pt-lg pb-xl">
+<div class="mb-lg">
+<h1 class="font-headline-md text-headline-md text-on-background mb-base">Operating Hours</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Configure your restaurant's open and close times. Deliveries will only be dispatched during these windows.</p>
+</div>
+<div class="bg-surface border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<!-- Quick Actions Header -->
+<div class="bg-surface-container-low p-md border-b border-outline-variant flex flex-col sm:flex-row justify-between items-start sm:items-center gap-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary" data-icon="schedule">schedule</span>
+<span class="font-label-md text-label-md text-on-surface">Standard Schedule</span>
+</div>
+<button class="flex items-center gap-xs text-primary bg-primary-fixed hover:bg-primary-fixed-dim px-4 py-2 rounded-lg font-label-md text-label-md transition-colors" onclick="copyMondayToAll()">
+<span class="material-symbols-outlined" data-icon="content_copy">content_copy</span>
+                    Copy Mon to All Days
+                </button>
+</div>
+<!-- Days Container -->
+<div class="divide-y divide-outline-variant" id="hours-container">
+<!-- Monday -->
+<div class="p-md hover:bg-surface-container-lowest transition-colors flex flex-col md:flex-row md:items-center gap-md day-row" data-day="monday">
+<div class="flex items-center justify-between md:w-1/4">
+<span class="font-headline-sm text-headline-sm text-on-surface w-24">Mon</span>
+<!-- Toggle -->
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" id="toggle-mon" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer" for="toggle-mon"></label>
+</div>
+</div>
+<div class="flex-1 flex flex-col sm:flex-row items-center gap-sm md:gap-md time-inputs">
+<div class="w-full sm:w-1/2 relative">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Opens</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="nest_sunrise">maps_auto</span>
+<input class="w-full pl-10 pr-3 py-3 bg-background border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all cursor-pointer" type="time" value="09:00"/>
+</div>
+</div>
+<span class="hidden sm:block text-outline-variant material-symbols-outlined" data-icon="remove">remove</span>
+<div class="w-full sm:w-1/2 relative">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Closes</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="bedtime">bedtime</span>
+<input class="w-full pl-10 pr-3 py-3 bg-background border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all cursor-pointer" type="time" value="23:00"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Tuesday -->
+<div class="p-md hover:bg-surface-container-lowest transition-colors flex flex-col md:flex-row md:items-center gap-md day-row" data-day="tuesday">
+<div class="flex items-center justify-between md:w-1/4">
+<span class="font-headline-sm text-headline-sm text-on-surface w-24">Tue</span>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" id="toggle-tue" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer" for="toggle-tue"></label>
+</div>
+</div>
+<div class="flex-1 flex flex-col sm:flex-row items-center gap-sm md:gap-md time-inputs">
+<div class="w-full sm:w-1/2 relative">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Opens</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="nest_sunrise">maps_auto</span>
+<input class="w-full pl-10 pr-3 py-3 bg-background border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all cursor-pointer" type="time" value="09:00"/>
+</div>
+</div>
+<span class="hidden sm:block text-outline-variant material-symbols-outlined" data-icon="remove">remove</span>
+<div class="w-full sm:w-1/2 relative">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Closes</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="bedtime">bedtime</span>
+<input class="w-full pl-10 pr-3 py-3 bg-background border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all cursor-pointer" type="time" value="23:00"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Wednesday -->
+<div class="p-md hover:bg-surface-container-lowest transition-colors flex flex-col md:flex-row md:items-center gap-md day-row" data-day="wednesday">
+<div class="flex items-center justify-between md:w-1/4">
+<span class="font-headline-sm text-headline-sm text-on-surface w-24">Wed</span>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" id="toggle-wed" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer" for="toggle-wed"></label>
+</div>
+</div>
+<div class="flex-1 flex flex-col sm:flex-row items-center gap-sm md:gap-md time-inputs">
+<div class="w-full sm:w-1/2 relative">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Opens</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="nest_sunrise">maps_auto</span>
+<input class="w-full pl-10 pr-3 py-3 bg-background border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all cursor-pointer" type="time" value="09:00"/>
+</div>
+</div>
+<span class="hidden sm:block text-outline-variant material-symbols-outlined" data-icon="remove">remove</span>
+<div class="w-full sm:w-1/2 relative">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Closes</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="bedtime">bedtime</span>
+<input class="w-full pl-10 pr-3 py-3 bg-background border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all cursor-pointer" type="time" value="23:00"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Thursday -->
+<div class="p-md hover:bg-surface-container-lowest transition-colors flex flex-col md:flex-row md:items-center gap-md day-row" data-day="thursday">
+<div class="flex items-center justify-between md:w-1/4">
+<span class="font-headline-sm text-headline-sm text-on-surface w-24">Thu</span>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" id="toggle-thu" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer" for="toggle-thu"></label>
+</div>
+</div>
+<div class="flex-1 flex flex-col sm:flex-row items-center gap-sm md:gap-md time-inputs">
+<div class="w-full sm:w-1/2 relative">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Opens</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="nest_sunrise">maps_auto</span>
+<input class="w-full pl-10 pr-3 py-3 bg-background border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all cursor-pointer" type="time" value="09:00"/>
+</div>
+</div>
+<span class="hidden sm:block text-outline-variant material-symbols-outlined" data-icon="remove">remove</span>
+<div class="w-full sm:w-1/2 relative">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Closes</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="bedtime">bedtime</span>
+<input class="w-full pl-10 pr-3 py-3 bg-background border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all cursor-pointer" type="time" value="23:00"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Friday -->
+<div class="p-md hover:bg-surface-container-lowest transition-colors flex flex-col md:flex-row md:items-center gap-md day-row" data-day="friday">
+<div class="flex items-center justify-between md:w-1/4">
+<span class="font-headline-sm text-headline-sm text-on-surface w-24">Fri</span>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" id="toggle-fri" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer" for="toggle-fri"></label>
+</div>
+</div>
+<div class="flex-1 flex flex-col sm:flex-row items-center gap-sm md:gap-md time-inputs">
+<div class="w-full sm:w-1/2 relative">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Opens</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="nest_sunrise">maps_auto</span>
+<input class="w-full pl-10 pr-3 py-3 bg-background border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all cursor-pointer" type="time" value="09:00"/>
+</div>
+</div>
+<span class="hidden sm:block text-outline-variant material-symbols-outlined" data-icon="remove">remove</span>
+<div class="w-full sm:w-1/2 relative">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Closes</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="bedtime">bedtime</span>
+<input class="w-full pl-10 pr-3 py-3 bg-background border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all cursor-pointer" type="time" value="02:00"/>
+</div>
+<span class="absolute -bottom-6 right-0 font-label-sm text-label-sm text-secondary-container">+1 day</span>
+</div>
+</div>
+</div>
+<!-- Saturday -->
+<div class="p-md hover:bg-surface-container-lowest transition-colors flex flex-col md:flex-row md:items-center gap-md day-row" data-day="saturday">
+<div class="flex items-center justify-between md:w-1/4">
+<span class="font-headline-sm text-headline-sm text-on-surface w-24">Sat</span>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" id="toggle-sat" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer" for="toggle-sat"></label>
+</div>
+</div>
+<div class="flex-1 flex flex-col sm:flex-row items-center gap-sm md:gap-md time-inputs">
+<div class="w-full sm:w-1/2 relative">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Opens</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="nest_sunrise">maps_auto</span>
+<input class="w-full pl-10 pr-3 py-3 bg-background border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all cursor-pointer" type="time" value="10:00"/>
+</div>
+</div>
+<span class="hidden sm:block text-outline-variant material-symbols-outlined" data-icon="remove">remove</span>
+<div class="w-full sm:w-1/2 relative">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Closes</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="bedtime">bedtime</span>
+<input class="w-full pl-10 pr-3 py-3 bg-background border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all cursor-pointer" type="time" value="02:00"/>
+</div>
+<span class="absolute -bottom-6 right-0 font-label-sm text-label-sm text-secondary-container">+1 day</span>
+</div>
+</div>
+</div>
+<!-- Sunday -->
+<div class="p-md hover:bg-surface-container-lowest transition-colors flex flex-col md:flex-row md:items-center gap-md day-row opacity-50" data-day="sunday">
+<div class="flex items-center justify-between md:w-1/4">
+<span class="font-headline-sm text-headline-sm text-on-surface w-24">Sun</span>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" id="toggle-sun" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer" for="toggle-sun"></label>
+</div>
+</div>
+<div class="flex-1 flex flex-col sm:flex-row items-center gap-sm md:gap-md time-inputs pointer-events-none opacity-50">
+<div class="w-full sm:w-1/2 relative">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Opens</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="nest_sunrise">maps_auto</span>
+<input class="w-full pl-10 pr-3 py-3 bg-surface-container-low border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface-variant outline-none transition-all" disabled="" type="time" value="10:00"/>
+</div>
+</div>
+<span class="hidden sm:block text-outline-variant material-symbols-outlined" data-icon="remove">remove</span>
+<div class="w-full sm:w-1/2 relative">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Closes</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="bedtime">bedtime</span>
+<input class="w-full pl-10 pr-3 py-3 bg-surface-container-low border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface-variant outline-none transition-all" disabled="" type="time" value="22:00"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Actions (Sticky) -->
+<div class="fixed bottom-0 left-0 right-0 bg-surface border-t border-outline-variant p-4 shadow-[0px_-4px_20px_rgba(15,76,92,0.08)] z-40">
+<div class="max-w-4xl mx-auto flex justify-end gap-md">
+<button class="px-6 py-3 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-variant transition-colors h-12">Cancel</button>
+<button class="px-6 py-3 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-surface-tint shadow-sm transition-colors h-12 flex items-center gap-xs">
+<span class="material-symbols-outlined" data-icon="save">save</span>
+                Save Changes
+            </button>
+</div>
+</div>
+<script>
+        // Simple logic to handle toggle state styling
+        document.querySelectorAll('.toggle-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const dayRow = this.closest('.day-row');
+                const timeInputs = dayRow.querySelector('.time-inputs');
+                const inputs = timeInputs.querySelectorAll('input');
+                
+                if(this.checked) {
+                    dayRow.classList.remove('opacity-50');
+                    timeInputs.classList.remove('pointer-events-none', 'opacity-50');
+                    inputs.forEach(input => {
+                        input.disabled = false;
+                        input.classList.remove('bg-surface-container-low', 'text-on-surface-variant');
+                        input.classList.add('bg-background', 'text-on-surface');
+                    });
+                } else {
+                    dayRow.classList.add('opacity-50');
+                    timeInputs.classList.add('pointer-events-none', 'opacity-50');
+                    inputs.forEach(input => {
+                        input.disabled = true;
+                        input.classList.add('bg-surface-container-low', 'text-on-surface-variant');
+                        input.classList.remove('bg-background', 'text-on-surface');
+                    });
+                }
+            });
+        });
+
+        // Copy Monday to All logic
+        function copyMondayToAll() {
+            const monRow = document.querySelector('.day-row[data-day="monday"]');
+            if(!monRow) return;
+            
+            const monInputs = monRow.querySelectorAll('input[type="time"]');
+            const openTime = monInputs[0].value;
+            const closeTime = monInputs[1].value;
+            const monChecked = monRow.querySelector('input[type="checkbox"]').checked;
+
+            document.querySelectorAll('.day-row').forEach(row => {
+                if(row.dataset.day === 'monday') return;
+                
+                const inputs = row.querySelectorAll('input[type="time"]');
+                const checkbox = row.querySelector('input[type="checkbox"]');
+                
+                if(inputs.length === 2) {
+                    inputs[0].value = openTime;
+                    inputs[1].value = closeTime;
+                }
+                
+                if(checkbox && checkbox.checked !== monChecked) {
+                    checkbox.checked = monChecked;
+                    // Trigger change event to update styles
+                    checkbox.dispatchEvent(new Event('change'));
+                }
+            });
+            
+            // Show a brief toast or indication (simplified here by just updating)
+            const btn = document.querySelector('button[onclick="copyMondayToAll()"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined" data-icon="check">check</span> Copied!';
+            btn.classList.add('bg-secondary-container', 'text-on-secondary-container');
+            btn.classList.remove('bg-primary-fixed', 'text-primary');
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.classList.remove('bg-secondary-container', 'text-on-secondary-container');
+                btn.classList.add('bg-primary-fixed', 'text-primary');
+            }, 2000);
+        }
+    </script>
+</body></html>

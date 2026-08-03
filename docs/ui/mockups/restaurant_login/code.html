@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TransitFood Partner Login</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-high": "#e7e8e9",
+                      "outline-variant": "#c0c8cb",
+                      "inverse-primary": "#9acee1",
+                      "on-secondary-fixed-variant": "#7a3000",
+                      "secondary-container": "#fd7729",
+                      "primary-container": "#0f4c5c",
+                      "tertiary-fixed": "#ffdad8",
+                      "on-secondary-fixed": "#351000",
+                      "secondary-fixed-dim": "#ffb693",
+                      "primary-fixed-dim": "#9acee1",
+                      "inverse-surface": "#2e3132",
+                      "surface-dim": "#d9dadb",
+                      "surface-container": "#edeeef",
+                      "on-secondary-container": "#5e2300",
+                      "tertiary-container": "#90001b",
+                      "surface-container-low": "#f3f4f5",
+                      "on-tertiary-fixed": "#410007",
+                      "on-tertiary-fixed-variant": "#92001b",
+                      "on-primary-fixed-variant": "#114d5d",
+                      "background": "#f8f9fa",
+                      "surface-container-highest": "#e1e3e4",
+                      "inverse-on-surface": "#f0f1f2",
+                      "surface-tint": "#306576",
+                      "secondary": "#a04100",
+                      "surface-variant": "#e1e3e4",
+                      "surface-container-lowest": "#ffffff",
+                      "on-error": "#ffffff",
+                      "primary": "#003441",
+                      "primary-fixed": "#b6ebfe",
+                      "on-primary": "#ffffff",
+                      "on-background": "#191c1d",
+                      "error-container": "#ffdad6",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "tertiary-fixed-dim": "#ffb3b0",
+                      "on-primary-fixed": "#001f28",
+                      "surface-bright": "#f8f9fa",
+                      "outline": "#70787c",
+                      "tertiary": "#660010",
+                      "surface": "#f8f9fa",
+                      "error": "#ba1a1a",
+                      "secondary-fixed": "#ffdbcc",
+                      "on-surface": "#191c1d",
+                      "on-primary-container": "#87bbce",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-container": "#ff9694",
+                      "on-surface-variant": "#40484b"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sm": "12px",
+                      "base": "8px",
+                      "xs": "4px",
+                      "lg": "40px",
+                      "md": "24px",
+                      "xl": "64px",
+                      "margin-mobile": "16px",
+                      "margin-desktop": "48px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "display-lg-mobile": ["Montserrat"],
+                      "display-lg": ["Montserrat"],
+                      "label-sm": ["Montserrat"],
+                      "headline-md": ["Montserrat"],
+                      "body-md": ["Montserrat"],
+                      "headline-sm": ["Montserrat"],
+                      "body-lg": ["Montserrat"],
+                      "label-md": ["Montserrat"]
+              },
+              "fontSize": {
+                      "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #EDF2F4;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .otp-input:focus {
+            outline: none;
+            border-color: #003441;
+            border-width: 2px;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(209, 217, 219, 0.5);
+        }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- Header / TopAppBar -->
+<header class="w-full top-0 sticky bg-surface-container dark:bg-surface-container-high shadow-sm z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop h-12 w-full">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="directions_bus">directions_bus</span>
+<h1 class="font-display-lg-mobile text-display-lg-mobile text-primary tracking-tight">TransitFood</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-label-md font-label-md text-on-surface-variant uppercase tracking-widest px-3 py-1 bg-surface-variant/30 rounded-full">Partner Portal</span>
+</div>
+</header>
+<main class="min-h-[calc(100vh-48px)] flex flex-col md:flex-row items-stretch overflow-hidden">
+<!-- Left Visual Section (Editorial Style) -->
+<div class="hidden md:flex md:w-1/2 relative bg-primary items-center justify-center p-xl overflow-hidden">
+<!-- Animated Shader Background Placeholder -->
+
+<div class="relative z-10 max-w-lg">
+<span class="text-secondary-fixed font-label-md tracking-[0.2em] uppercase mb-4 block">Logistics Meets Flavor</span>
+<h2 class="text-surface-lowest font-display-lg text-display-lg leading-none mb-6">Partner with MealsOnWheels</h2>
+<p class="text-primary-fixed-dim font-body-lg text-body-lg mb-8 opacity-90">Manage your kitchen operations with the precision of a high-speed transit hub. Real-time tracking, seamless handoffs, and premium delivery services.</p>
+<div class="grid grid-cols-2 gap-md">
+<div class="glass-card p-md rounded-xl">
+<span class="material-symbols-outlined text-secondary text-3xl mb-2" data-icon="speed">speed</span>
+<h4 class="text-primary font-headline-sm text-headline-sm">Fast Prep</h4>
+<p class="text-on-surface-variant font-label-sm text-label-sm">Optimized order flow for busy kitchens.</p>
+</div>
+<div class="glass-card p-md rounded-xl">
+<span class="material-symbols-outlined text-secondary text-3xl mb-2" data-icon="analytics">analytics</span>
+<h4 class="text-primary font-headline-sm text-headline-sm">Insights</h4>
+<p class="text-on-surface-variant font-label-sm text-label-sm">Deep data on transit and customer habits.</p>
+</div>
+</div>
+</div>
+<!-- Atmospheric Abstract Image -->
+<div class="absolute bottom-0 right-0 w-full h-1/3 opacity-20 pointer-events-none" data-alt="A sophisticated, high-contrast black and white photograph of a modern, minimalist restaurant kitchen with gleaming stainless steel surfaces and soft overhead lighting. The composition is artistic and editorial, reflecting the 'Sophisticated Transit' brand identity with its focus on order, precision, and high-end culinary professionalism. Deep teal shadows and bright highlights create a dramatic, premium atmosphere." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDSTvYBpi0DZzQKoOiZnTwtyfE00xUGp85sx2vFQv8MXca8DiGUqna5qeWNPp4VTMJKhhUUyVO4hPt30alUejk2y8Eb0jh2Nt5xN126eLeH0HsRxi3h4-RDOKeqRKLYLOzI8-0EfMo9gS2RAXpvTgMjRDH376PtNSljz2867s_fJyJjE8x9-3SwpKb2E97Waeimkw24XW5or1B4FcNpkxg-gznTQEwLn_l9V3VC4DRXg-GtNeWEklw2Uw')"></div>
+</div>
+<!-- Right Content Section (Login Form) -->
+<div class="w-full md:w-1/2 bg-surface flex items-center justify-center px-margin-mobile md:px-margin-desktop py-xl">
+<div class="w-full max-w-md">
+<div class="mb-lg">
+<h3 class="font-headline-md text-headline-md text-primary mb-2">Welcome Back, Partner</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Access your restaurant dashboard to manage orders and track transit in real-time.</p>
+</div>
+<form class="space-y-md" id="login-form">
+<!-- Phone Input -->
+<div>
+<label class="block font-label-md text-label-md text-primary mb-2" for="phone">Phone Number</label>
+<div class="relative">
+<span class="absolute inset-y-0 left-0 flex items-center pl-4 text-outline">
+<span class="material-symbols-outlined text-sm" data-icon="call">call</span>
+</span>
+<input class="w-full h-12 pl-10 pr-4 bg-surface-container-lowest border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all text-body-md" id="phone" name="phone" placeholder="+1 (555) 000-0000" type="tel"/>
+</div>
+</div>
+<!-- OTP Section (Hidden initially, shown after phone submission - simulated logic) -->
+<div class="transition-all duration-500" id="otp-section">
+<div class="flex justify-between items-center mb-2">
+<label class="block font-label-md text-label-md text-primary">Enter 6-Digit OTP</label>
+<button class="text-secondary font-label-sm text-label-sm hover:underline" type="button">Resend Code</button>
+</div>
+<div class="flex gap-xs justify-between">
+<input class="otp-input w-12 h-14 text-center text-headline-sm font-bold bg-surface-container-lowest border border-outline-variant rounded-lg" maxlength="1" type="text"/>
+<input class="otp-input w-12 h-14 text-center text-headline-sm font-bold bg-surface-container-lowest border border-outline-variant rounded-lg" maxlength="1" type="text"/>
+<input class="otp-input w-12 h-14 text-center text-headline-sm font-bold bg-surface-container-lowest border border-outline-variant rounded-lg" maxlength="1" type="text"/>
+<input class="otp-input w-12 h-14 text-center text-headline-sm font-bold bg-surface-container-lowest border border-outline-variant rounded-lg" maxlength="1" type="text"/>
+<input class="otp-input w-12 h-14 text-center text-headline-sm font-bold bg-surface-container-lowest border border-outline-variant rounded-lg" maxlength="1" type="text"/>
+<input class="otp-input w-12 h-14 text-center text-headline-sm font-bold bg-surface-container-lowest border border-outline-variant rounded-lg" maxlength="1" type="text"/>
+</div>
+</div>
+<!-- CTA Button -->
+<button class="w-full h-12 bg-primary text-on-primary font-label-md text-label-md rounded-lg shadow-sm hover:bg-primary-container transition-colors active:scale-[0.98] duration-150 flex items-center justify-center gap-2" type="submit">
+<span>Login as Restaurant</span>
+<span class="material-symbols-outlined" data-icon="login">login</span>
+</button>
+</form>
+<div class="mt-lg pt-md border-t border-outline-variant/30 text-center">
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Not a partner yet? Join our ecosystem.</p>
+<a class="inline-flex items-center gap-2 px-md py-sm bg-secondary text-on-secondary rounded-full font-label-md text-label-md hover:bg-secondary-container transition-all" href="#">
+<span>Join our fleet</span>
+<span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+<!-- Footer Links -->
+<div class="mt-xl flex flex-wrap justify-center gap-md text-label-sm font-label-sm text-outline">
+<a class="hover:text-primary transition-colors" href="#">Help Center</a>
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+</main>
+<!-- Navigation Drawer (Hidden on Login for focus) -->
+<!-- Suppression logic applied: suppress navigation shell on transactional/login screens -->
+<script>
+        // Micro-interaction for OTP input movement
+        const otpInputs = document.querySelectorAll('.otp-input');
+        otpInputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value.length === 1 && index < otpInputs.length - 1) {
+                    otpInputs[index + 1].focus();
+                }
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                    otpInputs[index - 1].focus();
+                }
+            });
+        });
+
+        // Form submission animation simulation
+        const form = document.getElementById('login-form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = form.querySelector('button[type="submit"]');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin" data-icon="progress_activity">progress_activity</span> Authenticating...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.classList.add('bg-secondary');
+                btn.innerHTML = '<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span> Welcome, Transit Diner';
+            }, 1500);
+        });
+    </script>
+</body></html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>No Order History</title>
+<!-- Montserrat font as per Design System -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-tint": "#306576",
+                    "surface-container": "#edeeef",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed-variant": "#7a3000",
+                    "tertiary": "#660010",
+                    "secondary-fixed-dim": "#ffb693",
+                    "secondary": "#a04100",
+                    "on-primary-container": "#87bbce",
+                    "inverse-primary": "#9acee1",
+                    "outline": "#70787c",
+                    "outline-variant": "#c0c8cb",
+                    "on-surface": "#191c1d",
+                    "on-primary-fixed-variant": "#114d5d",
+                    "on-background": "#191c1d",
+                    "surface-container-high": "#e7e8e9",
+                    "primary": "#003441",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#f0f1f2",
+                    "on-tertiary-container": "#ff9694",
+                    "background": "#f8f9fa",
+                    "on-tertiary-fixed-variant": "#92001b",
+                    "secondary-fixed": "#ffdbcc",
+                    "on-tertiary-fixed": "#410007",
+                    "inverse-surface": "#2e3132",
+                    "tertiary-fixed-dim": "#ffb3b0",
+                    "on-error": "#ffffff",
+                    "surface-container-highest": "#e1e3e4",
+                    "tertiary-fixed": "#ffdad8",
+                    "secondary-container": "#fd7729",
+                    "on-primary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "surface-dim": "#d9dadb",
+                    "on-surface-variant": "#40484b",
+                    "error": "#ba1a1a",
+                    "surface": "#f8f9fa",
+                    "surface-bright": "#f8f9fa",
+                    "on-secondary-fixed": "#351000",
+                    "on-primary-fixed": "#001f28",
+                    "primary-container": "#0f4c5c",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-container": "#5e2300",
+                    "error-container": "#ffdad6",
+                    "surface-variant": "#e1e3e4",
+                    "tertiary-container": "#90001b",
+                    "surface-container-low": "#f3f4f5",
+                    "primary-fixed-dim": "#9acee1",
+                    "primary-fixed": "#b6ebfe"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "12px",
+                    "base": "8px",
+                    "xs": "4px",
+                    "margin-mobile": "16px",
+                    "xl": "64px",
+                    "gutter": "24px",
+                    "lg": "40px",
+                    "md": "24px",
+                    "margin-desktop": "48px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Montserrat"],
+                    "body-lg": ["Montserrat"],
+                    "display-lg": ["Montserrat"],
+                    "headline-sm": ["Montserrat"],
+                    "body-md": ["Montserrat"],
+                    "headline-md": ["Montserrat"],
+                    "label-md": ["Montserrat"],
+                    "display-lg-mobile": ["Montserrat"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        font-family: 'Montserrat', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      .ambient-glow {
+        background: radial-gradient(circle at 50% 50%, rgba(0, 52, 65, 0.03) 0%, transparent 70%);
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface border-b border-outline-variant flex items-center justify-between px-margin-mobile h-12 w-full">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="restaurant">restaurant</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">MealsOnWheels</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:bg-surface-container-high transition-colors p-1 rounded-full active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="location_on">location_on</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center pt-12 pb-16 px-margin-mobile relative overflow-hidden">
+<!-- Ambient Atmospheric Background -->
+<div class="absolute inset-0 ambient-glow pointer-events-none"></div>
+<!-- Empty State Container -->
+<div class="w-full max-w-md text-center z-10 flex flex-col items-center">
+<!-- Minimalist Illustration Plate Area -->
+<div class="relative w-48 h-48 mb-lg flex items-center justify-center">
+<!-- Decorative Subtle Ring -->
+<div class="absolute inset-0 rounded-full border border-outline-variant/30 animate-[pulse_4s_ease-in-out_infinite]"></div>
+<!-- Plate Illustration -->
+<div class="relative bg-surface-container-lowest rounded-full w-40 h-40 shadow-[0px_4px_20px_rgba(15,76,92,0.08)] flex items-center justify-center border border-outline-variant/10">
+<!-- Cutlery details using Material Symbols -->
+<div class="flex gap-8 opacity-20">
+<span class="material-symbols-outlined text-primary text-6xl" data-icon="flatware">flatware</span>
+</div>
+<!-- Empty State Image (Placeholder) -->
+<div class="absolute inset-0 flex items-center justify-center p-8">
+<img class="w-full h-full object-contain opacity-80" data-alt="A minimalist, high-end editorial photo of a clean, white ceramic designer plate resting on a pristine light grey marble surface. The lighting is soft and directional, creating a gentle shadow that emphasizes the plate's elegant curve. No food is present, symbolizing a fresh start and sophisticated minimalism. The overall aesthetic is bright, calm, and professional, perfectly aligned with a corporate transit and culinary brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmBiI1bHIAtvOlM4yCO6bOtqH-Us7JqQoTmkjKlZObl1mEzqVMWsw01OwjzRVGA10aLo2VN6zuW8tyastPlTJ_1Tpk9tmZoLN6r2Ub-p-Ku8pIE3h5DxHalX2DYPMNqmnASS6DUNInOcQNAMAizm8gWmgn40AifxU2fmYwcrYh28osdS7qulGpkj406qtRHWI8NV_3KynL5V-eYkuTTNYr7Xs9WZ4ql0jNIdlnvI4uaf45AlkuOZBpXA"/>
+</div>
+</div>
+<!-- Small Floating Accent (Transit related) -->
+<div class="absolute -bottom-2 -right-2 bg-secondary-container text-on-secondary-container p-3 rounded-xl shadow-md transform rotate-12">
+<span class="material-symbols-outlined text-2xl" data-icon="departure_board">departure_board</span>
+</div>
+</div>
+<!-- Typography Content -->
+<div class="space-y-sm mb-lg">
+<h2 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">No orders yet</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-[280px] mx-auto">
+                    Start your journey and book a meal at your favorite restaurant.
+                </p>
+</div>
+<!-- Primary Action -->
+<div class="w-full space-y-md">
+<button class="w-full bg-primary text-on-primary h-12 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] shadow-[0px_4px_20px_rgba(0,52,65,0.12)]">
+<span class="material-symbols-outlined text-lg" data-icon="search">search</span>
+                    Search restaurants
+                </button>
+<!-- Secondary Action -->
+<a class="inline-flex items-center gap-1 font-label-md text-label-md text-secondary hover:underline transition-all group" href="#">
+                    Browse popular routes
+                    <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Decorative Logistic Grid Lines (Subtle Sophisticated Transit feel) -->
+<div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#003441 1px, transparent 1px); background-size: 32px 32px;">
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface shadow-[0px_-4px_20px_rgba(0,52,65,0.08)] flex justify-around items-center h-16 w-full px-2">
+<!-- Home -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-highest transition-colors rounded-xl active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm-mobile">Home</span>
+</a>
+<!-- Stops -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-highest transition-colors rounded-xl active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="departure_board">departure_board</span>
+<span class="font-label-sm text-label-sm-mobile">Stops</span>
+</a>
+<!-- Orders (Active state because we are on History/Orders context) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-label-sm text-label-sm-mobile">Orders</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-highest transition-colors rounded-xl active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm-mobile">Profile</span>
+</a>
+</nav>
+<!-- Micro-interactions Script -->
+<script>
+        // Simple hover effect or logic for interactive elements
+        document.querySelectorAll('button, a').forEach(el => {
+            el.addEventListener('click', () => {
+                console.log('Action triggered:', el.innerText || 'Navigation');
+            });
+        });
+    </script>
+</body></html>

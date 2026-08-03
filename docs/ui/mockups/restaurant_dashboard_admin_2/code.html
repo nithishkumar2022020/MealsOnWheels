@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ambala Highway Treat - Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "on-error-container": "#93000a",
+                "tertiary-container": "#90001b",
+                "inverse-surface": "#2e3132",
+                "on-error": "#ffffff",
+                "surface-container-high": "#e7e8e9",
+                "surface-dim": "#d9dadb",
+                "surface": "#f8f9fa",
+                "on-primary-fixed": "#001f28",
+                "inverse-primary": "#9acee1",
+                "surface-container-highest": "#e1e3e4",
+                "on-tertiary-fixed-variant": "#92001b",
+                "inverse-on-surface": "#f0f1f2",
+                "surface-container": "#edeeef",
+                "on-tertiary-fixed": "#410007",
+                "surface-tint": "#306576",
+                "on-surface-variant": "#40484b",
+                "on-primary": "#ffffff",
+                "on-surface": "#191c1d",
+                "on-secondary": "#ffffff",
+                "error": "#ba1a1a",
+                "primary-container": "#0f4c5c",
+                "primary-fixed-dim": "#9acee1",
+                "tertiary-fixed": "#ffdad8",
+                "secondary": "#a04100",
+                "outline": "#70787c",
+                "on-primary-container": "#87bbce",
+                "on-secondary-fixed": "#351000",
+                "on-secondary-container": "#5e2300",
+                "on-background": "#191c1d",
+                "surface-bright": "#f8f9fa",
+                "secondary-fixed": "#ffdbcc",
+                "primary": "#003441",
+                "on-tertiary-container": "#ff9694",
+                "error-container": "#ffdad6",
+                "primary-fixed": "#b6ebfe",
+                "on-secondary-fixed-variant": "#7a3000",
+                "tertiary": "#660010",
+                "tertiary-fixed-dim": "#ffb3b0",
+                "surface-variant": "#e1e3e4",
+                "outline-variant": "#c0c8cb",
+                "on-tertiary": "#ffffff",
+                "surface-container-low": "#f3f4f5",
+                "secondary-container": "#fd7729",
+                "secondary-fixed-dim": "#ffb693",
+                "surface-container-lowest": "#ffffff",
+                "on-primary-fixed-variant": "#114d5d",
+                "background": "#f8f9fa"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "xs": "4px",
+                "xl": "64px",
+                "base": "8px",
+                "margin-mobile": "16px",
+                "md": "24px",
+                "margin-desktop": "48px",
+                "sm": "12px",
+                "lg": "40px",
+                "gutter": "24px"
+        },
+        "fontFamily": {
+                "label-md": [
+                        "Montserrat"
+                ],
+                "display-lg-mobile": [
+                        "Montserrat"
+                ],
+                "display-lg": [
+                        "Montserrat"
+                ],
+                "body-lg": [
+                        "Montserrat"
+                ],
+                "headline-md": [
+                        "Montserrat"
+                ],
+                "label-sm": [
+                        "Montserrat"
+                ],
+                "headline-sm": [
+                        "Montserrat"
+                ],
+                "body-md": [
+                        "Montserrat"
+                ]
+        },
+        "fontSize": {
+                "label-md": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "letterSpacing": "0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "display-lg-mobile": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "display-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "56px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-md": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "headline-sm": [
+                        "20px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+      body {
+        font-family: 'Montserrat', sans-serif;
+        background-color: #f1faee;
+        color: #191c1d;
+      }
+      .admin-card {
+        background: #ffffff;
+        border: 1px solid #D1D9DB;
+        transition: all 0.2s ease;
+      }
+      .admin-card:hover {
+        box-shadow: 0px 4px 20px rgba(15, 76, 92, 0.08);
+      }
+      .status-critical {
+        animation: pulse-red 1.5s infinite;
+      }
+      @keyframes pulse-red {
+        0% { color: #ba1a1a; }
+        50% { color: #ff9694; }
+        100% { color: #ba1a1a; }
+      }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .sidebar-active {
+        background-color: #0f4c5c;
+        color: #87bbce;
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col md:flex-row overflow-x-hidden">
+<!-- Desktop Sidebar -->
+<aside class="hidden md:flex flex-col w-64 bg-primary text-white fixed h-full z-50">
+<div class="p-6">
+<h1 class="text-headline-sm font-display-lg font-bold tracking-tight">Ambala</h1>
+<p class="text-label-sm opacity-70">Highway Treat</p>
+</div>
+<nav class="flex-1 mt-6 px-4 space-y-2">
+<a class="flex items-center gap-3 p-3 rounded-xl sidebar-active" href="{{DATA:SCREEN:SCREEN_46}}">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-colors" href="{{DATA:SCREEN:SCREEN_21}}">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span class="font-label-md">Menu Manage</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-colors" href="{{DATA:SCREEN:SCREEN_20}}">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md">Insights</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-colors" href="{{DATA:SCREEN:SCREEN_26}}">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md">Settings</span>
+</a>
+</nav>
+<div class="p-6 border-t border-white/10">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-white font-bold">A</div>
+<div>
+<p class="text-label-md">Admin Mode</p>
+<p class="text-label-sm opacity-60">Log out</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 pb-24 md:pb-8">
+<!-- Header -->
+<header class="bg-white px-margin-mobile md:px-margin-desktop py-6 flex flex-col md:flex-row md:items-center justify-between sticky top-0 z-40 shadow-sm">
+<div class="flex flex-col">
+<h2 class="text-headline-md font-bold text-primary">Manage Orders</h2>
+<div class="flex items-center gap-2 mt-1">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+<p class="text-label-sm text-outline">Open until 11:30 PM</p>
+</div>
+</div>
+<div class="mt-4 md:mt-0 flex gap-3">
+<a class="bg-surface-container hover:bg-surface-container-high px-4 py-2 rounded-lg flex items-center gap-2 transition-colors" href="#history">
+<span class="material-symbols-outlined text-body-md">history</span>
+<span class="font-label-md text-primary">History</span>
+</a>
+<button class="bg-primary text-white px-6 py-2 rounded-lg font-label-md hover:opacity-90 transition-opacity">
+                    Refresh Feed
+                </button>
+</div>
+</header>
+<div class="px-margin-mobile md:px-margin-desktop mt-8 space-y-10">
+<!-- Stats Bar -->
+<section class="grid grid-cols-1 sm:grid-cols-3 gap-gutter">
+<div class="admin-card p-6 rounded-xl flex items-center gap-4">
+<div class="w-12 h-12 bg-primary-container/10 rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">shopping_bag</span>
+</div>
+<div>
+<p class="text-label-sm text-outline">Total orders today</p>
+<h3 class="text-headline-sm font-bold text-primary">142</h3>
+</div>
+</div>
+<div class="admin-card p-6 rounded-xl flex items-center gap-4">
+<div class="w-12 h-12 bg-secondary-container/10 rounded-full flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">verified</span>
+</div>
+<div>
+<p class="text-label-sm text-outline">Confirmation rate</p>
+<h3 class="text-headline-sm font-bold text-primary">98.4%</h3>
+</div>
+</div>
+<div class="admin-card p-6 rounded-xl flex items-center gap-4">
+<div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-orange-600">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<div>
+<p class="text-label-sm text-outline">Avg rating</p>
+<h3 class="text-headline-sm font-bold text-primary">4.8 <span class="text-label-sm font-normal text-outline">★</span></h3>
+</div>
+</div>
+</section>
+<!-- Pending Orders Section -->
+<section>
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-headline-sm font-bold text-primary" id="pending-orders-title">Pending Orders (3)</h3>
+<div class="flex gap-2">
+<span class="bg-tertiary/10 text-tertiary px-3 py-1 rounded-full text-label-sm font-semibold">Priority View</span>
+</div>
+</div>
+<!-- Pending List -->
+<div class="space-y-4" id="pending-list">
+<!-- Order Card 1 (CRITICAL) -->
+<div class="admin-card p-5 rounded-xl border-l-4 border-l-error pending-order">
+<div class="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
+<div class="flex-1 space-y-3">
+<div class="flex items-center gap-4">
+<span class="font-label-md text-primary bg-primary/5 px-2 py-1 rounded order-id">#ORD-9021</span>
+<span class="text-label-sm text-outline">+91 98*** **450</span>
+</div>
+<div class="space-y-1">
+<p class="font-body-md font-bold text-on-surface order-items">2x Paneer Highway Special, 1x Dal Tadka, 4x Butter Naan</p>
+<p class="text-label-sm text-tertiary italic flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">info</span>
+                                        "Extra spicy on the Dal, please include extra tissues."
+                                    </p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-4 min-w-[240px]">
+<div class="text-right">
+<p class="text-label-sm text-outline">TIME UNTIL CUTOFF</p>
+<p class="text-headline-sm font-bold status-critical">03:45</p>
+</div>
+<div class="flex gap-2 w-full">
+<button class="confirm-btn flex-1 bg-primary-container text-on-primary-container px-4 py-2 rounded-lg font-label-md hover:brightness-110 transition-all active:scale-95">CONFIRM</button>
+<button class="flex-1 border border-outline text-outline px-4 py-2 rounded-lg font-label-md hover:bg-surface-variant transition-all">REJECT</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Order Card 2 -->
+<div class="admin-card p-5 rounded-xl pending-order">
+<div class="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
+<div class="flex-1 space-y-3">
+<div class="flex items-center gap-4">
+<span class="font-label-md text-primary bg-primary/5 px-2 py-1 rounded order-id">#ORD-9022</span>
+<span class="text-label-sm text-outline">+91 70*** **112</span>
+</div>
+<div class="space-y-1">
+<p class="font-body-md font-bold text-on-surface order-items">1x Chicken Highway Handi (Family Pack), 2x Garlic Naan</p>
+<p class="text-label-sm text-outline">No special notes.</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-4 min-w-[240px]">
+<div class="text-right">
+<p class="text-label-sm text-outline">TIME UNTIL CUTOFF</p>
+<p class="text-headline-sm font-bold text-on-surface">12:20</p>
+</div>
+<div class="flex gap-2 w-full">
+<button class="confirm-btn flex-1 bg-primary-container text-on-primary-container px-4 py-2 rounded-lg font-label-md hover:brightness-110 transition-all">CONFIRM</button>
+<button class="flex-1 border border-outline text-outline px-4 py-2 rounded-lg font-label-md hover:bg-surface-variant transition-all">REJECT</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Order Card 3 -->
+<div class="admin-card p-5 rounded-xl pending-order">
+<div class="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
+<div class="flex-1 space-y-3">
+<div class="flex items-center gap-4">
+<span class="font-label-md text-primary bg-primary/5 px-2 py-1 rounded order-id">#ORD-9023</span>
+<span class="text-label-sm text-outline">+91 88*** **776</span>
+</div>
+<div class="space-y-1">
+<p class="font-body-md font-bold text-on-surface order-items">3x Veg Grilled Sandwich, 2x Cold Coffee</p>
+<p class="text-label-sm text-outline">Packed separately for travel.</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-4 min-w-[240px]">
+<div class="text-right">
+<p class="text-label-sm text-outline">TIME UNTIL CUTOFF</p>
+<p class="text-headline-sm font-bold text-on-surface">18:55</p>
+</div>
+<div class="flex gap-2 w-full">
+<button class="confirm-btn flex-1 bg-primary-container text-on-primary-container px-4 py-2 rounded-lg font-label-md hover:brightness-110 transition-all">CONFIRM</button>
+<button class="flex-1 border border-outline text-outline px-4 py-2 rounded-lg font-label-md hover:bg-surface-variant transition-all">REJECT</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Confirmed Orders Section -->
+<section>
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-headline-sm font-bold text-primary" id="confirmed-orders-title">In Preparation / Confirmed (5)</h3>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4" id="confirmed-list">
+<!-- Confirmed Order 1 -->
+<div class="admin-card p-4 rounded-xl border-l-4 border-l-green-500">
+<div class="flex justify-between items-center mb-3">
+<div>
+<span class="font-label-md text-primary">#ORD-8998</span>
+<span class="mx-2 text-outline">|</span>
+<span class="text-label-sm font-semibold text-green-600">IN KITCHEN</span>
+</div>
+<span class="text-label-sm text-outline">Confirmed 12m ago</span>
+</div>
+<p class="text-body-md mb-4 text-on-surface">1x Highway Platter, 2x Lassi</p>
+<button class="w-full bg-green-600 text-white py-2 rounded-lg font-label-md hover:bg-green-700 transition-colors">READY FOR PICKUP</button>
+</div>
+<!-- Confirmed Order 2 -->
+<div class="admin-card p-4 rounded-xl border-l-4 border-l-secondary-container">
+<div class="flex justify-between items-center mb-3">
+<div>
+<span class="font-label-md text-primary">#ORD-8995</span>
+<span class="mx-2 text-outline">|</span>
+<span class="text-label-sm font-semibold text-secondary">READY</span>
+</div>
+<span class="text-label-sm text-outline">Ready 4m ago</span>
+</div>
+<p class="text-body-md mb-4 text-on-surface">4x Aloo Paratha, 1x Curd Cup</p>
+<button class="w-full bg-outline text-white py-2 rounded-lg font-label-md hover:bg-primary transition-colors">HANDED OVER</button>
+</div>
+<!-- Confirmed Order 3 -->
+<div class="admin-card p-4 rounded-xl border-l-4 border-l-green-500 opacity-80">
+<div class="flex justify-between items-center mb-3">
+<div>
+<span class="font-label-md text-primary">#ORD-8994</span>
+<span class="mx-2 text-outline">|</span>
+<span class="text-label-sm font-semibold text-green-600">IN KITCHEN</span>
+</div>
+<span class="text-label-sm text-outline">Confirmed 22m ago</span>
+</div>
+<p class="text-body-md mb-4 text-on-surface">2x Chole Bhature</p>
+<button class="w-full bg-green-600 text-white py-2 rounded-lg font-label-md hover:bg-green-700 transition-colors">READY FOR PICKUP</button>
+</div>
+<!-- Confirmed Order 4 -->
+<div class="admin-card p-4 rounded-xl border-l-4 border-l-secondary-container">
+<div class="flex justify-between items-center mb-3">
+<div>
+<span class="font-label-md text-primary">#ORD-8992</span>
+<span class="mx-2 text-outline">|</span>
+<span class="text-label-sm font-semibold text-secondary">READY</span>
+</div>
+<span class="text-label-sm text-outline">Ready 15m ago</span>
+</div>
+<p class="text-body-md mb-4 text-on-surface">1x Fried Rice, 1x Veg Manchurian</p>
+<button class="w-full bg-outline text-white py-2 rounded-lg font-label-md hover:bg-primary transition-colors">HANDED OVER</button>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Mobile Bottom Navigation (Visible on md:hidden) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-outline-variant z-50 flex justify-around items-center h-16 px-4">
+<a class="flex flex-col items-center gap-1 text-primary" href="{{DATA:SCREEN:SCREEN_46}}">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-bold">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-outline" href="{{DATA:SCREEN:SCREEN_21}}">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span class="text-[10px]">Menu</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-outline" href="{{DATA:SCREEN:SCREEN_20}}">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-[10px]">Stats</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-outline" href="{{DATA:SCREEN:SCREEN_26}}">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px]">Profile</span>
+</a>
+</nav>
+<script>
+        // Simple countdown logic for the visual demo
+        const countdowns = document.querySelectorAll('.status-critical');
+        countdowns.forEach(countdown => {
+            let time = countdown.innerText.split(':');
+            let minutes = parseInt(time[0]);
+            let seconds = parseInt(time[1]);
+
+            setInterval(() => {
+                if (seconds > 0) {
+                    seconds--;
+                } else {
+                    if (minutes > 0) {
+                        minutes--;
+                        seconds = 59;
+                    }
+                }
+                countdown.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        });
+
+        // Add interaction feedback for buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousedown', () => {
+                btn.classList.add('scale-95');
+            });
+            btn.addEventListener('mouseup', () => {
+                btn.classList.remove('scale-95');
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.classList.remove('scale-95');
+            });
+        });
+
+        // Confirm button logic
+        let pendingCount = 3;
+        let confirmedCount = 5;
+
+        document.querySelectorAll('.confirm-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const pendingCard = this.closest('.pending-order');
+                const orderId = pendingCard.querySelector('.order-id').innerText;
+                const itemsText = pendingCard.querySelector('.order-items').innerText;
+                
+                // Create new confirmed card
+                const confirmedCard = document.createElement('div');
+                confirmedCard.className = 'admin-card p-4 rounded-xl border-l-4 border-l-green-500 animate-pulse';
+                confirmedCard.innerHTML = `
+                    <div class="flex justify-between items-center mb-3">
+                        <div>
+                            <span class="font-label-md text-primary">${orderId}</span>
+                            <span class="mx-2 text-outline">|</span>
+                            <span class="text-label-sm font-semibold text-green-600">IN KITCHEN</span>
+                        </div>
+                        <span class="text-label-sm text-outline">Confirmed just now</span>
+                    </div>
+                    <p class="text-body-md mb-4 text-on-surface">${itemsText}</p>
+                    <button class="w-full bg-green-600 text-white py-2 rounded-lg font-label-md hover:bg-green-700 transition-colors">READY FOR PICKUP</button>
+                `;
+
+                // Add to confirmed list
+                document.getElementById('confirmed-list').prepend(confirmedCard);
+                
+                // Remove from pending list
+                pendingCard.remove();
+                
+                // Update counts
+                pendingCount--;
+                confirmedCount++;
+                document.getElementById('pending-orders-title').innerText = `Pending Orders (${pendingCount})`;
+                document.getElementById('confirmed-orders-title').innerText = `In Preparation / Confirmed (${confirmedCount})`;
+                
+                // Remove pulse after a short delay
+                setTimeout(() => {
+                    confirmedCard.classList.remove('animate-pulse');
+                }, 1000);
+            });
+        });
+    </script>
+</body></html>

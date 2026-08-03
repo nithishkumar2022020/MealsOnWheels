@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Live Order Tracking | En route</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Flowing effect for progress line */
+        @keyframes flowing-glow {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .status-line-gradient {
+            background: linear-gradient(90deg, #b7122a 0%, #ffb3b1 50%, #b7122a 100%);
+            background-size: 200% 100%;
+            animation: flowing-glow 3s linear infinite;
+        }
+
+        /* Gentle bounce for active status icon */
+        @keyframes gentle-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+        .animate-gentle-bounce {
+            animation: gentle-bounce 2s ease-in-out infinite;
+        }
+
+        /* Pulse animation for map marker */
+        @keyframes marker-pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+        .marker-pulse-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: #b7122a;
+            animation: marker-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        /* Ripple effect for button */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+        .ripple-effect {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            pointer-events: none;
+        }
+        @keyframes ripple-animation {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        /* Slide in animation for profile card */
+        @keyframes slide-up {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .animate-slide-up {
+            animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .interactive-card:active {
+            transform: scale(0.98);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#e4bebc",
+                        "on-background": "#1a1c1c",
+                        "surface-tint": "#bb162c",
+                        "on-tertiary-container": "#fffbff",
+                        "surface": "#f9f9f9",
+                        "on-secondary-fixed-variant": "#474747",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#291800",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#410007",
+                        "surface-variant": "#e2e2e2",
+                        "surface-dim": "#dadada",
+                        "secondary-fixed": "#e4e2e1",
+                        "inverse-primary": "#ffb3b1",
+                        "primary-fixed-dim": "#ffb3b1",
+                        "tertiary-fixed-dim": "#ffb954",
+                        "on-primary-fixed-variant": "#92001c",
+                        "error": "#ba1a1a",
+                        "background": "#f9f9f9",
+                        "tertiary-fixed": "#ffddb4",
+                        "on-surface-variant": "#5b403f",
+                        "tertiary": "#805200",
+                        "primary-fixed": "#ffdad8",
+                        "surface-bright": "#f9f9f9",
+                        "secondary-container": "#e4e2e1",
+                        "on-error": "#ffffff",
+                        "primary": "#b7122a",
+                        "inverse-on-surface": "#f1f1f1",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#a06900",
+                        "surface-container-high": "#e8e8e8",
+                        "surface-container": "#eeeeee",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "inverse-surface": "#2f3131",
+                        "secondary": "#5f5e5e",
+                        "on-primary-container": "#fffbff",
+                        "on-tertiary-fixed-variant": "#633f00",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#c8c6c6",
+                        "on-secondary-container": "#656464",
+                        "primary-container": "#db313f",
+                        "outline": "#8f6f6e",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "on-surface": "#1a1c1c",
+                        "surface-container-low": "#f3f3f3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-margin": "20px",
+                        "gutter": "16px",
+                        "touch-target-min": "48px",
+                        "card-padding": "16px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "headline-xl": ["Montserrat"],
+                        "headline-lg": ["Montserrat"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg-mobile": ["Montserrat"],
+                        "label-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md text-body-md antialiased min-h-screen pb-24">
+<!-- Top App Bar -->
+<header class="bg-surface docked full-width top-0 shadow-sm flex justify-between items-center w-full px-container-margin py-base h-touch-target-min fixed z-50">
+<div class="flex items-center gap-base">
+<span class="material-symbols-outlined text-primary" data-icon="location_on">location_on</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">En route: New Delhi Exp</h1>
+</div>
+<button class="hover:bg-surface-container-low transition-colors p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<main class="pt-touch-target-min">
+<!-- Map View -->
+<section class="relative h-[397px] w-full overflow-hidden">
+<div class="w-full h-full bg-surface-container-high relative overflow-hidden" data-location="New Delhi, India">
+<img class="w-full h-full object-cover grayscale-[0.3]" data-alt="Map visualization" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEqZs04fUwOCtK5szG5JQTLeN-LxZ19YFvneShCRnCL2oq5ZyyasBr5myYN7ikqcBFcqrExr55LSzEz1qWjlo-TsPD2le8s7iaXBzGClbbUGGMgQzkY5OXvNNpQABQ8x3ltzQTvRh1W8z086OxTpRK0xckUDC7hP_P20uK2AbcWslGCADem_I81xxTIfjxiU0_NGA1SiHiylg8mA_RIP9RhKq0QWVLcs0K23elRMWGpgE22Tvm1Z64jA"/>
+<div class="absolute top-1/4 left-1/3 flex flex-col items-center">
+<div class="bg-white p-1 rounded-lg shadow-lg border border-primary">
+<span class="material-symbols-outlined text-primary fill-icon" data-icon="restaurant" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+</div>
+</div>
+<div class="absolute bottom-1/3 right-1/4 flex flex-col items-center">
+<div class="relative flex items-center justify-center">
+<div class="marker-pulse-ring"></div>
+<div class="bg-primary p-2 rounded-full shadow-2xl relative z-10">
+<span class="material-symbols-outlined text-white fill-icon" data-icon="moped" style="font-variation-settings: 'FILL' 1;">moped</span>
+</div>
+</div>
+<div class="mt-1 bg-white/90 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] font-bold border border-primary/20">Rider</div>
+</div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+<div class="bg-on-background p-2 rounded-full shadow-2xl">
+<span class="material-symbols-outlined text-white" data-icon="directions_bus">directions_bus</span>
+</div>
+<div class="mt-1 bg-white/90 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] font-bold border border-on-background/20">Your Bus</div>
+</div>
+</div>
+<div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-surface to-transparent"></div>
+</section>
+<!-- Status Content -->
+<div class="px-container-margin -mt-8 relative z-10">
+<!-- Status Header Card -->
+<div class="bg-surface-container-lowest p-card-padding rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.06)] border border-outline-variant/30 mb-gutter">
+<div class="flex items-center gap-3 mb-2">
+<div class="h-10 w-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="timer">timer</span>
+</div>
+<div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">Rider is 2 mins away</h2>
+<p class="text-secondary font-label-sm text-label-sm">Estimated arrival at Sarai Kale Khan Stop</p>
+</div>
+</div>
+</div>
+<!-- Animated Progress Tracker -->
+<div class="bg-surface-container-lowest p-card-padding rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.06)] mb-gutter overflow-hidden">
+<h3 class="font-label-md text-label-md mb-6 text-on-surface">Order Progress</h3>
+<div class="relative flex justify-between items-start">
+<!-- Progress Line with Flowing Effect -->
+<div class="absolute top-4 left-0 w-full h-1 bg-surface-container-highest -z-0">
+<div class="status-line-gradient h-full w-3/4 transition-all duration-1000 ease-in-out"></div>
+</div>
+<!-- Step 1: Accepted -->
+<div class="relative z-10 flex flex-col items-center gap-2 flex-1">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white shadow-md">
+<span class="material-symbols-outlined text-[16px]" data-icon="check">check</span>
+</div>
+<span class="text-label-sm font-label-sm text-primary text-center">Accepted</span>
+</div>
+<!-- Step 2: Preparing -->
+<div class="relative z-10 flex flex-col items-center gap-2 flex-1">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white shadow-md">
+<span class="material-symbols-outlined text-[16px]" data-icon="check">check</span>
+</div>
+<span class="text-label-sm font-label-sm text-primary text-center">Preparing</span>
+</div>
+<!-- Step 3: Rider at Stop (ACTIVE with Gentle Bounce) -->
+<div class="relative z-10 flex flex-col items-center gap-2 flex-1">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white shadow-md ring-4 ring-primary/20 animate-gentle-bounce">
+<span class="material-symbols-outlined text-[16px] fill-icon" data-icon="moped" style="font-variation-settings: 'FILL' 1;">moped</span>
+</div>
+<span class="text-label-sm font-label-sm text-primary font-bold text-center">Rider at Stop</span>
+</div>
+<!-- Step 4: Delivered -->
+<div class="relative z-10 flex flex-col items-center gap-2 flex-1">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-secondary shadow-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="home">home</span>
+</div>
+<span class="text-label-sm font-label-sm text-secondary text-center">Delivered</span>
+</div>
+</div>
+</div>
+<!-- Delivery Info Card (Slide In Entrance) -->
+<div class="bg-surface-container-lowest p-card-padding rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.06)] flex items-center justify-between animate-slide-up opacity-0" style="animation-delay: 0.2s;">
+<div class="flex items-center gap-4">
+<div class="h-14 w-14 rounded-xl overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Amit Sharma" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVFeZoHQtjmhYkaxly1f3ZsWRklujVZZra4COBkzjyXWfFJLHtY96CYzIaxO5HzWnmvi1TpAI8CIJTQzLFxJH_DzyKOpNqlLbswnrdY0ARiVz10MQX07p4z0UFQ-T_idVlyNjyKPkC-RNxspTRdOgEbbW1NTVhpUcrqJVquR0iCblVYIOzT7DmWEpITfINq4auO9eNXV7-DhYGCX_oXagIdu9nojSM8jhfTnaSxDnYApPm_bJIJ2h3dw"/>
+</div>
+<div>
+<p class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Amit Sharma</p>
+<div class="flex items-center gap-2 text-secondary">
+<span class="material-symbols-outlined text-sm" data-icon="directions_bus">directions_bus</span>
+<p class="text-label-sm font-label-sm">DL 1P C 8842 • 4.9 ★</p>
+</div>
+</div>
+</div>
+<button class="ripple bg-primary text-on-primary h-touch-target-min px-6 rounded-full font-bold flex items-center gap-2 interactive-card transition-all active:scale-95 shadow-md" id="call-rider-btn">
+<span class="material-symbols-outlined fill-icon" data-icon="call" style="font-variation-settings: 'FILL' 1;">call</span>
+<span class="font-label-md text-label-md">Call Rider</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Floating Help Button -->
+<div class="fixed bottom-24 right-container-margin z-40">
+<button class="bg-surface-container-lowest text-primary shadow-[0px_8px_30px_rgba(0,0,0,0.12)] border border-primary/10 px-5 py-3 rounded-full flex items-center gap-2 font-bold hover:bg-surface-container-low transition-all active:scale-90">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span class="font-label-md text-label-md">Need Help?</span>
+</button>
+</div>
+<!-- Bottom Nav Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-container-margin pb-4 pt-2 bg-surface rounded-t-xl shadow-lg border-t border-outline-variant/20">
+<button class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined" data-icon="departure_board">departure_board</span>
+<span class="font-label-sm text-label-sm">Stops</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 scale-90 transition-all duration-150">
+<span class="material-symbols-outlined fill-icon" data-icon="receipt_long" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</button>
+</nav>
+<script>
+    // Ripple effect implementation
+    function createRipple(event) {
+        const button = event.currentTarget;
+        const circle = document.createElement("span");
+        const diameter = Math.max(button.clientWidth, button.clientHeight);
+        const radius = diameter / 2;
+
+        circle.style.width = circle.style.height = `${diameter}px`;
+        circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius}px`;
+        circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius}px`;
+        circle.classList.add("ripple-effect");
+
+        const ripple = button.getElementsByClassName("ripple-effect")[0];
+        if (ripple) {
+            ripple.remove();
+        }
+
+        button.appendChild(circle);
+    }
+
+    const callBtn = document.getElementById('call-rider-btn');
+    if (callBtn) {
+        callBtn.addEventListener('click', (e) => {
+            createRipple(e);
+            
+            // Reusing existing micro-interaction logic
+            const originalContent = callBtn.innerHTML;
+            callBtn.innerHTML = '<span class="material-symbols-outlined animate-spin" data-icon="autorenew">autorenew</span><span class="font-label-md text-label-md">Connecting...</span>';
+            setTimeout(() => {
+                callBtn.innerHTML = '<span class="material-symbols-outlined fill-icon" style="font-variation-settings: \'FILL\' 1;" data-icon="call">call</span><span class="font-label-md text-label-md">Calling...</span>';
+            }, 1500);
+        });
+    }
+
+    // Micro-interaction: Update progress bar width on load
+    window.addEventListener('DOMContentLoaded', () => {
+        const progressLine = document.querySelector('.status-line-gradient');
+        if (progressLine) {
+            progressLine.style.width = '0%';
+            setTimeout(() => {
+                progressLine.style.width = '75%';
+            }, 300);
+        }
+    });
+</script>
+</body></html>

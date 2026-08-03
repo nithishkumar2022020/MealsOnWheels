@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MealsOnWheels - Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#90001b",
+                    "surface-container": "#edeeef",
+                    "outline-variant": "#c0c8cb",
+                    "on-tertiary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#660010",
+                    "surface-container-high": "#e7e8e9",
+                    "secondary-fixed": "#ffdbcc",
+                    "tertiary-fixed-dim": "#ffb3b0",
+                    "on-tertiary-container": "#ff9694",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed-variant": "#114d5d",
+                    "inverse-on-surface": "#f0f1f2",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed": "#410007",
+                    "on-surface-variant": "#40484b",
+                    "primary-fixed-dim": "#9acee1",
+                    "inverse-primary": "#9acee1",
+                    "on-secondary": "#ffffff",
+                    "on-background": "#191c1d",
+                    "tertiary-fixed": "#ffdad8",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-container": "#0f4c5c",
+                    "on-secondary-fixed-variant": "#7a3000",
+                    "inverse-surface": "#2e3132",
+                    "on-primary-container": "#87bbce",
+                    "on-secondary-container": "#5e2300",
+                    "surface-container-low": "#f3f4f5",
+                    "surface": "#f8f9fa",
+                    "on-primary-fixed": "#001f28",
+                    "background": "#f8f9fa",
+                    "surface-tint": "#306576",
+                    "primary": "#003441",
+                    "on-secondary-fixed": "#351000",
+                    "surface-dim": "#d9dadb",
+                    "secondary-container": "#fd7729",
+                    "secondary": "#a04100",
+                    "on-surface": "#191c1d",
+                    "on-tertiary-fixed-variant": "#92001b",
+                    "on-error-container": "#93000a",
+                    "primary-fixed": "#b6ebfe",
+                    "secondary-fixed-dim": "#ffb693",
+                    "surface-bright": "#f8f9fa",
+                    "outline": "#70787c",
+                    "surface-variant": "#e1e3e4",
+                    "surface-container-highest": "#e1e3e4",
+                    "on-error": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "8px",
+                    "xl": "16px",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "40px",
+                    "xl": "64px",
+                    "md": "24px",
+                    "base": "8px",
+                    "gutter": "24px",
+                    "xs": "4px",
+                    "sm": "12px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "48px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Montserrat"],
+                    "headline-sm": ["Montserrat"],
+                    "body-md": ["Montserrat"],
+                    "headline-md": ["Montserrat"],
+                    "body-lg": ["Montserrat"],
+                    "label-md": ["Montserrat"],
+                    "display-lg-mobile": ["Montserrat"],
+                    "display-lg": ["Montserrat"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #EDF2F4;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .otp-input:focus {
+            border-color: #003441;
+            box-shadow: 0 0 0 2px rgba(0, 52, 65, 0.1);
+        }
+        .sophisticated-shadow {
+            box-shadow: 0px 4px 20px rgba(15, 76, 92, 0.08);
+        }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-margin-mobile">
+<!-- Login Container -->
+<main class="w-full max-w-[440px] bg-surface rounded-xl border border-outline-variant sophisticated-shadow p-8 flex flex-col gap-8">
+<!-- Header / Logo -->
+<header class="flex flex-col items-center gap-2">
+<div class="w-16 h-16 bg-primary-container rounded-xl flex items-center justify-center mb-2">
+<span class="material-symbols-outlined text-on-primary-container text-4xl" data-icon="local_shipping">local_shipping</span>
+</div>
+<h1 class="font-display-lg-mobile text-display-lg-mobile text-primary tracking-tight">MealsOnWheels</h1>
+<p class="font-body-md text-body-md text-on-surface-variant text-center px-4">Experience sophisticated transit for your premium culinary needs.</p>
+</header>
+<!-- Form Section -->
+<section class="flex flex-col gap-6">
+<!-- Phone Number Field -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface" for="phone">Phone Number</label>
+<div class="relative flex items-center">
+<span class="absolute left-4 font-body-md text-body-md text-primary font-semibold">+91</span>
+<input class="w-full h-[48px] pl-14 pr-4 bg-surface-container-low border border-outline-variant rounded-lg font-body-md text-body-md focus:outline-none focus:border-primary transition-all placeholder:text-outline" id="phone" oninput="validatePhone(this)" placeholder="Enter 10-digit mobile number" type="number"/>
+</div>
+</div>
+<!-- OTP Field (Hidden Logic Concept) -->
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-on-surface">Verification Code</label>
+<button class="text-secondary font-label-sm text-label-sm hover:underline">Resend OTP</button>
+</div>
+<div class="flex gap-2 justify-between">
+<input class="otp-input w-12 h-[56px] text-center bg-surface-container-low border border-outline-variant rounded-lg font-headline-md text-headline-md focus:outline-none" maxlength="1" onkeyup="moveFocus(this, 'otp2')" type="number"/>
+<input class="otp-input w-12 h-[56px] text-center bg-surface-container-low border border-outline-variant rounded-lg font-headline-md text-headline-md focus:outline-none" id="otp2" maxlength="1" onkeyup="moveFocus(this, 'otp3')" type="number"/>
+<input class="otp-input w-12 h-[56px] text-center bg-surface-container-low border border-outline-variant rounded-lg font-headline-md text-headline-md focus:outline-none" id="otp3" maxlength="1" onkeyup="moveFocus(this, 'otp4')" type="number"/>
+<input class="otp-input w-12 h-[56px] text-center bg-surface-container-low border border-outline-variant rounded-lg font-headline-md text-headline-md focus:outline-none" id="otp4" maxlength="1" onkeyup="moveFocus(this, 'otp5')" type="number"/>
+<input class="otp-input w-12 h-[56px] text-center bg-surface-container-low border border-outline-variant rounded-lg font-headline-md text-headline-md focus:outline-none" id="otp5" maxlength="1" onkeyup="moveFocus(this, 'otp6')" type="number"/>
+<input class="otp-input w-12 h-[56px] text-center bg-surface-container-low border border-outline-variant rounded-lg font-headline-md text-headline-md focus:outline-none" id="otp6" maxlength="1" type="number"/>
+</div>
+</div>
+<!-- Submit Button -->
+<button class="w-full h-[48px] bg-outline-variant text-on-surface-variant font-label-md text-label-md rounded-lg flex items-center justify-center gap-2 cursor-not-allowed transition-all" disabled="" id="submit-btn" onclick="handleLogin()">
+                Send OTP
+                <span class="material-symbols-outlined text-[20px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</section>
+<!-- Divider -->
+<div class="flex items-center gap-4">
+<div class="flex-1 h-[1px] bg-outline-variant"></div>
+<span class="font-label-sm text-label-sm text-outline">OR</span>
+<div class="flex-1 h-[1px] bg-outline-variant"></div>
+</div>
+<!-- Footer Link -->
+<footer class="flex flex-col items-center gap-4">
+<p class="font-label-md text-label-md text-on-surface-variant">
+                Already a restaurant? 
+                <a class="text-secondary font-bold hover:underline decoration-2 underline-offset-4 ml-1" href="#">Sign in here</a>
+</p>
+<div class="flex gap-6 mt-2">
+<span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary transition-colors" data-icon="help_outline">help_outline</span>
+<span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary transition-colors" data-icon="language">language</span>
+</div>
+</footer>
+</main>
+<!-- Background Decorative Element (Abstract Subtle Mesh) -->
+<div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+
+</div>
+<script>
+        function validatePhone(input) {
+            const btn = document.getElementById('submit-btn');
+            if (input.value.length === 10) {
+                btn.disabled = false;
+                btn.classList.remove('bg-outline-variant', 'text-on-surface-variant', 'cursor-not-allowed');
+                btn.classList.add('bg-primary-container', 'text-on-primary-container', 'hover:opacity-90', 'active:scale-[0.98]');
+                btn.innerText = 'Verify & Proceed';
+                // Add icon back since innerText clears it
+                const icon = document.createElement('span');
+                icon.className = 'material-symbols-outlined text-[20px]';
+                icon.innerText = 'arrow_forward';
+                btn.appendChild(icon);
+            } else {
+                btn.disabled = true;
+                btn.classList.add('bg-outline-variant', 'text-on-surface-variant', 'cursor-not-allowed');
+                btn.classList.remove('bg-primary-container', 'text-on-primary-container', 'hover:opacity-90', 'active:scale-[0.98]');
+                btn.innerHTML = 'Send OTP <span class="material-symbols-outlined text-[20px]">arrow_forward</span>';
+            }
+        }
+
+        function moveFocus(current, nextFieldID) {
+            if (current.value.length >= 1) {
+                document.getElementById(nextFieldID).focus();
+            }
+        }
+
+        function handleLogin() {
+            const btn = document.getElementById('submit-btn');
+            btn.innerHTML = '<span class="animate-spin material-symbols-outlined">progress_activity</span> Authenticating...';
+            setTimeout(() => {
+                window.location.reload(); // Simulate login refresh
+            }, 1500);
+        }
+    </script>
+</body></html>

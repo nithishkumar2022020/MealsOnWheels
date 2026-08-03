@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TransitFood | Order History</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#e7e8e9",
+                        "outline-variant": "#c0c8cb",
+                        "inverse-primary": "#9acee1",
+                        "on-secondary-fixed-variant": "#7a3000",
+                        "secondary-container": "#fd7729",
+                        "primary-container": "#0f4c5c",
+                        "tertiary-fixed": "#ffdad8",
+                        "on-secondary-fixed": "#351000",
+                        "secondary-fixed-dim": "#ffb693",
+                        "primary-fixed-dim": "#9acee1",
+                        "inverse-surface": "#2e3132",
+                        "surface-dim": "#d9dadb",
+                        "surface-container": "#edeeef",
+                        "on-secondary-container": "#5e2300",
+                        "tertiary-container": "#90001b",
+                        "surface-container-low": "#f3f4f5",
+                        "on-tertiary-fixed": "#410007",
+                        "on-tertiary-fixed-variant": "#92001b",
+                        "on-primary-fixed-variant": "#114d5d",
+                        "background": "#f8f9fa",
+                        "surface-container-highest": "#e1e3e4",
+                        "inverse-on-surface": "#f0f1f2",
+                        "surface-tint": "#306576",
+                        "secondary": "#a04100",
+                        "surface-variant": "#e1e3e4",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error": "#ffffff",
+                        "primary": "#003441",
+                        "primary-fixed": "#b6ebfe",
+                        "on-primary": "#ffffff",
+                        "on-background": "#191c1d",
+                        "error-container": "#ffdad6",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb3b0",
+                        "on-primary-fixed": "#001f28",
+                        "surface-bright": "#f8f9fa",
+                        "outline": "#70787c",
+                        "tertiary": "#660010",
+                        "surface": "#f8f9fa",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#ffdbcc",
+                        "on-surface": "#191c1d",
+                        "on-primary-container": "#87bbce",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#ff9694",
+                        "on-surface-variant": "#40484b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "base": "8px",
+                        "xs": "4px",
+                        "lg": "40px",
+                        "md": "24px",
+                        "xl": "64px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "48px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Montserrat"],
+                        "display-lg": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "headline-md": ["Montserrat"],
+                        "body-md": ["Montserrat"],
+                        "headline-sm": ["Montserrat"],
+                        "body-lg": ["Montserrat"],
+                        "label-md": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #EDF2F4;
+            color: #191c1d;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .order-card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid #D1D9DB;
+        }
+        .order-card:hover {
+            box-shadow: 0px 4px 20px rgba(15, 76, 92, 0.08);
+            transform: translateY(-2px);
+        }
+        .status-badge-completed {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        .status-badge-cancelled {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        .custom-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #c0c8cb;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-32 md:pb-0">
+<!-- TopAppBar Shell -->
+<header class="w-full top-0 sticky z-40 bg-surface shadow-sm flex justify-between items-center px-margin-mobile md:px-margin-desktop h-12 w-full">
+<div class="flex items-center gap-base">
+<span class="material-symbols-outlined text-primary" data-icon="directions_bus">directions_bus</span>
+<h1 class="font-display-lg-mobile text-display-lg-mobile text-primary tracking-tight md:text-headline-sm">TransitFood</h1>
+</div>
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-variant/20 transition-colors duration-200 p-2 rounded-full cursor-pointer" data-icon="location_on">location_on</span>
+</div>
+</header>
+<main class="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-lg">
+<!-- Header & Filters -->
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-md mb-lg">
+<div>
+<h2 class="font-headline-md text-headline-md text-primary mb-xs">Order History</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Your culinary journey through the transit network.</p>
+</div>
+<div class="flex gap-sm overflow-x-auto pb-2 md:pb-0 custom-scroll">
+<button class="px-md py-2 rounded-full bg-primary-container text-on-primary text-label-md font-label-md whitespace-nowrap shadow-sm transition-transform active:scale-95">All</button>
+<button class="px-md py-2 rounded-full bg-surface-container-high text-on-surface-variant text-label-md font-label-md whitespace-nowrap hover:bg-surface-variant/20 transition-colors">Completed</button>
+<button class="px-md py-2 rounded-full bg-surface-container-high text-on-surface-variant text-label-md font-label-md whitespace-nowrap hover:bg-surface-variant/20 transition-colors">Cancelled</button>
+</div>
+</section>
+<!-- Order List (Asymmetric Grid) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
+<!-- Order Card 1: Completed -->
+<div class="order-card bg-surface-container-lowest rounded-xl p-md flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<div class="flex gap-sm">
+<div class="w-12 h-12 rounded-lg bg-cover bg-center" data-alt="A macro shot of a gourmet artisan burger with melting cheese and fresh greens, shot in warm, cinematic studio lighting with a clean, high-end editorial food photography style, featuring deep teal and amber accents in the background." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDY2gyb_wsQgQjDTxDSBZ2o_zc-hDCifrh45mjZ3SyBg2rnGm-TnKBeyvGUrSKMYOxEAiZb_eqT8nrHiGUWjwOj8jQpUN1ikiGjcRxGi1cQtAJAp1AXsVZ5AznUL72FGzE3iA_4VQWUKtQbh40l7jFnsWnWoQ6G94shRm1UB8XTQ3frI4B_8Stfdyu5-hHog8ehUMmbsxuICxbJZN5MQKA6R7A5AxFtIHx1G_5KQE3z8ENLUeGsajzC7A')"></div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">The Terminal Grill</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">October 24, 2023 • 12:45 PM</p>
+</div>
+</div>
+<span class="status-badge-completed px-sm py-1 rounded-full font-label-md text-label-md">Completed</span>
+</div>
+<div class="h-[1px] w-full bg-outline-variant/30"></div>
+<div class="flex flex-col gap-xs">
+<p class="font-body-md text-body-md text-on-surface-variant">1x Smoked Brisket Sandwich, 1x Truffle Fries, 1x Iced Tea</p>
+<p class="font-headline-sm text-headline-sm text-primary mt-xs">$34.50</p>
+</div>
+<div class="mt-sm flex gap-sm">
+<button class="flex-1 h-10 rounded-lg border border-primary text-primary font-label-md text-label-md hover:bg-primary/5 transition-colors">Reorder</button>
+<button class="px-sm h-10 rounded-lg bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="star">star</span>
+</button>
+</div>
+</div>
+<!-- Order Card 2: Cancelled -->
+<div class="order-card bg-surface-container-lowest rounded-xl p-md flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<div class="flex gap-sm">
+<div class="w-12 h-12 rounded-lg bg-cover bg-center" data-alt="A top-down view of steaming traditional Japanese ramen with a soft-boiled egg and bamboo shoots, captured in a modern minimalist aesthetic with cool blue tones and soft natural side lighting, emphasizing precision and culinary warmth." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCm_TbePzbziTnKRG4fbIRIjNw4hWPVOrjfwpSCHz9XLbNcPIW3kE9i1i7pWTkMgdJ5ZplQOT8XpQ7e3iKdEgPZ2vQVITATolHfp6CIuj3T0zg6kVPWdEknPLjY3n18GTl-bxgijIw7xZud7GIva90k0nDf6QlxcyV8wj0Q9RxQ7zkHi15MyARGFTfyTKarWskOB4W-pgijnQqPId9EvqxssYdx_E9gM7srr0euWcvpoVCULvM5TA25JA')"></div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Platform Ramen</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">October 21, 2023 • 07:15 PM</p>
+</div>
+</div>
+<span class="status-badge-cancelled px-sm py-1 rounded-full font-label-md text-label-md">Cancelled</span>
+</div>
+<div class="h-[1px] w-full bg-outline-variant/30"></div>
+<div class="flex flex-col gap-xs opacity-60">
+<p class="font-body-md text-body-md text-on-surface-variant">2x Tonkotsu Classic, 1x Gyoza (6pc)</p>
+<p class="font-headline-sm text-headline-sm text-on-surface-variant mt-xs">$42.00</p>
+</div>
+<div class="mt-sm flex gap-sm">
+<button class="flex-1 h-10 rounded-lg border border-outline-variant text-on-surface-variant font-label-md text-label-md hover:bg-surface-container transition-colors">View Details</button>
+</div>
+</div>
+<!-- Order Card 3: Completed -->
+<div class="order-card bg-surface-container-lowest rounded-xl p-md flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<div class="flex gap-sm">
+<div class="w-12 h-12 rounded-lg bg-cover bg-center" data-alt="A collection of fresh, colorful sushi rolls arranged geometrically on a dark slate plate, lit by sharp directional lighting that creates long, dramatic shadows in a sophisticated, corporate modern design style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA7OY-7SDA5rN3C5mUljuI5WYQYsR-XivHG1emy9vLRT_z5UVHRTthAzZZIM_4Yyv6VsMp0QAu2uBw_01lGjDM-JbwOt8mkqGp451JI3WaK96bNjUqjN75DgKOmoF1aHzTRuj5wJkd26UJGhGW_uTWf26kbnXYxzfQyxZqR8S5xTuBMU2VDeaUQoIHOC2Ng1nuUI6_dNJbplZekFx1kshqbtnxzIf2EnIs3xrLxMSgGu0cKmnKoDBU-NQ')"></div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Express Sushi</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">October 18, 2023 • 01:20 PM</p>
+</div>
+</div>
+<span class="status-badge-completed px-sm py-1 rounded-full font-label-md text-label-md">Completed</span>
+</div>
+<div class="h-[1px] w-full bg-outline-variant/30"></div>
+<div class="flex flex-col gap-xs">
+<p class="font-body-md text-body-md text-on-surface-variant">1x Bento Box A, 1x Miso Soup</p>
+<p class="font-headline-sm text-headline-sm text-primary mt-xs">$21.90</p>
+</div>
+<div class="mt-sm flex gap-sm">
+<button class="flex-1 h-10 rounded-lg border border-primary text-primary font-label-md text-label-md hover:bg-primary/5 transition-colors">Reorder</button>
+<button class="px-sm h-10 rounded-lg bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="star">star</span>
+</button>
+</div>
+</div>
+<!-- Order Card 4: Completed (Wider layout for visual interest) -->
+<div class="order-card bg-surface-container-lowest rounded-xl p-md flex flex-col gap-sm md:col-span-2">
+<div class="flex flex-col md:flex-row justify-between md:items-start gap-md">
+<div class="flex gap-sm">
+<div class="w-16 h-16 rounded-xl bg-cover bg-center" data-alt="A sleek, professional espresso machine pouring rich crema coffee into a white porcelain cup, shot with a shallow depth of field in an airy, minimalist café setting featuring polished surfaces and warm wood accents." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA8g9iv6Vl7B5hpLYtlm-tOSwld_ga0gavej1LTW85kXCe6GLlDNTMeTSJhfxaIsJRyroHXFmt1k2ho9OxdU2APhiSvKENVkUSGS-BzSH4vc0vvHdWrWSKUWJwoUau0AU4ryKAqurb_ZHwi-QUsdQpOLpf9-Wp-uOTcCf2TBiU0UViJerIqJKeeE92FpsQQB34y2OGyOHu9AcbL2AA3mOfWxbGNe4nVnuqMc987bwNye_Vcpgmk7yxKDg')"></div>
+<div>
+<div class="flex items-center gap-xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Concours Coffee</h3>
+<span class="material-symbols-outlined text-secondary text-[16px]" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">October 15, 2023 • 08:30 AM</p>
+<div class="mt-2 flex gap-xs">
+<span class="px-2 py-0.5 bg-secondary/10 text-secondary text-[10px] uppercase font-bold rounded">Morning Route</span>
+<span class="px-2 py-0.5 bg-primary/10 text-primary text-[10px] uppercase font-bold rounded">Rapid Pickup</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end gap-xs">
+<span class="status-badge-completed px-sm py-1 rounded-full font-label-md text-label-md">Completed</span>
+<p class="font-headline-sm text-headline-sm text-primary">$12.40</p>
+</div>
+</div>
+<div class="h-[1px] w-full bg-outline-variant/30 my-xs"></div>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-sm">
+<p class="font-body-md text-body-md text-on-surface-variant">1x Large Oat Milk Latte, 1x Almond Croissant</p>
+<div class="flex gap-sm">
+<button class="h-10 px-md rounded-lg border border-primary text-primary font-label-md text-label-md hover:bg-primary/5 transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="receipt">receipt</span> Invoice
+                        </button>
+<button class="h-10 px-md rounded-lg bg-primary text-white font-label-md text-label-md hover:opacity-90 transition-opacity active:scale-95 shadow-md">Reorder Now</button>
+</div>
+</div>
+</div>
+<!-- Placeholder for Empty State/End of List -->
+<div class="border-2 border-dashed border-outline-variant rounded-xl p-md flex flex-col items-center justify-center text-center gap-sm opacity-50 min-h-[200px]">
+<span class="material-symbols-outlined text-[48px] text-outline-variant" data-icon="history">history</span>
+<p class="font-label-md text-label-md text-on-surface-variant max-w-[200px]">End of recent orders. Looking for older bookings?</p>
+<button class="text-primary font-bold text-label-sm underline">Load Archive</button>
+</div>
+</div>
+</main>
+<!-- BottomNavBar Shell -->
+<nav class="fixed bottom-0 w-full z-50 md:hidden flex justify-around items-center h-16 px-2 pb-safe bg-surface-container-lowest shadow-[0px_-4px_20px_rgba(15,76,92,0.08)]">
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 cursor-pointer transition-transform active:scale-95">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 cursor-pointer transition-transform active:scale-95">
+<span class="material-symbols-outlined" data-icon="departure_board">departure_board</span>
+<span class="font-label-sm text-label-sm">Stops</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 cursor-pointer transition-transform active:scale-95 shadow-sm">
+<span class="material-symbols-outlined" data-icon="receipt_long" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 cursor-pointer transition-transform active:scale-95">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</div>
+</nav>
+<!-- Desktop Navigation Drawer (Hidden on Mobile) -->
+<aside class="hidden md:flex fixed left-0 top-0 h-full w-72 bg-surface border-r border-outline-variant flex-col py-md gap-xs shadow-lg z-30">
+<div class="px-md mb-lg">
+<h1 class="font-display-lg text-primary tracking-tight">TransitFood</h1>
+</div>
+<div class="flex flex-col gap-xs flex-1">
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant hover:bg-surface-container-high transition-all mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant hover:bg-surface-container-high transition-all mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="departure_board">departure_board</span>
+<span class="font-label-md text-label-md">Stops</span>
+</a>
+<a class="flex items-center gap-md px-md py-3 bg-primary-container text-on-primary font-bold mx-2 rounded-lg shadow-sm" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-label-md text-label-md">Orders</span>
+</a>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant hover:bg-surface-container-high transition-all mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</a>
+<div class="mt-xl h-[1px] bg-outline-variant/30 mx-md"></div>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant hover:bg-surface-container-high transition-all mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="font-label-md text-label-md">Notifications</span>
+</a>
+<a class="flex items-center gap-md px-md py-3 text-on-surface-variant hover:bg-surface-container-high transition-all mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+<div class="px-md mt-auto pt-md border-t border-outline-variant/30">
+<div class="flex items-center gap-sm p-sm rounded-xl bg-surface-container-low">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold">TD</div>
+<div class="flex-1 overflow-hidden">
+<p class="font-label-md text-label-md text-on-surface truncate">Transit Diner</p>
+<p class="text-[10px] text-on-surface-variant">Premium Member</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="more_vert">more_vert</span>
+</div>
+</div>
+</aside>
+<!-- Adjust main content for side nav presence on desktop -->
+<style>
+        @media (min-width: 768px) {
+            main {
+                margin-left: 288px; /* Width of the side nav */
+                width: calc(100% - 288px);
+            }
+            header {
+                margin-left: 288px;
+                width: calc(100% - 288px);
+            }
+        }
+    </style>
+<script>
+        // Micro-interaction for filter buttons
+        const filterButtons = document.querySelectorAll('button[class*="px-md"]');
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterButtons.forEach(b => {
+                    b.classList.remove('bg-primary-container', 'text-on-primary');
+                    b.classList.add('bg-surface-container-high', 'text-on-surface-variant');
+                });
+                btn.classList.add('bg-primary-container', 'text-on-primary');
+                btn.classList.remove('bg-surface-container-high', 'text-on-surface-variant');
+                
+                // Add a little ripple/bounce animation
+                btn.animate([
+                    { transform: 'scale(1)' },
+                    { transform: 'scale(0.95)' },
+                    { transform: 'scale(1)' }
+                ], {
+                    duration: 150,
+                    easing: 'ease-out'
+                });
+            });
+        });
+
+        // Hover effect for cards to add 2px elevation lift via JS if CSS transition is too simple
+        const cards = document.querySelectorAll('.order-card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.borderColor = '#0f4c5c';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.borderColor = '#D1D9DB';
+            });
+        });
+    </script>
+</body></html>

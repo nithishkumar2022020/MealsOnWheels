@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cart & Checkout | En route</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Montserrat:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .active-nav-pill {
+            font-variation-settings: 'FILL' 1;
+        }
+        /* Custom scrollbar for cleaner look */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e2e2e2;
+            border-radius: 10px;
+        }
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .animate-pulse-soft {
+            animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#e4bebc",
+                        "on-background": "#1a1c1c",
+                        "surface-tint": "#bb162c",
+                        "on-tertiary-container": "#fffbff",
+                        "surface": "#f9f9f9",
+                        "on-secondary-fixed-variant": "#474747",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#291800",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#410007",
+                        "surface-variant": "#e2e2e2",
+                        "surface-dim": "#dadada",
+                        "secondary-fixed": "#e4e2e1",
+                        "inverse-primary": "#ffb3b1",
+                        "primary-fixed-dim": "#ffb3b1",
+                        "tertiary-fixed-dim": "#ffb954",
+                        "on-primary-fixed-variant": "#92001c",
+                        "error": "#ba1a1a",
+                        "background": "#f9f9f9",
+                        "tertiary-fixed": "#ffddb4",
+                        "on-surface-variant": "#5b403f",
+                        "tertiary": "#805200",
+                        "primary-fixed": "#ffdad8",
+                        "surface-bright": "#f9f9f9",
+                        "secondary-container": "#e4e2e1",
+                        "on-error": "#ffffff",
+                        "primary": "#b7122a",
+                        "inverse-on-surface": "#f1f1f1",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#a06900",
+                        "surface-container-high": "#e8e8e8",
+                        "surface-container": "#eeeeee",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "inverse-surface": "#2f3131",
+                        "secondary": "#5f5e5e",
+                        "on-primary-container": "#fffbff",
+                        "on-tertiary-fixed-variant": "#633f00",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#c8c6c6",
+                        "on-secondary-container": "#656464",
+                        "primary-container": "#db313f",
+                        "outline": "#8f6f6e",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "on-surface": "#1a1c1c",
+                        "surface-container-low": "#f3f3f3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-margin": "20px",
+                        "gutter": "16px",
+                        "touch-target-min": "48px",
+                        "card-padding": "16px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "headline-xl": ["Montserrat"],
+                        "headline-lg": ["Montserrat"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg-mobile": ["Montserrat"],
+                        "label-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-32">
+<!-- Top App Bar -->
+<header class="bg-surface docked full-width top-0 shadow-sm flex justify-between items-center w-full px-container-margin py-base h-touch-target-min sticky z-50">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">location_on</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">En route: New Delhi Exp</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:bg-surface-container-low transition-colors p-2 rounded-full active:opacity-80 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+</div>
+</header>
+<main class="max-w-xl mx-auto px-container-margin py-base space-y-6">
+<!-- Delivery Context Banner -->
+<section class="bg-primary-container text-on-primary-container p-card-padding rounded-xl shadow-sm space-y-2 border-l-4 border-primary">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+<h2 class="font-label-md text-label-md uppercase tracking-wider">Delivery Details</h2>
+</div>
+<p class="font-body-md leading-tight">
+                Delivering to <span class="font-bold">Bus RJ-14-PB-1234</span>, <span class="font-bold">Seat 12A</span> at <span class="bg-white/20 px-1 rounded">Ambala Cantt Stop</span>.
+            </p>
+<div class="flex items-center gap-1 text-label-sm opacity-90">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>Expected in 45 mins</span>
+</div>
+</section>
+<!-- Order Summary Section -->
+<section class="space-y-4">
+<div class="flex justify-between items-end">
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile">Order Summary</h3>
+<span class="text-secondary font-label-sm">2 Items</span>
+</div>
+<div class="space-y-base">
+<!-- Item 1 -->
+<div class="bg-surface-container-lowest p-base rounded-xl flex gap-4 items-center shadow-[0px_4px_20px_rgba(0,0,0,0.06)] group hover:translate-y-[-2px] transition-transform">
+<div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A high-contrast, professional food photography shot of a steaming hot Paneer Butter Masala served in a traditional clay pot. The rich tomato-based gravy glows in a vibrant Hunger Red tone, highlighted by soft, overhead ambient lighting. The background is a clean, minimalist white, emphasizing the appetizing texture and fresh coriander garnish, matching a modern corporate travel dining aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNCjD_6nDaM1fprG7uyXkhTyRX7uGLe13NiKcUmWn4SOaUoZZVn1OVYK28zjsnkPDl44Ypux8OFhjoBGs345mz2qjbIliJn8oVMOWGnOFMy2sNOcsUEe8S8pgD77rZQH5pdbnmrNdCzRcwpLVp4CYzi_33qZ757M-hjTEBDp6HucUKzCrMvwEO-Q8rTlRisyc0oGHKHBYXEGqQCnZcGVbjb9jiZfpSbjqqdukHcIGiG3WYrU7jEqkOCw"/>
+</div>
+<div class="flex-grow space-y-1">
+<h4 class="font-label-md text-on-surface">Paneer Butter Masala Meal</h4>
+<p class="text-secondary font-label-sm">Serves 1 • Non-spicy</p>
+<div class="flex justify-between items-center pt-1">
+<span class="font-bold text-primary">₹249</span>
+<div class="flex items-center bg-surface-container-high rounded-full overflow-hidden border border-outline-variant/30">
+<button class="p-1 px-3 hover:bg-outline-variant/20 transition-colors text-primary font-bold" onclick="updateQty(this, -1)">-</button>
+<span class="px-2 font-label-md min-w-[24px] text-center">1</span>
+<button class="p-1 px-3 hover:bg-outline-variant/20 transition-colors text-primary font-bold" onclick="updateQty(this, 1)">+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="bg-surface-container-lowest p-base rounded-xl flex gap-4 items-center shadow-[0px_4px_20px_rgba(0,0,0,0.06)] group hover:translate-y-[-2px] transition-transform">
+<div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A premium close-up of a chilled, condensation-covered glass of Masala Lemonade with fresh mint leaves and a slice of lemon. The lighting is crisp and high-key, creating a refreshing and energetic visual. Set against a blurred, light-mode background with soft shadows, the image uses vibrant yellow and green accents to signify freshness and quality in a transit food context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAl70KD_noi38rJhBa7-egg9mbG9wWeTIxlDoy3TCcBfZ-VLwLjzzK8meuGI9qgXgAoWfTmkhca89y4cW-POUxMeDzKk5zK_679mKjdTr-iR8GfCE49TX32J2mq9wQCbGYJgsDd-mRuPIjughLXdG1tn2P00ldlPAmYsjkNhgzXLEr_kySNxCKzncn0i9h8fxguHnPmcQoqcCtoK5ra4U20fZqCIg_j6aAxvVi7Z5Vt7ocLE44Sudn96w"/>
+</div>
+<div class="flex-grow space-y-1">
+<h4 class="font-label-md text-on-surface">Masala Lemonade</h4>
+<p class="text-secondary font-label-sm">300ml • Iced</p>
+<div class="flex justify-between items-center pt-1">
+<span class="font-bold text-primary">₹89</span>
+<div class="flex items-center bg-surface-container-high rounded-full overflow-hidden border border-outline-variant/30">
+<button class="p-1 px-3 hover:bg-outline-variant/20 transition-colors text-primary font-bold" onclick="updateQty(this, -1)">-</button>
+<span class="px-2 font-label-md min-w-[24px] text-center">2</span>
+<button class="p-1 px-3 hover:bg-outline-variant/20 transition-colors text-primary font-bold" onclick="updateQty(this, 1)">+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Payment Method -->
+<section class="space-y-4">
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile">Payment Method</h3>
+<div class="grid grid-cols-1 gap-base">
+<!-- Wallet -->
+<label class="relative flex items-center p-card-padding bg-surface-container rounded-xl cursor-pointer border-2 border-transparent has-[:checked]:border-primary transition-all">
+<input checked="" class="hidden" name="payment" type="radio"/>
+<span class="material-symbols-outlined text-on-surface-variant mr-3">account_balance_wallet</span>
+<div class="flex-grow">
+<p class="font-label-md">Traveler Wallet</p>
+<p class="text-label-sm text-secondary">Balance: ₹1,240</p>
+</div>
+<div class="w-5 h-5 rounded-full border-2 border-outline flex items-center justify-center has-[:checked]:bg-primary">
+<div class="w-2 h-2 bg-white rounded-full"></div>
+</div>
+</label>
+<!-- UPI -->
+<label class="relative flex items-center p-card-padding bg-surface-container rounded-xl cursor-pointer border-2 border-transparent has-[:checked]:border-primary transition-all">
+<input class="hidden" name="payment" type="radio"/>
+<span class="material-symbols-outlined text-on-surface-variant mr-3">bolt</span>
+<div class="flex-grow">
+<p class="font-label-md">UPI (GPay, PhonePe, Paytm)</p>
+</div>
+<div class="w-5 h-5 rounded-full border-2 border-outline flex items-center justify-center">
+<div class="w-2 h-2 bg-white rounded-full"></div>
+</div>
+</label>
+<!-- Cards -->
+<label class="relative flex items-center p-card-padding bg-surface-container rounded-xl cursor-pointer border-2 border-transparent has-[:checked]:border-primary transition-all">
+<input class="hidden" name="payment" type="radio"/>
+<span class="material-symbols-outlined text-on-surface-variant mr-3">credit_card</span>
+<div class="flex-grow">
+<p class="font-label-md">Credit / Debit Cards</p>
+</div>
+<div class="w-5 h-5 rounded-full border-2 border-outline flex items-center justify-center">
+<div class="w-2 h-2 bg-white rounded-full"></div>
+</div>
+</label>
+</div>
+</section>
+<!-- Bill Details -->
+<section class="bg-white rounded-2xl p-card-padding shadow-sm border border-surface-container-highest space-y-4">
+<div class="flex items-center justify-between bg-tertiary-fixed text-on-tertiary-fixed p-3 rounded-lg border-dashed border-2 border-tertiary/30">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary">confirmation_number</span>
+<span class="font-label-md uppercase">TRAVELER25</span>
+</div>
+<span class="font-bold text-tertiary">-₹25.00</span>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-on-surface-variant font-body-md">
+<span>Item Total</span>
+<span>₹427.00</span>
+</div>
+<div class="flex justify-between text-on-surface-variant font-body-md">
+<span>Delivery Fee</span>
+<span>₹35.00</span>
+</div>
+<div class="flex justify-between text-tertiary font-bold">
+<span>Traveler Discount</span>
+<span>-₹25.00</span>
+</div>
+<div class="pt-2 border-t border-surface-variant flex justify-between items-end">
+<div class="space-y-0">
+<p class="text-on-surface font-bold text-headline-lg-mobile">Total Amount</p>
+<p class="text-label-sm text-secondary">Incl. all taxes</p>
+</div>
+<span class="text-primary font-extrabold text-2xl">₹437.00</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Fixed Bottom Action Bar -->
+<div class="fixed bottom-0 left-0 w-full bg-surface shadow-[0px_-8px_24px_rgba(0,0,0,0.08)] z-[60] px-container-margin py-4 flex flex-col gap-4 md:hidden rounded-t-3xl">
+<div class="flex items-center justify-between px-2">
+<div>
+<p class="text-label-sm text-secondary">Pay using Traveler Wallet</p>
+<p class="font-bold text-on-surface">₹437.00</p>
+</div>
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-sm">info</span>
+<span class="text-label-sm font-bold uppercase tracking-tight underline">View Details</span>
+</div>
+</div>
+<button class="bg-primary text-on-primary w-full h-[56px] rounded-xl font-bold flex items-center justify-center gap-2 active:scale-[0.98] transition-all shadow-lg shadow-primary/20" onclick="handlePlaceOrder()">
+            Place Order & Track
+            <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<!-- Bottom Nav Bar (Desktop Context Mockup) -->
+<nav class="hidden md:flex fixed bottom-0 left-0 w-full z-50 justify-around items-center px-container-margin pb-4 pt-2 bg-surface shadow-lg rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all" href="#">
+<span class="material-symbols-outlined">departure_board</span>
+<span class="font-label-sm text-label-sm">Stops</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-all duration-150" href="#">
+<span class="material-symbols-outlined active-nav-pill">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<!-- Bottom Nav Bar (Mobile) - Hidden during Checkout flow to prioritize focus -->
+<div class="fixed bottom-0 left-0 w-full z-40 bg-surface shadow-lg flex justify-around items-center px-container-margin pb-4 pt-2 md:hidden opacity-0 pointer-events-none transition-opacity duration-300" id="mobile-nav">
+<div class="flex flex-col items-center justify-center text-secondary px-4 py-1">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary px-4 py-1">
+<span class="material-symbols-outlined">departure_board</span>
+<span class="font-label-sm text-label-sm">Stops</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1">
+<span class="material-symbols-outlined active-nav-pill">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary px-4 py-1">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</div>
+</div>
+<script>
+        function updateQty(btn, delta) {
+            const span = btn.parentElement.querySelector('span');
+            let current = parseInt(span.innerText);
+            current += delta;
+            if (current < 1) current = 1;
+            span.innerText = current;
+            
+            // Add a little pop animation
+            span.classList.add('scale-125', 'text-primary');
+            setTimeout(() => {
+                span.classList.remove('scale-125', 'text-primary');
+            }, 150);
+        }
+
+        function handlePlaceOrder() {
+            const btn = document.querySelector('button[onclick="handlePlaceOrder()"]');
+            const originalHtml = btn.innerHTML;
+            
+            // Interaction feedback
+            btn.disabled = true;
+            btn.innerHTML = `
+                <div class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                Processing...
+            `;
+            
+            setTimeout(() => {
+                alert("Order Placed Successfully! Redirecting to tracking...");
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+            }, 1500);
+        }
+
+        // Logic for hiding navigation during checkout focus (already handled by manual exclusion, but here's a micro-interaction)
+        window.addEventListener('scroll', () => {
+            const checkoutBtn = document.querySelector('.fixed.bottom-0');
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 50) {
+                // At bottom
+            }
+        });
+    </script>
+</body></html>

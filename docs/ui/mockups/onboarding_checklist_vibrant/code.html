@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TransitFood - Onboarding</title>
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e4e2e2",
+                        "primary-container": "#ffdad7",
+                        "tertiary-container": "#ffd9e3",
+                        "outline": "#777777",
+                        "on-secondary-fixed": "#2b1615",
+                        "on-primary-fixed": "#410005",
+                        "surface-dim": "#dadada",
+                        "on-tertiary-fixed-variant": "#5e1133",
+                        "tertiary": "#7b2949",
+                        "inverse-on-surface": "#f1f0f0",
+                        "inverse-primary": "#ffb3af",
+                        "on-primary-fixed-variant": "#730012",
+                        "surface-tint": "#a41c2d",
+                        "background": "#f9f9f9",
+                        "on-tertiary-fixed": "#310015",
+                        "surface-container-high": "#e8e8e8",
+                        "on-error": "#ffffff",
+                        "primary": "#e23744",
+                        "secondary-container": "#ffdad7",
+                        "on-surface": "#1a1c1d",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed": "#ffdad7",
+                        "outline-variant": "#c8c6c6",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#310015",
+                        "tertiary-fixed-dim": "#ffb0c8",
+                        "surface": "#f9f9f9",
+                        "secondary-fixed-dim": "#e7bdba",
+                        "secondary": "#775654",
+                        "on-secondary-fixed-variant": "#5d3f3d",
+                        "inverse-surface": "#2f3031",
+                        "tertiary-fixed": "#ffd9e3",
+                        "surface-container-highest": "#e2e2e2",
+                        "surface-container": "#eeeeee",
+                        "on-secondary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#454747",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#410005",
+                        "error": "#ba1a1a",
+                        "on-secondary-container": "#2b1615",
+                        "primary-fixed": "#ffdad7",
+                        "surface-bright": "#f9f9f9",
+                        "on-background": "#1a1c1d",
+                        "surface-container-low": "#f3f3f3",
+                        "primary-fixed-dim": "#ffb3af"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.5rem",
+                        "xl": "0.5rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "gutter": "16px",
+                        "base": "8px",
+                        "md": "24px",
+                        "margin-mobile": "16px",
+                        "xl": "48px",
+                        "margin-desktop": "32px",
+                        "sm": "16px",
+                        "lg": "32px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Montserrat"],
+                        "display-lg": ["Montserrat"],
+                        "label-sm": ["Montserrat"],
+                        "body-md": ["Montserrat"],
+                        "label-md": ["Montserrat"],
+                        "headline-md": ["Montserrat"],
+                        "body-lg": ["Montserrat"],
+                        "display-lg-mobile": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["24px", { "lineHeight": "32px", "fontWeight": "400" }],
+                        "display-lg": ["57px", { "lineHeight": "64px", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+                        "label-sm": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500" }],
+                        "headline-md": ["28px", { "lineHeight": "36px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg-mobile": ["45px", { "lineHeight": "52px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Montserrat', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col antialiased">
+<!-- TopAppBar Shared Component -->
+<header class="w-full top-0 bg-surface dark:bg-inverse-surface shadow-sm dark:shadow-none flex justify-between items-center px-margin-mobile md:px-margin-desktop h-12 relative z-10">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+<span class="font-headline-md text-headline-md text-primary dark:text-primary-fixed-dim tracking-tight">TransitFood</span>
+</div>
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim" style="font-variation-settings: 'FILL' 1;">account_circle</span>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center w-full">
+<!-- Hero Section -->
+<div class="w-full max-w-3xl relative">
+<div class="absolute inset-0 h-48 bg-surface-container-low -z-10 rounded-b-[2rem] overflow-hidden">
+<div class="w-full h-full bg-cover bg-center opacity-30 mix-blend-multiply" data-alt="A sophisticated, softly lit interior of a modern commercial kitchen, viewed slightly out of focus. Stainless steel surfaces gleam gently under warm, high-key ambient light. The aesthetic is clean, professional, and optimistic, utilizing a subtle palette of cool silvers and warm, inviting neutral tones to convey readiness and premium culinary standards." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCT_MX0Firhy88oWeP-hPg8HU-TsGdcSSJIyE-saucu__0Pg1459s3PsQIezhghCX7LE_QHhwLdQ0hOc9UR9z1h1GcwKt922PS2_ljZzHVbv7bRinhBfvXFpvAV1rsuH1pNH-srppeCSlGDeiTLn97RPLR1epgHCgEJXKK_iDLRW6mMaQ92HtvzZu6Pxf4E9t1kMyYh9pYAaKy1NWFqIzJPWUTqXF_Cb3x6ytrLcLD6xCE9Wxj0uE17RA')"></div>
+<div class="absolute inset-0 bg-gradient-to-b from-transparent to-background"></div>
+</div>
+<div class="pt-xl px-margin-mobile md:px-margin-desktop pb-md text-center md:text-left">
+<div class="inline-flex items-center gap-xs bg-primary-container px-3 py-1 rounded-full mb-md">
+<span class="material-symbols-outlined text-on-primary-container text-sm" style="font-variation-settings: 'FILL' 1;">storefront</span>
+<span class="font-label-sm text-label-sm text-on-primary-container uppercase tracking-wider">Partner Onboarding</span>
+</div>
+<h1 class="font-display-lg-mobile md:font-display-lg text-on-surface mb-sm tracking-tight">Almost ready to serve</h1>
+<p class="font-body-lg text-on-surface-variant max-w-xl">Complete these final requirements to unlock your dashboard and start receiving orders from the TransitFood network.</p>
+</div>
+</div>
+<!-- Checklist Canvas -->
+<div class="w-full max-w-3xl px-margin-mobile md:px-margin-desktop pb-xl flex flex-col gap-sm">
+<!-- Completed Items Group -->
+<div class="flex flex-col gap-xs mb-md">
+<!-- Checked Item: Profile -->
+<div class="flex items-center justify-between p-md bg-surface/60 border border-surface-variant rounded-xl opacity-75 backdrop-blur-sm">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-outline">Profile</h3>
+<p class="font-body-md text-outline-variant">Information verified</p>
+</div>
+</div>
+</div>
+<!-- Checked Item: Hours -->
+<div class="flex items-center justify-between p-md bg-surface/60 border border-surface-variant rounded-xl opacity-75 backdrop-blur-sm">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-outline">Hours</h3>
+<p class="font-body-md text-outline-variant">Operating schedule set</p>
+</div>
+</div>
+</div>
+</div>
+<div class="w-full h-px bg-surface-container-highest my-xs"></div>
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-xs mt-sm">Action Required</h2>
+<!-- Active Items Group (Actionable Cards) -->
+<div class="flex flex-col gap-md">
+<!-- Unchecked Item: Menu -->
+<a class="group relative flex flex-col md:flex-row md:items-center justify-between p-md bg-surface border border-outline-variant rounded-xl hover:border-primary hover:shadow-sm transition-all duration-300 ease-in-out active:scale-[0.98] overflow-hidden" href="#">
+<div class="absolute inset-0 bg-gradient-to-r from-error/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex items-start md:items-center gap-md relative z-10">
+<div class="w-12 h-12 rounded-full bg-error-container flex items-center justify-center shrink-0 group-hover:bg-error transition-colors duration-300">
+<span class="material-symbols-outlined text-error group-hover:text-on-error transition-colors duration-300" style="font-variation-settings: 'FILL' 1;">cancel</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-xs">Menu</h3>
+<p class="font-body-md text-on-surface-variant">Add at least one item to showcase your offerings to customers.</p>
+</div>
+</div>
+<div class="mt-md md:mt-0 flex items-center gap-xs text-primary font-label-md text-label-md self-end md:self-auto relative z-10">
+<span>Add items</span>
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</a>
+<!-- Unchecked Item: Booking types -->
+<a class="group relative flex flex-col md:flex-row md:items-center justify-between p-md bg-surface border border-outline-variant rounded-xl hover:border-primary hover:shadow-sm transition-all duration-300 ease-in-out active:scale-[0.98] overflow-hidden" href="#">
+<div class="absolute inset-0 bg-gradient-to-r from-error/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex items-start md:items-center gap-md relative z-10">
+<div class="w-12 h-12 rounded-full bg-error-container flex items-center justify-center shrink-0 group-hover:bg-error transition-colors duration-300">
+<span class="material-symbols-outlined text-error group-hover:text-on-error transition-colors duration-300" style="font-variation-settings: 'FILL' 1;">cancel</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-xs">Booking types</h3>
+<p class="font-body-md text-on-surface-variant">Choose at least one delivery or pickup method for your venue.</p>
+</div>
+</div>
+<div class="mt-md md:mt-0 flex items-center gap-xs text-primary font-label-md text-label-md self-end md:self-auto relative z-10">
+<span>Configure</span>
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</a>
+</div>
+</div>
+<!-- Support Link Footer -->
+<div class="mt-auto pb-xl w-full flex justify-center">
+<div class="flex flex-col items-center gap-xs bg-surface-container-lowest py-md px-xl rounded-full border border-surface-variant">
+<span class="material-symbols-outlined text-outline">help</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Stuck on a step?</p>
+<a class="font-label-md text-label-md text-primary hover:text-primary-container transition-colors underline decoration-primary/30 underline-offset-4" href="#">Contact Partner Support</a>
+</div>
+</div>
+</main>
+</body></html>

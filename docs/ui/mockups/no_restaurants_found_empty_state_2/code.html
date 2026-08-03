@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>No Restaurants Found (Empty State)</title>
+<!-- Montserrat Font -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "surface-tint": "#306576",
+                "surface-container": "#edeeef",
+                "surface-container-lowest": "#ffffff",
+                "on-secondary-fixed-variant": "#7a3000",
+                "tertiary": "#660010",
+                "secondary-fixed-dim": "#ffb693",
+                "secondary": "#a04100",
+                "on-primary-container": "#87bbce",
+                "inverse-primary": "#9acee1",
+                "outline": "#70787c",
+                "outline-variant": "#c0c8cb",
+                "on-surface": "#191c1d",
+                "on-primary-fixed-variant": "#114d5d",
+                "on-background": "#191c1d",
+                "surface-container-high": "#e7e8e9",
+                "primary": "#003441",
+                "on-secondary": "#ffffff",
+                "inverse-on-surface": "#f0f1f2",
+                "on-tertiary-container": "#ff9694",
+                "background": "#f8f9fa",
+                "on-tertiary-fixed-variant": "#92001b",
+                "secondary-fixed": "#ffdbcc",
+                "on-tertiary-fixed": "#410007",
+                "inverse-surface": "#2e3132",
+                "tertiary-fixed-dim": "#ffb3b0",
+                "on-error": "#ffffff",
+                "surface-container-highest": "#e1e3e4",
+                "tertiary-fixed": "#ffdad8",
+                "secondary-container": "#fd7729",
+                "on-primary": "#ffffff",
+                "on-error-container": "#93000a",
+                "surface-dim": "#d9dadb",
+                "on-surface-variant": "#40484b",
+                "error": "#ba1a1a",
+                "surface": "#f8f9fa",
+                "surface-bright": "#f8f9fa",
+                "on-secondary-fixed": "#351000",
+                "on-primary-fixed": "#001f28",
+                "primary-container": "#0f4c5c",
+                "on-tertiary": "#ffffff",
+                "on-secondary-container": "#5e2300",
+                "error-container": "#ffdad6",
+                "surface-variant": "#e1e3e4",
+                "tertiary-container": "#90001b",
+                "surface-container-low": "#f3f4f5",
+                "primary-fixed-dim": "#9acee1",
+                "primary-fixed": "#b6ebfe"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "sm": "12px",
+                "base": "8px",
+                "xs": "4px",
+                "margin-mobile": "16px",
+                "xl": "64px",
+                "gutter": "24px",
+                "lg": "40px",
+                "md": "24px",
+                "margin-desktop": "48px"
+            },
+            "fontFamily": {
+                "label-sm": ["Montserrat"],
+                "body-lg": ["Montserrat"],
+                "display-lg": ["Montserrat"],
+                "headline-sm": ["Montserrat"],
+                "body-md": ["Montserrat"],
+                "headline-md": ["Montserrat"],
+                "label-md": ["Montserrat"],
+                "display-lg-mobile": ["Montserrat"]
+            },
+            "fontSize": {
+                "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .canvas-transition {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .highway-dash {
+            stroke-dasharray: 20;
+            animation: dashmove 2s linear infinite;
+        }
+        @keyframes dashmove {
+            to { stroke-dashoffset: -40; }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopAppBar (Shared Component) -->
+<header class="fixed top-0 w-full z-50 bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline flex items-center justify-between px-margin-mobile h-12 w-full">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed" style="font-size: 24px;">restaurant</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">MealsOnWheels</h1>
+</div>
+<div class="flex items-center">
+<button class="p-2 hover:bg-surface-container-high transition-colors active:scale-95 transition-transform rounded-full">
+<span class="material-symbols-outlined text-on-surface-variant dark:text-surface-variant">location_on</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center pt-12 pb-16 px-margin-mobile">
+<!-- Bento-style Container for Empty State -->
+<div class="max-w-xl w-full flex flex-col items-center text-center">
+<!-- Minimalist 2-color Illustration (Custom SVG with Animation) -->
+<div class="w-full max-w-sm mb-lg">
+<svg class="w-full h-auto opacity-90" fill="none" viewbox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
+<!-- Sky/Background -->
+<rect fill="#EDF2F4" height="240" rx="24" width="400"></rect>
+<!-- The Highway -->
+<path d="M50 240L160 80H240L350 240H50Z" fill="#003441"></path>
+<!-- Animated Road Lines -->
+<line class="highway-dash" stroke="#9acee1" stroke-linecap="round" stroke-width="4" x1="200" x2="200" y1="90" y2="230"></line>
+<!-- Minimalist Distant Mountains -->
+<path d="M0 100L80 40L160 100H0Z" fill="#D1D9DB" opacity="0.5"></path>
+<path d="M240 100L320 60L400 100H240Z" fill="#D1D9DB" opacity="0.3"></path>
+<!-- Roadside Sign -->
+<rect fill="#D1D9DB" height="30" rx="4" width="40" x="280" y="140"></rect>
+<rect fill="#70787c" height="20" width="4" x="298" y="170"></rect>
+</svg>
+</div>
+<!-- Typography Content -->
+<div class="space-y-base">
+<h2 class="font-headline-md text-headline-md font-bold text-primary">No restaurants found</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md mx-auto">No restaurants are accepting orders for this route at this time.</p>
+<div class="pt-base">
+<span class="font-label-md text-label-md text-outline px-4 py-1.5 bg-surface-container rounded-full inline-block">
+                        Try selecting a different time or route.
+                    </span>
+</div>
+</div>
+<!-- Action Cluster -->
+<div class="mt-lg w-full flex flex-col gap-sm md:flex-row md:justify-center items-stretch">
+<!-- Primary Action -->
+<button class="bg-primary text-on-primary h-[48px] px-xl rounded-lg font-label-md text-label-md shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">route</span>
+                    Search another route
+                </button>
+<!-- Secondary Action -->
+<button class="bg-secondary-container text-on-secondary-container h-[48px] px-md rounded-lg font-label-md text-label-md hover:brightness-105 active:scale-95 transition-all flex items-center justify-center">
+                    Browse all restaurants
+                </button>
+</div>
+<!-- Footer Link -->
+<button class="mt-md font-label-md text-label-md text-primary flex items-center gap-1 hover:underline active:scale-95 transition-all">
+<span class="material-symbols-outlined" style="font-size: 18px;">notifications</span>
+                Set a reminder to search later?
+            </button>
+</div>
+<!-- Optional Subtle Background Interaction -->
+<div class="fixed inset-0 pointer-events-none -z-10 opacity-20 overflow-hidden">
+<!-- Asymmetric decorative elements typical of modern corporate UI -->
+<div class="absolute -top-24 -left-24 w-96 h-96 bg-primary-fixed-dim rounded-full blur-[100px]"></div>
+<div class="absolute -bottom-48 -right-48 w-[500px] h-[500px] bg-secondary-fixed-dim rounded-full blur-[120px]"></div>
+</div>
+</main>
+<!-- BottomNavBar (Shared Component) -->
+<!-- Determined active tab: "Home" or "Stops" depending on intent. 
+         Since user searched and failed, "Home" or "Stops" are closest. 
+         We'll assume user is in a Search flow originating from "Stops". -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface dark:bg-surface-dim shadow-[0px_-4px_20px_rgba(0,52,65,0.08)] flex justify-around items-center h-16 w-full px-2">
+<!-- Home -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1 hover:bg-surface-container-highest transition-colors active:scale-95 transition-transform">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm-mobile">Home</span>
+</button>
+<!-- Stops (Active) -->
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1 hover:bg-surface-container-highest transition-colors active:scale-95 transition-transform">
+<span class="material-symbols-outlined">departure_board</span>
+<span class="font-label-sm text-label-sm-mobile">Stops</span>
+</button>
+<!-- Orders -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1 hover:bg-surface-container-highest transition-colors active:scale-95 transition-transform">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-sm text-label-sm-mobile">Orders</span>
+</button>
+<!-- Profile -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1 hover:bg-surface-container-highest transition-colors active:scale-95 transition-transform">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm-mobile">Profile</span>
+</button>
+</nav>
+<script>
+        // Micro-interaction for the "Set reminder" link
+        document.querySelector('.text-primary.flex.items-center').addEventListener('click', function() {
+            const btn = this;
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined" style="font-size: 18px;">check</span> Reminder set!';
+            btn.classList.add('text-secondary');
+            setTimeout(() => {
+                btn.innerHTML = originalHtml;
+                btn.classList.remove('text-secondary');
+            }, 2000);
+        });
+
+        // Simple button hover effects beyond tailwind classes
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                btn.style.boxShadow = '0px 8px 30px rgba(0, 52, 65, 0.12)';
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.boxShadow = '';
+            });
+        });
+    </script>
+</body></html>

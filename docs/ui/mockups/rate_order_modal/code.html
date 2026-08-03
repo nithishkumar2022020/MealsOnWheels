@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Post-Delivery Rating</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#660010",
+                    "on-primary-container": "#87bbce",
+                    "surface-container-low": "#f3f4f5",
+                    "on-tertiary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "surface-bright": "#f8f9fa",
+                    "on-primary": "#ffffff",
+                    "inverse-primary": "#9acee1",
+                    "surface-tint": "#306576",
+                    "surface": "#f8f9fa",
+                    "inverse-on-surface": "#f0f1f2",
+                    "on-tertiary-fixed": "#410007",
+                    "on-error": "#ffffff",
+                    "on-surface": "#191c1d",
+                    "surface-variant": "#e1e3e4",
+                    "on-secondary": "#ffffff",
+                    "primary-container": "#0f4c5c",
+                    "secondary-fixed": "#ffdbcc",
+                    "outline-variant": "#c0c8cb",
+                    "on-surface-variant": "#40484b",
+                    "primary-fixed": "#b6ebfe",
+                    "tertiary-container": "#90001b",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed-dim": "#ffb693",
+                    "tertiary-fixed-dim": "#ffb3b0",
+                    "surface-container-highest": "#e1e3e4",
+                    "tertiary-fixed": "#ffdad8",
+                    "secondary-container": "#fd7729",
+                    "primary": "#003441",
+                    "inverse-surface": "#2e3132",
+                    "on-background": "#191c1d",
+                    "on-primary-fixed-variant": "#114d5d",
+                    "on-error-container": "#93000a",
+                    "secondary": "#a04100",
+                    "on-secondary-container": "#5e2300",
+                    "surface-dim": "#d9dadb",
+                    "surface-container": "#edeeef",
+                    "on-tertiary-container": "#ff9694",
+                    "surface-container-high": "#e7e8e9",
+                    "primary-fixed-dim": "#9acee1",
+                    "error-container": "#ffdad6",
+                    "background": "#f8f9fa",
+                    "on-tertiary-fixed-variant": "#92001b",
+                    "on-secondary-fixed-variant": "#7a3000",
+                    "on-primary-fixed": "#001f28",
+                    "outline": "#70787c",
+                    "on-secondary-fixed": "#351000"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "48px",
+                    "gutter": "24px",
+                    "lg": "40px",
+                    "xl": "64px",
+                    "xs": "4px",
+                    "base": "8px",
+                    "sm": "12px",
+                    "md": "24px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Montserrat"],
+                    "headline-md": ["Montserrat"],
+                    "body-md": ["Montserrat"],
+                    "body-lg": ["Montserrat"],
+                    "label-md": ["Montserrat"],
+                    "display-lg-mobile": ["Montserrat"],
+                    "display-lg": ["Montserrat"],
+                    "headline-sm": ["Montserrat"],
+                    "headline-lg-mobile": ["Montserrat"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .star-active {
+            font-variation-settings: 'FILL' 1 !important;
+            color: #fd7729 !important; /* Secondary Container / Sunset Amber */
+        }
+        .blur-overlay {
+            backdrop-filter: blur(8px);
+        }
+        .rating-card-shadow {
+            box-shadow: 0px 4px 20px rgba(15, 76, 92, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden">
+<!-- Background Layer (Order History Content) -->
+<main class="min-h-screen p-margin-mobile opacity-40 select-none">
+<header class="flex justify-between items-center mb-md">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-primary">En route: New Delhi Exp</h2>
+<p class="font-label-sm text-label-sm text-outline">Trip #29384 - Completed</p>
+</div>
+<span class="material-symbols-outlined text-primary">notifications</span>
+</header>
+<section class="space-y-md">
+<!-- Mock Card 1 -->
+<div class="bg-surface border border-outline-variant rounded-xl p-md">
+<div class="flex justify-between mb-sm">
+<span class="font-label-md text-label-md text-secondary">DELIVERED</span>
+<span class="font-label-sm text-label-sm text-outline">14 Oct, 12:30 PM</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm mb-xs">Premium Thali &amp; Refreshments</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">2x Items • Ambala Cantt Junction</p>
+</div>
+<!-- Mock Card 2 -->
+<div class="bg-surface border border-outline-variant rounded-xl p-md opacity-50">
+<div class="flex justify-between mb-sm">
+<span class="font-label-md text-label-md text-outline">CANCELLED</span>
+<span class="font-label-sm text-label-sm text-outline">12 Oct, 08:15 PM</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm mb-xs">Gourmet Sandwiches</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">1x Item • Ludhiana Jn</p>
+</div>
+</section>
+</main>
+<!-- Modal Backdrop -->
+<div class="fixed inset-0 bg-primary/20 blur-overlay z-40 flex items-end sm:items-center justify-center" id="modal-backdrop">
+<!-- Rating Modal -->
+<div class="bg-surface-bright w-full max-w-md rounded-t-[2rem] sm:rounded-3xl p-md rating-card-shadow transform transition-transform duration-300 translate-y-0 z-50" id="rating-modal">
+<!-- Handle for mobile -->
+<div class="w-12 h-1.5 bg-outline-variant rounded-full mx-auto mb-md sm:hidden"></div>
+<!-- Header -->
+<div class="text-center mb-lg">
+<h1 class="font-headline-md text-headline-md text-primary mb-xs">How was Ambala Cantt?</h1>
+<p class="font-body-md text-body-md text-on-surface-variant px-md">Your feedback helps us maintain sophisticated transit standards.</p>
+</div>
+<!-- Rating Inputs -->
+<div class="space-y-md mb-lg">
+<!-- Hygiene -->
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface">Hygiene</span>
+<div class="flex gap-1 rating-row" data-category="hygiene">
+<span class="material-symbols-outlined text-outline-variant cursor-pointer text-3xl transition-all hover:scale-110 active:scale-95" onclick="setRating(this, 1)">star</span>
+<span class="material-symbols-outlined text-outline-variant cursor-pointer text-3xl transition-all hover:scale-110 active:scale-95" onclick="setRating(this, 2)">star</span>
+<span class="material-symbols-outlined text-outline-variant cursor-pointer text-3xl transition-all hover:scale-110 active:scale-95" onclick="setRating(this, 3)">star</span>
+<span class="material-symbols-outlined text-outline-variant cursor-pointer text-3xl transition-all hover:scale-110 active:scale-95" onclick="setRating(this, 4)">star</span>
+<span class="material-symbols-outlined text-outline-variant cursor-pointer text-3xl transition-all hover:scale-110 active:scale-95" onclick="setRating(this, 5)">star</span>
+</div>
+</div>
+<!-- Food Quality -->
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface">Food Quality</span>
+<div class="flex gap-1 rating-row" data-category="food">
+<span class="material-symbols-outlined text-outline-variant cursor-pointer text-3xl transition-all hover:scale-110 active:scale-95" onclick="setRating(this, 1)">star</span>
+<span class="material-symbols-outlined text-outline-variant cursor-pointer text-3xl transition-all hover:scale-110 active:scale-95" onclick="setRating(this, 2)">star</span>
+<span class="material-symbols-outlined text-outline-variant cursor-pointer text-3xl transition-all hover:scale-110 active:scale-95" onclick="setRating(this, 3)">star</span>
+<span class="material-symbols-outlined text-outline-variant cursor-pointer text-3xl transition-all hover:scale-110 active:scale-95" onclick="setRating(this, 4)">star</span>
+<span class="material-symbols-outlined text-outline-variant cursor-pointer text-3xl transition-all hover:scale-110 active:scale-95" onclick="setRating(this, 5)">star</span>
+</div>
+</div>
+<!-- Timeliness -->
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface">Timeliness</span>
+<div class="flex gap-1 rating-row" data-category="time">
+<span class="material-symbols-outlined text-outline-variant cursor-pointer text-3xl transition-all hover:scale-110 active:scale-95" onclick="setRating(this, 1)">star</span>
+<span class="material-symbols-outlined text-outline-variant cursor-pointer text-3xl transition-all hover:scale-110 active:scale-95" onclick="setRating(this, 2)">star</span>
+<span class="material-symbols-outlined text-outline-variant cursor-pointer text-3xl transition-all hover:scale-110 active:scale-95" onclick="setRating(this, 3)">star</span>
+<span class="material-symbols-outlined text-outline-variant cursor-pointer text-3xl transition-all hover:scale-110 active:scale-95" onclick="setRating(this, 4)">star</span>
+<span class="material-symbols-outlined text-outline-variant cursor-pointer text-3xl transition-all hover:scale-110 active:scale-95" onclick="setRating(this, 5)">star</span>
+</div>
+</div>
+</div>
+<!-- Comment Field -->
+<div class="mb-lg">
+<label class="block font-label-md text-label-md text-on-surface mb-xs" for="comment">Tell us more</label>
+<textarea class="w-full bg-surface border border-outline-variant rounded-xl p-sm font-body-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none resize-none placeholder:text-outline/50" id="comment" placeholder="Was everything delivered as per your expectations?" rows="3"></textarea>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-sm">
+<button class="w-full h-[48px] bg-primary text-on-primary font-label-md rounded-xl hover:opacity-90 active:scale-95 transition-all flex justify-center items-center" id="submit-btn">
+                    Submit rating
+                </button>
+<button class="w-full h-[48px] bg-surface-variant text-on-surface-variant font-label-md rounded-xl hover:bg-surface-dim active:scale-95 transition-all flex justify-center items-center" id="skip-btn">
+                    Rate later
+                </button>
+</div>
+</div>
+</div>
+<!-- Feedback Toast (Hidden) -->
+<div class="fixed bottom-margin-mobile left-margin-mobile right-margin-mobile bg-primary text-on-primary p-md rounded-xl shadow-lg transform translate-y-32 transition-transform duration-500 z-[60] flex items-center gap-sm" id="toast">
+<span class="material-symbols-outlined">check_circle</span>
+<span class="font-label-md">Thank you for your feedback!</span>
+</div>
+<script>
+        function setRating(el, score) {
+            const row = el.closest('.rating-row');
+            const stars = row.querySelectorAll('.material-symbols-outlined');
+            
+            stars.forEach((star, index) => {
+                if (index < score) {
+                    star.classList.add('star-active');
+                    star.style.fontVariationSettings = "'FILL' 1";
+                } else {
+                    star.classList.remove('star-active');
+                    star.style.fontVariationSettings = "'FILL' 0";
+                }
+            });
+
+            // Haptic-like feedback animation
+            el.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                el.style.transform = 'scale(1)';
+            }, 150);
+        }
+
+        const modal = document.getElementById('rating-modal');
+        const backdrop = document.getElementById('modal-backdrop');
+        const skipBtn = document.getElementById('skip-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const toast = document.getElementById('toast');
+
+        function closeModal() {
+            modal.style.transform = 'translateY(100%)';
+            backdrop.style.opacity = '0';
+            setTimeout(() => {
+                backdrop.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }, 300);
+        }
+
+        function showToast() {
+            toast.style.transform = 'translateY(0)';
+            setTimeout(() => {
+                toast.style.transform = 'translateY(150%)';
+            }, 3000);
+        }
+
+        skipBtn.addEventListener('click', closeModal);
+        
+        submitBtn.addEventListener('click', () => {
+            // Simulate API call
+            submitBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span>';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                closeModal();
+                showToast();
+            }, 1000);
+        });
+
+        // Close on backdrop click (not the modal itself)
+        backdrop.addEventListener('click', (e) => {
+            if (e.target === backdrop) closeModal();
+        });
+    </script>
+</body></html>

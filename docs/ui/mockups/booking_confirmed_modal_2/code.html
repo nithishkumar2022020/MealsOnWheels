@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Booking Confirmed - Sophisticated Transit</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#660010",
+                        "on-primary-container": "#87bbce",
+                        "surface-container-low": "#f3f4f5",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#f8f9fa",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#9acee1",
+                        "surface-tint": "#306576",
+                        "surface": "#f8f9fa",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-tertiary-fixed": "#410007",
+                        "on-error": "#ffffff",
+                        "on-surface": "#191c1d",
+                        "surface-variant": "#e1e3e4",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#0f4c5c",
+                        "secondary-fixed": "#ffdbcc",
+                        "outline-variant": "#c0c8cb",
+                        "on-surface-variant": "#40484b",
+                        "primary-fixed": "#b6ebfe",
+                        "tertiary-container": "#90001b",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#ffb693",
+                        "tertiary-fixed-dim": "#ffb3b0",
+                        "surface-container-highest": "#e1e3e4",
+                        "tertiary-fixed": "#ffdad8",
+                        "secondary-container": "#fd7729",
+                        "primary": "#003441",
+                        "inverse-surface": "#2e3132",
+                        "on-background": "#191c1d",
+                        "on-primary-fixed-variant": "#114d5d",
+                        "on-error-container": "#93000a",
+                        "secondary": "#a04100",
+                        "on-secondary-container": "#5e2300",
+                        "surface-dim": "#d9dadb",
+                        "surface-container": "#edeeef",
+                        "on-tertiary-container": "#ff9694",
+                        "surface-container-high": "#e7e8e9",
+                        "primary-fixed-dim": "#9acee1",
+                        "error-container": "#ffdad6",
+                        "background": "#f8f9fa",
+                        "on-tertiary-fixed-variant": "#92001b",
+                        "on-secondary-fixed-variant": "#7a3000",
+                        "on-primary-fixed": "#001f28",
+                        "outline": "#70787c",
+                        "on-secondary-fixed": "#351000"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "48px",
+                        "gutter": "24px",
+                        "lg": "40px",
+                        "xl": "64px",
+                        "xs": "4px",
+                        "base": "8px",
+                        "sm": "12px",
+                        "md": "24px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Montserrat"],
+                        "headline-md": ["Montserrat"],
+                        "body-md": ["Montserrat"],
+                        "body-lg": ["Montserrat"],
+                        "label-md": ["Montserrat"],
+                        "display-lg-mobile": ["Montserrat"],
+                        "display-lg": ["Montserrat"],
+                        "headline-sm": ["Montserrat"],
+                        "headline-lg-mobile": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .modal-overlay {
+            background-color: rgba(0, 52, 65, 0.4);
+            backdrop-filter: blur(8px);
+        }
+        .custom-shadow {
+            box-shadow: 0px 4px 20px rgba(15, 76, 92, 0.08);
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen relative overflow-hidden">
+<!-- Mock Dashboard Background (Dimmed) -->
+<div class="absolute inset-0 z-0 pointer-events-none opacity-40">
+<!-- Top App Bar Mock -->
+<div class="flex justify-between items-center w-full px-4 py-4 h-14 bg-surface shadow-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">location_on</span>
+<span class="font-headline-lg-mobile text-headline-sm font-bold text-primary">En route: New Delhi Exp</span>
+</div>
+<span class="material-symbols-outlined text-primary">notifications</span>
+</div>
+<!-- Dashboard Content Mock -->
+<main class="p-4 space-y-6">
+<div class="h-48 w-full rounded-xl bg-surface-variant overflow-hidden">
+<div class="w-full h-full bg-cover bg-center" data-alt="A modern railway station platform at dusk, with soft amber lighting and sleek transit trains. The atmosphere is sophisticated and calm, with high-end architectural details and a palette of midnight teal and sunset amber. Photorealistic style with professional editorial lighting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAnhmOB9Vrm3kjwQ8CPkveb0hlPqW2WwaxJi0yzwr9Kp4BpoVPGKpqG_GTK-p_JEF87mI7zYiWi-QwhpQB2kCuNh6ZIQs1ZEPRdZAdmZuHJJvGOh6QxYnbXSmsJegp_o_vqvofCzoAMnZk7FEVfDX2DUy8xsxK9uiWVHw6lu8Sv9bEAY_FwASdy9edOLpdrYxG5p0jnGH6N9y_2ElhYyQXR7W63cdmqnZMFbZGSe3-m0VVUFFIRkbxEkQ')"></div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="h-32 bg-surface-container rounded-xl"></div>
+<div class="h-32 bg-surface-container rounded-xl"></div>
+</div>
+<div class="h-64 bg-surface-container-high rounded-xl"></div>
+</main>
+</div>
+<!-- Confirmation Modal Overlay -->
+<div class="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 modal-overlay cursor-pointer" id="confirmation-modal" onclick="closeModal()">
+<div class="bg-surface w-full max-w-md rounded-t-[32px] sm:rounded-3xl overflow-hidden animate-in slide-in-from-bottom duration-300 custom-shadow border border-outline-variant/30 cursor-default" onclick="event.stopPropagation()">
+<!-- Visual Header Animation/Pattern -->
+<div class="relative h-32 w-full flex items-center justify-center bg-primary overflow-hidden">
+<button class="absolute top-4 right-4 text-on-primary hover:text-white/80 transition-colors z-20" onclick="closeModal()">
+<span class="material-symbols-outlined text-2xl">close</span>
+</button>
+<div class="relative z-10 flex flex-col items-center">
+<div class="bg-secondary-container w-16 h-16 rounded-full flex items-center justify-center mb-2 shadow-lg">
+<span class="material-symbols-outlined text-white text-4xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+</div>
+<!-- Modal Content -->
+<div class="px-6 pt-6 pb-8 space-y-6">
+<div class="text-center">
+<h1 class="font-headline-md text-headline-md text-primary mb-1">Order Confirmed! 🎉</h1>
+<p class="font-body-md text-on-surface-variant">Your premium meal is on its way.</p>
+</div>
+<!-- Booking ID Section -->
+<div class="bg-surface-container-low border border-outline-variant/50 rounded-2xl p-4 flex flex-col items-center justify-center space-y-2 relative group active:scale-95 transition-transform cursor-pointer" onclick="copyId()">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Booking ID</span>
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm font-bold text-primary" id="booking-id">#MOW-89230</span>
+<span class="material-symbols-outlined text-primary text-lg">content_copy</span>
+</div>
+<!-- Feedback Toast (Hidden) -->
+<div class="absolute -top-10 bg-inverse-surface text-inverse-on-surface px-3 py-1 rounded-full text-xs opacity-0 transition-opacity" id="copy-toast">ID Copied!</div>
+</div>
+<!-- Order Details Bento Layout -->
+<div class="space-y-4">
+<div class="flex justify-between items-start border-b border-outline-variant pb-4">
+<div class="flex-1">
+<h3 class="font-label-md text-label-md text-on-surface mb-1">Order Summary</h3>
+<p class="font-body-md text-on-surface-variant">2x Paneer Kulcha Trio</p>
+</div>
+<div class="text-right">
+<p class="font-headline-sm text-headline-sm text-secondary">$437.00</p>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-4">
+<!-- Pickup Info -->
+<div class="flex gap-4 items-start">
+<div class="bg-primary-container/10 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary">restaurant</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface">Pickup Point</h3>
+<p class="font-body-md text-on-surface-variant">Urban Spice Kitchen, Platform 1</p>
+</div>
+</div>
+<!-- Cutoff Notice -->
+<div class="bg-tertiary/5 border border-tertiary/20 p-4 rounded-xl flex gap-3 items-center">
+<span class="material-symbols-outlined text-tertiary">timer</span>
+<p class="font-label-sm text-label-sm text-tertiary">Changes accepted until <span class="font-bold">12:45 PM</span></p>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-3 pt-2">
+<a class="bg-primary hover:bg-primary-container text-white h-[48px] rounded-xl font-label-md text-label-md flex items-center justify-center gap-2 transition-all active:scale-95 shadow-md decoration-none" href="{{DATA:SCREEN:SCREEN_53}}">
+<span class="material-symbols-outlined text-lg">route</span>
+                        Track order
+                    </a>
+<a class="bg-surface-variant hover:bg-outline-variant text-on-surface-variant h-[48px] rounded-xl font-label-md text-label-md flex items-center justify-center transition-all active:scale-95 decoration-none" href="{{DATA:SCREEN:SCREEN_52}}">
+                        Continue shopping
+                    </a>
+</div>
+</div>
+<!-- Bottom Safe Area Indicator for Mobile -->
+<div class="h-6 w-full flex justify-center items-end pb-2">
+<div class="w-12 h-1.5 bg-outline-variant rounded-full opacity-50"></div>
+</div>
+</div>
+</div>
+<!-- Floating Navigation Shell (Filtered/Suppressed but conceptually part of system) -->
+<!-- Suppressed for focused confirmation state -->
+<script>
+        function copyId() {
+            const id = document.getElementById('booking-id').innerText;
+            const toast = document.getElementById('copy-toast');
+            
+            navigator.clipboard.writeText(id).then(() => {
+                toast.classList.remove('opacity-0');
+                toast.classList.add('opacity-100');
+                
+                setTimeout(() => {
+                    toast.classList.remove('opacity-100');
+                    toast.classList.add('opacity-0');
+                }, 2000);
+            });
+        }
+
+        function closeModal() {
+            const modal = document.querySelector('.animate-in');
+            if (modal) {
+                modal.style.transform = 'translateY(100%)';
+                setTimeout(() => {
+                    document.getElementById('confirmation-modal').style.display = 'none';
+                }, 300); // Wait for transition before hiding
+            }
+        }
+
+        // Micro-interaction for modal entry
+        window.addEventListener('DOMContentLoaded', () => {
+            const modal = document.querySelector('.animate-in');
+            modal.style.transform = 'translateY(100%)';
+            setTimeout(() => {
+                modal.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+                modal.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body></html>
