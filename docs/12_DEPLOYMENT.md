@@ -65,7 +65,6 @@ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 | `JWT_SECRET` | dev-only random string | 32+ byte random (Render secret) |
 | `JWT_EXPIRE_HOURS` | `24` | `24` |
 | `ENVIRONMENT` | `development` | `production` — **must be set explicitly**; no default |
-| `RESTAURANT_DASHBOARD_TOKEN` | any dev string | **Unused in production** — the shared-token path is refused when `ENVIRONMENT=production` |
 | `CORS_ORIGINS` | `http://localhost:3000,http://localhost:8080` | Flutter web URL; never `*` |
 | `NOMINATIM_BASE_URL` | `https://nominatim.openstreetmap.org` | Same (throttled) |
 | `NOMINATIM_USER_AGENT` | `MealsOnWheels/1.0 (+https://github.com/nithishkumar2022020/MealsOnWheels)` | Same |

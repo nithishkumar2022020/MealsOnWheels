@@ -24,7 +24,7 @@
 | Account creation under another person's phone | Spoofing | User identity | Login never auto-registers — unknown phone returns `404 USER_NOT_FOUND` |
 | JWT theft (XSS) | Spoofing | Session | `flutter_secure_storage` (Keychain/Keystore); HTTPS only; short-lived tokens Phase 2 |
 | Booking ID enumeration | Information disclosure | Order data | Auth required; ownership check on every read |
-| Cross-restaurant order access | Broken access control | Order data, customer PII | `X-Restaurant-Token` **plus** per-request check that the booking belongs to the given `restaurant_id` |
+| Cross-restaurant order access | Broken access control | Order data, customer PII | Per-restaurant JWT (`typ=restaurant`, `rid` claim); `restaurant_id` read from the loaded staff row, never from the request |
 | SQL injection | Tampering | Database | SQLAlchemy parameterized queries; no raw string SQL |
 | Price tampering | Tampering | Revenue | Client cannot send prices; server resolves them from its own menu |
 | Mass assignment | Tampering | Booking status | Status changes only via dashboard endpoints with state machine validation; `extra="forbid"` on all request schemas |
@@ -80,7 +80,7 @@ every stored token issued before the change is already exposed.
 | Role | Authentication | Capabilities |
 |------|---------------|--------------|
 | Traveller | JWT (phone + OTP) | Own profile; create/view/cancel **own** bookings; rate own handed-over bookings; register a restaurant (inactive until approved) |
-| Restaurant | Shared `X-Restaurant-Token` + `restaurant_id` ownership check | View and transition **that restaurant's** orders; view its stats |
+| Restaurant staff | Per-restaurant JWT scoped by `restaurant_users.restaurant_id` | View and transition **that restaurant's** orders; edit its menu and hours |
 | Operator | Direct database access | Activate registered restaurants |
 
 **Ownership is checked on every access, not just authentication.** A traveller reading a
@@ -144,7 +144,6 @@ Reject unknown fields (`model_config = ConfigDict(extra="forbid")` on request sc
 | Secret | Storage | Rotation |
 |--------|---------|----------|
 | `JWT_SECRET` | Render env var / local `.env` | On compromise; quarterly in production |
-| `RESTAURANT_DASHBOARD_TOKEN` | Render env var / local `.env` | On compromise; superseded by per-restaurant JWTs at launch |
 | `DATABASE_URL` | Render env var | Render managed |
 | `REDIS_URL` | Render env var | Render managed |
 | SMTP credentials | Render env var | As needed |

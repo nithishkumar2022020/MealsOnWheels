@@ -38,8 +38,8 @@ All errors return:
 |-------------|---------------|------|
 | 400 | `VALIDATION_ERROR`, `INVALID_STATUS_TRANSITION`, `ARRIVAL_TOO_SOON` | Bad input |
 | 401 | `UNAUTHORIZED`, `INVALID_OTP`, `TOKEN_EXPIRED` | Auth failure |
-| 403 | `FORBIDDEN`, `INVALID_RESTAURANT_TOKEN` | Insufficient permissions |
-| 404 | `NOT_FOUND`, `USER_NOT_FOUND` | Resource missing |
+| 403 | `FORBIDDEN` | Authenticated, but not for this resource |
+| 404 | `NOT_FOUND`, `USER_NOT_FOUND`, `STAFF_NOT_FOUND` | Resource missing |
 | 409 | `DUPLICATE_RATING`, `PHONE_ALREADY_REGISTERED` | Conflicting state |
 | 422 | `UNPROCESSABLE_ENTITY` | Pydantic validation |
 | 429 | `RATE_LIMITED` | Throttle exceeded |
@@ -133,6 +133,67 @@ not merely a weak password. It also made `POST /auth/register`'s `409` branch un
 
 **Errors:** `401 INVALID_OTP`, `404 NOT_FOUND` (`USER_NOT_FOUND`), `429 RATE_LIMITED`,
 `503 SERVICE_UNAVAILABLE` (production, no SMS provider)
+
+---
+
+### 3.3 POST `/restaurant/auth/login`
+
+Verify OTP and receive a token scoped to one restaurant.
+
+**Auth required:** No
+
+**Request:**
+
+```json
+{
+  "phone": "+919555000111",
+  "otp": "123456"
+}
+```
+
+**Response `200`:**
+
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIs...",
+  "token_type": "bearer",
+  "expires_in": 86400,
+  "restaurant_id": 1,
+  "restaurant_name": "Murthal Dhaba",
+  "staff_name": "Rajesh",
+  "phone": "+919555000111",
+  "approval_status": "approved",
+  "is_accepting_orders": true,
+  "onboarding_complete": false
+}
+```
+
+Same OTP gating as §3.2 — the stub is unreachable in production, and a missing SMS provider
+is a `503` rather than a fallback.
+
+**Tokens are actor-typed.** This one carries `typ: "restaurant"` and a `rid` claim; a
+traveller token carries `typ: "traveller"`. Presenting either to the other's endpoints is a
+`401`. Without that claim the two decode identically — a signed integer and a phone number —
+and because `users.id` and `restaurant_users.id` are independent sequences, low IDs collide
+routinely, so a traveller could present their own valid token as restaurant staff.
+
+**`rid` is a convenience, not an authorization input.** Every endpoint reads
+`restaurant_id` from the `restaurant_users` row the token resolves to, so a forged or stale
+claim grants nothing, and staff moved between outlets or deactivated lose access
+immediately rather than at token expiry.
+
+**Login succeeds while the listing is pending or rejected.** Approval gates *taking orders*,
+not signing in — an owner needs to log in precisely to find out why they are not live.
+`approval_status` and `onboarding_complete` are returned so the client can show the
+onboarding checklist instead of an empty order queue, which otherwise look identical.
+
+**There is no restaurant self-registration.** Staff rows are created by an operator during
+onboarding. A self-service endpoint would let anyone attach themselves to an existing
+restaurant and read its order queue.
+
+**Errors:** `401 INVALID_OTP`, `401 UNAUTHORIZED` (deactivated staff — deliberately
+indistinguishable from a wrong credential), `404 NOT_FOUND` (`STAFF_NOT_FOUND`),
+`429 RATE_LIMITED`, `503 SERVICE_UNAVAILABLE`
 
 ---
 
@@ -472,36 +533,40 @@ Base path: `/api/dashboard`
 
 ### 8.0 Dashboard authentication
 
-**Every endpoint in this section requires the header:**
+**Every endpoint in this section requires a restaurant JWT:**
 
 ```
-X-Restaurant-Token: <token>
+Authorization: Bearer <restaurant jwt>
 ```
 
-checked against the `RESTAURANT_DASHBOARD_TOKEN` env var. A missing or wrong token returns
-`403 INVALID_RESTAURANT_TOKEN`.
+obtained from `POST /api/restaurant/auth/login` (§3.3). The token carries
+`typ: "restaurant"` and a `rid` claim; a traveller token is rejected with `401`.
 
-**The token alone is not sufficient.** Every mutation additionally verifies that the target
-booking's `restaurant_id` matches the `restaurant_id` supplied in the request; a mismatch is
-`403 FORBIDDEN`. Without that check a single shared token would still let one restaurant
-confirm, ready, or hand over another restaurant's orders — including marking `handed_over`,
-which permanently blocks cancellation and unlocks rating.
+**`restaurant_id` is never taken from the request.** It is read from the
+`restaurant_users` row the token resolves to, so a caller cannot pass another
+restaurant's id and read its order queue. Mutations additionally verify that the target
+booking belongs to that restaurant; a mismatch is `403 FORBIDDEN`.
 
-**This is a transitional control, gated to `ENVIRONMENT != production`.** A shared token
-cannot distinguish one restaurant from another, so it is adequate for a controlled demo and
-not for public use. Per-restaurant JWTs carrying a `restaurant_id` claim are the launch
-requirement — [10_SECURITY.md](./10_SECURITY.md) §10 and §3.4.
+Two earlier designs were replaced here, both worth recording because each looked adequate:
 
-An earlier draft left these endpoints entirely unauthenticated, mitigated by "obscure URL".
-Obscurity is not a control: `restaurant_id` was a plain query parameter, so any caller could
-enumerate another restaurant's live order queue — including partially masked customer phone
-numbers — and drive arbitrary state transitions.
+1. **Unauthenticated, mitigated by "obscure URL".** Obscurity is not a control —
+   `restaurant_id` was a plain query parameter, so any caller could enumerate another
+   restaurant's live queue, including partially masked customer phone numbers, and drive
+   arbitrary state transitions.
+2. **A single shared `X-Restaurant-Token`.** Better, but a shared secret cannot distinguish
+   one restaurant from another: authorization still rested entirely on the client
+   volunteering an honest `restaurant_id`, which is not a control either. It also could not
+   be revoked for one outlet without breaking every other, and it left a live credential in
+   the environment for a scheme that only ever suited a demo.
+
+Per-restaurant tokens remove the class of problem rather than mitigating it: the identity
+comes from the token, and the scope comes from the database row that identity names.
 
 ---
 
 ### 8.1 GET `/dashboard/orders`
 
-**Auth required:** `X-Restaurant-Token`
+**Auth required:** restaurant JWT
 
 **Query:** `restaurant_id=1&status=pending`
 
@@ -537,7 +602,7 @@ stay `pending` for a human to decide ([02_TECHNICAL_SPEC.md](./02_TECHNICAL_SPEC
 
 ### 8.2 PUT `/dashboard/orders/{id}/confirm`
 
-**Auth required:** `X-Restaurant-Token` + ownership check
+**Auth required:** restaurant JWT + booking-belongs-to-restaurant check
 
 **Query:** `restaurant_id=1`
 
@@ -545,13 +610,13 @@ stay `pending` for a human to decide ([02_TECHNICAL_SPEC.md](./02_TECHNICAL_SPEC
 
 ### 8.3 PUT `/dashboard/orders/{id}/ready`
 
-**Auth required:** `X-Restaurant-Token` + ownership check
+**Auth required:** restaurant JWT + booking-belongs-to-restaurant check
 
 **Response `200`:** `{ "id": 42, "status": "ready" }`
 
 ### 8.4 PUT `/dashboard/orders/{id}/handed_over`
 
-**Auth required:** `X-Restaurant-Token` + ownership check
+**Auth required:** restaurant JWT + booking-belongs-to-restaurant check
 
 **Response `200`:** `{ "id": 42, "status": "handed_over" }`
 
@@ -559,14 +624,14 @@ Each transition validates the state machine
 ([01_PRODUCT_SPEC.md](./01_PRODUCT_SPEC.md)) and returns
 `400 INVALID_STATUS_TRANSITION` if the move is not legal from the current status.
 
-**Errors (8.2–8.4):** `400 INVALID_STATUS_TRANSITION`, `403 INVALID_RESTAURANT_TOKEN`,
+**Errors (8.2–8.4):** `400 INVALID_STATUS_TRANSITION`, `401 UNAUTHORIZED`,
 `403 FORBIDDEN` (booking belongs to another restaurant), `404 NOT_FOUND`
 
 ---
 
 ### 8.5 GET `/dashboard/stats`
 
-**Auth required:** `X-Restaurant-Token`
+**Auth required:** restaurant JWT
 
 **Query:** `restaurant_id=1`
 
