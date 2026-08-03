@@ -53,7 +53,12 @@ class Settings(BaseSettings):
 
     JWT_EXPIRE_HOURS: int = Field(default=24, ge=1, le=720)
 
-    RESTAURANT_DASHBOARD_TOKEN: str | None = None
+    # RESTAURANT_DASHBOARD_TOKEN was removed here. It was a single shared secret
+    # standing in for restaurant auth, and per-restaurant JWTs now do that job
+    # properly (app/core/security.py, ACTOR_RESTAURANT). Leaving a live
+    # credential in the settings for a scheme nothing implements is a liability:
+    # it reads as supported, and the next person to need restaurant auth finds a
+    # ready-made shared password.
 
     CORS_ORIGINS: str = ""
 
@@ -110,13 +115,6 @@ class Settings(BaseSettings):
     @model_validator(mode="after")
     def _enforce_production_guards(self) -> Settings:
         if not self.is_production:
-            # Outside production the dashboard token still has to exist,
-            # otherwise tests would pass against an endpoint that is
-            # accidentally open.
-            if not self.RESTAURANT_DASHBOARD_TOKEN:
-                raise ValueError(
-                    "RESTAURANT_DASHBOARD_TOKEN is required when " "ENVIRONMENT is not production"
-                )
             return self
 
         problems: list[str] = []
@@ -125,16 +123,6 @@ class Settings(BaseSettings):
             problems.append("JWT_SECRET must be at least 32 characters in production")
         if self.JWT_SECRET.lower() in _PLACEHOLDER_SECRETS:
             problems.append("JWT_SECRET is still the example placeholder")
-
-        # The shared static token is a demo-grade control. Per-restaurant
-        # credentials are Stage 18; until then production must not run the
-        # dashboard at all rather than run it on a secret in a config file.
-        if self.RESTAURANT_DASHBOARD_TOKEN:
-            problems.append(
-                "RESTAURANT_DASHBOARD_TOKEN must not be set in production; the "
-                "shared static token is demo-only. Per-restaurant auth is "
-                "Stage 18 in docs/14_BUILD_PLAN.md"
-            )
 
         if not self.cors_origin_list:
             problems.append("CORS_ORIGINS must be set explicitly in production")

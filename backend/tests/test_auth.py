@@ -116,9 +116,14 @@ async def test_login_with_stub_otp_returns_token(client) -> None:
     claims = jwt.decode(body["access_token"], get_settings().JWT_SECRET, algorithms=[ALGORITHM])
     assert claims["sub"] == str(body["user"]["id"])
     assert claims["phone"] == PHONE
+    assert claims["typ"] == "traveller"
     # Exactly the documented claim set — a JWT is readable by its bearer, so
-    # anything extra here is published, not stored.
-    assert set(claims) == {"sub", "phone", "iat", "exp"}
+    # anything extra here is published, not stored. `typ` was added when
+    # restaurant staff became a second actor signing against the same secret:
+    # without it a traveller token and a staff token decode identically, and
+    # since users.id and restaurant_users.id are independent sequences, a
+    # traveller could present their own valid token as staff.
+    assert set(claims) == {"sub", "phone", "typ", "iat", "exp"}
 
 
 async def test_login_wrong_otp_rejected(client) -> None:
@@ -256,23 +261,24 @@ async def test_profile_for_deleted_user_rejected(client) -> None:
 
 
 def test_token_roundtrip() -> None:
-    from app.core.security import decode_token
+    from app.core.security import ACTOR_TRAVELLER, decode_token
 
     token, expires_in = create_access_token(user_id=42, phone=PHONE)
-    claims = decode_token(token)
+    claims = decode_token(token, expected_actor=ACTOR_TRAVELLER)
 
-    assert claims.user_id == 42
+    assert claims.subject_id == 42
     assert claims.phone == PHONE
+    assert claims.actor == ACTOR_TRAVELLER
     assert expires_in == get_settings().JWT_EXPIRE_HOURS * 3600
 
 
 def test_decode_rejects_token_missing_claims() -> None:
     """A correctly signed token without our claims is invalid, not accepted."""
-    from app.core.security import TokenInvalid, decode_token
+    from app.core.security import ACTOR_TRAVELLER, TokenInvalid, decode_token
 
     token = jwt.encode({"exp": 9999999999}, get_settings().JWT_SECRET, algorithm=ALGORITHM)
     with pytest.raises(TokenInvalid):
-        decode_token(token)
+        decode_token(token, expected_actor=ACTOR_TRAVELLER)
 
 
 # --- Rate limiting --------------------------------------------------------

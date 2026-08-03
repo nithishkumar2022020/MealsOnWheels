@@ -167,6 +167,34 @@ class RestaurantDetailResponse(ResponseModel):
     menu: list[MenuItemResponse]
 
 
+class RestaurantLoginRequest(RequestModel):
+    phone: str = Field(pattern=PHONE_PATTERN, max_length=20)
+    otp: str = Field(pattern=r"^\d{4,8}$")
+
+    _normalise = field_validator("phone", mode="before")(normalise_phone)
+
+
+class RestaurantLoginResponse(ResponseModel):
+    """Token plus just enough context to render the dashboard header.
+
+    `approval_status` and `onboarding_complete` are here because login succeeds
+    while a listing is still pending — the client needs to know to show the
+    onboarding checklist rather than an empty order queue, and "no orders" and
+    "not live yet" look identical without it.
+    """
+
+    access_token: str
+    token_type: str = "bearer"
+    expires_in: int
+    restaurant_id: int
+    restaurant_name: str
+    staff_name: str | None = None
+    phone: str
+    approval_status: str
+    is_accepting_orders: bool
+    onboarding_complete: bool
+
+
 class RestaurantRegisterRequest(RequestModel):
     name: str = Field(min_length=2, max_length=200)
     phone: str = Field(pattern=PHONE_PATTERN, max_length=20)

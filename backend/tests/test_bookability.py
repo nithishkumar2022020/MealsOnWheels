@@ -173,9 +173,7 @@ def test_unapproved_reported_before_closed() -> None:
 
 
 def test_unsupported_booking_type_reported_before_accepting_flag() -> None:
-    restaurant = FakeRestaurant(
-        is_accepting_orders=False, types=("self_drive_dine",)
-    )
+    restaurant = FakeRestaurant(is_accepting_orders=False, types=("self_drive_dine",))
     reason = unbookable_reason(
         restaurant, [], utc("2026-08-03T02:00:00"), booking_type="bus_boarding_point"
     )
@@ -191,15 +189,9 @@ def test_owner_toggle_reported_when_approved_and_type_ok() -> None:
 
 def test_missing_hours_distinguished_from_closed_now() -> None:
     # Different remedies: one needs configuration, the other needs waiting.
-    assert (
-        unbookable_reason(FakeRestaurant(), [], utc("2026-08-03T02:00:00"))
-        == NO_HOURS_SET
-    )
+    assert unbookable_reason(FakeRestaurant(), [], utc("2026-08-03T02:00:00")) == NO_HOURS_SET
     hours = [FakeHours(0, "06:00", "23:00")]
-    assert (
-        unbookable_reason(FakeRestaurant(), hours, utc("2026-08-04T02:00:00"))
-        == CLOSED_AT_TIME
-    )
+    assert unbookable_reason(FakeRestaurant(), hours, utc("2026-08-04T02:00:00")) == CLOSED_AT_TIME
 
 
 def test_bookable_returns_none() -> None:

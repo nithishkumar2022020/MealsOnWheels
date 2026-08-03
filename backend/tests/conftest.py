@@ -21,7 +21,6 @@ os.environ.setdefault(
     "postgresql+asyncpg://mealsonwheels:localdev@localhost:5432/highway_food_booking",
 )
 os.environ.setdefault("JWT_SECRET", "test-secret-value-that-is-long-enough-32chars")
-os.environ.setdefault("RESTAURANT_DASHBOARD_TOKEN", "test-restaurant-token")
 # Unset so tests exercise the no-cache path by default; cache behaviour is
 # tested explicitly where it matters.
 os.environ.pop("REDIS_URL", None)

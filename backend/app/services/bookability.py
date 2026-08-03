@@ -76,11 +76,7 @@ def is_open_at(
     # because it only looks at Tuesday.
     yesterday = (weekday - 1) % 7
     for window in hours:
-        if (
-            window.weekday == yesterday
-            and window.is_overnight
-            and wall_clock < window.closes_at
-        ):
+        if window.weekday == yesterday and window.is_overnight and wall_clock < window.closes_at:
             return True
 
     return False

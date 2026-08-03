@@ -64,7 +64,6 @@ READY_BEFORE_ARRIVAL_MINUTES: dict[str, int] = {
 APPROVAL_STATUSES = ("pending", "approved", "rejected")
 
 
-
 class User(Base):
     __tablename__ = "users"
 
@@ -139,9 +138,7 @@ class Restaurant(Base):
     # a rollback does not break search; use is_bookable_now() instead.
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     # Ops decision on the listing. Changes ~never.
-    approval_status: Mapped[str] = mapped_column(
-        String(20), nullable=False, default="pending"
-    )
+    approval_status: Mapped[str] = mapped_column(String(20), nullable=False, default="pending")
     # Owner toggle from the kitchen tablet. Changes several times a day. Kept
     # separate from approval_status because tapping "Closed" at the end of a
     # shift must not look like an unapproved listing.
