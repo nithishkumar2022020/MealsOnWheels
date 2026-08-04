@@ -1,7 +1,7 @@
 # Build Plan & Handoff Log
 
 **Document version:** 1.0
-**Last updated:** 2026-07-31 (Stage 10 complete)
+**Last updated:** 2026-08-04 (Stage 10.5c complete — owner-managed product data)
 **Purpose:** Single source of truth for build progress. Any agent or contributor picking
 this project up mid-stream starts here.
 
@@ -45,11 +45,17 @@ Shortcuts **still deliberately accepted** (all documented, all gated):
 | Shortcut | Why kept | Gate |
 |----------|----------|------|
 | OTP stub `123456` | No SMS provider yet; blocks nothing else | `ENVIRONMENT != production` |
-| Shared restaurant dashboard token | Per-restaurant accounts need an onboarding flow | `ENVIRONMENT != production` |
-| Hardcoded menus | Menu CRUD is a Phase 1 feature | Server owns the menu; client cannot inject prices |
 | Point-radius search | Route polylines not seeded yet | Corridor query is Stage 16 |
-| JSONB booking items | Normalising needs the menu table first | — |
+| JSONB booking items | Normalising costs a join for no gain while a booking is always read whole | Line items freeze name and price at order time |
 | Polling, not WebSocket | Adequate at current scale | — |
+| No operator UI for approving a restaurant | Approval is a database update by an operator | Self-registrations land `is_active = false` and are never searchable |
+
+**Retired since**, because the reason for keeping them stopped applying:
+
+| Was | Now | Why it could not wait |
+|-----|-----|-----------------------|
+| Shared restaurant dashboard token | Per-restaurant JWTs (`typ` + `rid`), Stage 10.5b | A shared secret cannot distinguish one restaurant from another, so authorization rested on the client volunteering an honest `restaurant_id` |
+| Hardcoded menus | `menu_items`, owner-managed, Stage 10.5c | Menus had to be real before bookings priced against them; a fabricated menu quotes a price no restaurant agreed to |
 
 ---
 
@@ -79,6 +85,9 @@ Each stage is independently runnable and independently testable.
 | 8 | Auth module — register, login, JWT, profile | DONE | `pytest tests/test_auth.py` green; login returns a usable token |
 | 9 | Routes module + seed script | DONE | Seeded DB; `GET /api/routes` returns 5 routes |
 | 10 | Restaurant search, detail, register | DONE | `tests/test_restaurants.py` green including Overpass-down fallback |
+| 10.5a | Migration 002 — owner-managed product data schema | DONE | Six new/changed tables; migration idempotent; approval backfill guarded |
+| 10.5b | Per-restaurant auth (JWT with `typ` + `rid`) | DONE | `tests/test_restaurant_auth.py` green including the actor-collision test |
+| 10.5c | Menu + hours CRUD, bookability from the database | DONE | `tests/test_restaurant_admin.py` green; menus served from `menu_items` |
 | 11 | Booking module + state machine | TODO | `tests/test_bookings.py` green including every invalid transition |
 | 12 | Dashboard module + restaurant token auth | TODO | `tests/test_dashboard.py` green including cross-restaurant denial |
 | 13 | Ratings module + aggregate recompute | TODO | `tests/test_ratings.py` green; restaurant aggregate updates on rating |
@@ -93,7 +102,7 @@ Deliberately unplanned in detail. Scope these when Phase B is done, not before.
 | 15 | Flutter client — login, search, book, status, rating | TODO |
 | 16 | PostGIS corridor search replacing point-radius | TODO |
 | 17 | Restaurant dashboard web console | TODO |
-| 18 | Real SMS OTP + per-restaurant auth (unblocks public launch) | TODO |
+| 18 | Real SMS OTP (unblocks public launch) | TODO |
 | 19 | Self-hosted Nominatim / Overpass (usage policy compliance) | TODO |
 
 ---
@@ -116,10 +125,16 @@ they are recorded in §5 with reasons.
 | `app/models.py` | `Booking`, `ALLOWED_TRANSITIONS`, and `Booking.can_transition_to()` |
 | `app/schemas.py` | `RequestModel` (`extra="forbid"`) / `ResponseModel` bases |
 | `app/deps.py` | `CurrentUser`, `DbSession`, `ClientIp` |
-| **`app/services/menu.py`** | **`price_of(restaurant_name, item_name)` — the authoritative price source. `None` means "not on this menu"** |
+| **`app/services/menus.py`** | **`price_lookup(db, restaurant_id)` → `{name: Decimal}`, the authoritative price source. Excludes unavailable items, so a missing name means "cannot be ordered right now"** |
+| **`app/services/bookability.py`** | **`unbookable_reason(restaurant, hours, moment, booking_type)` → reason string or `None`. Already handles timezone and overnight windows** |
+| `app/services/hours.py` | `list_hours(db, restaurant_id)` |
+| `app/models.py` | also `BOOKING_TYPES`, `READY_BEFORE_ARRIVAL_MINUTES`, `Booking.ready_by` |
 | `app/services/restaurants.py` | `get_detail()`; the geography/`ST_DWithin` pattern |
 | `app/services/rate_limit.py` | `enforce(key, limit, window)`; add a `(limit, window)` constant per §9 of `10_SECURITY.md` |
 | `tests/conftest.py` | `client`, `seeded`, `db_exec`, `db_scalar`, `db_count` fixtures; Overpass blocked by default |
+
+`app/services/menu.py` **no longer exists** — it moved to `scripts/seed_menus.py` and is seed
+data only. Do not import it from the request path; `price_lookup` above is the replacement.
 
 ### Build
 
@@ -132,13 +147,26 @@ they are recorded in §5 with reasons.
 ### The behaviours that must be exactly right
 
 - **The server computes `total_price`. Always.** Resolve every line item's name against
-  `menu.price_of()`, reject any name not on the menu with a 400, and sum the result. A
+  `menus.price_lookup()`, reject any name not in it with a 400, and sum the result. A
   client-sent price is refused by `extra="forbid"` — there is no field for it — and the old
   contract that trusted one let two parathas be booked for ₹0.02.
 - **Resolved unit prices are frozen onto `bookings.items` at creation.** A later menu price
-  change must not retroactively alter a placed order.
+  change must not retroactively alter a placed order. Store `menu_item_id` on each line as a
+  plain integer, **not** an FK: a soft-deleted dish must not break a historical order.
+- **A dish marked unavailable cannot be booked.** `price_lookup` already excludes them, so an
+  unavailable name lands in the same 400 path as an unknown one — but the message should say
+  which, and the code should be `ITEM_UNAVAILABLE` rather than a generic validation error.
+  This is the mid-checkout race from `16_FUNCTIONAL_PRODUCT_DATA.md` §3.6: **reject the whole
+  booking** rather than silently dropping the line and recomputing the total. Changing what
+  someone agreed to pay is a worse surprise than an error.
+- **Check `bookability.unbookable_reason()` before anything else.** Approval, the owner's
+  accepting-orders toggle, and opening hours at the *requested arrival time* — not at now.
+  A restaurant open when you browse and shut when you arrive cannot take the order.
 - **Minimum lead time is the restaurant's `avg_prep_time_minutes`, not a flat 30.**
   Enforced server-side; `arrival_time` earlier than `now + prep` is `400 ARRIVAL_TOO_SOON`.
+- **`booking_type` is required and must be supported by the restaurant.** It drives
+  `ready_by` (dine-in resolves to arrival itself — food plated early cools while a family
+  parks), so it cannot be defaulted silently.
 - **Every invalid transition is a 400**, driven by `ALLOWED_TRANSITIONS` — including
   reversals and any move out of a terminal state.
 - **Ownership is checked on every read and write.** A traveller may only see and cancel
@@ -148,8 +176,12 @@ they are recorded in §5 with reasons.
 ### Done when
 
 `tests/test_bookings.py` is green including **every** invalid transition, the price-tampering
-attempt, and the lead-time boundary. Plus `ruff check`, `black --check`, `pytest tests/ -q`,
-and a real `curl` creating a booking against the running container.
+attempt, the unavailable-item rejection, the closed-at-arrival-time rejection, and the
+lead-time boundary. Plus `ruff check`, `black --check`, `pytest tests/ -q`, and a real `curl`
+creating a booking against the running container.
+
+Note that seeded hours are 06:00–23:00 IST, so a `curl` with an arrival time outside that
+window is *correctly* rejected — check the reason before assuming it is a bug.
 
 ### Running the stack
 
@@ -207,6 +239,20 @@ Decisions taken during the build that are not obvious from the code. Append, nev
 | 2026-07-30 | Migrations applied by `scripts/migrate.py`, not postgres `docker-entrypoint-initdb.d` | The init directory runs only on an empty volume, so it silently skips on every subsequent boot. One code path for local and production means a migration that works on a laptop is the one that runs on Render |
 | 2026-07-30 | Health returns 503 only for a database failure | A missing or broken cache is degraded, not down. Returning 503 for it would make Render kill a service that still works |
 | 2026-07-30 | Rate limiting fails **open** when Redis is unavailable | Failing closed turns a cache outage into an auth outage. The limit is documented as best-effort for exactly this reason |
+| 2026-07-31 | `is_active` split into `approval_status` + `is_accepting_orders` + `restaurant_hours` | One flag meant "ops approved this" and "include in search", and the design wanted it to also mean "open now". An owner tapping Closed would have flipped the flag meaning unapproved and needed an operator to undo it |
+| 2026-07-31 | `is_active` kept and still maintained, deprecated by comment | Dropping a column the previous release still reads breaks a rolling deploy. It is retired in a later migration once nothing references it |
+| 2026-07-31 | Approval backfill guarded against re-running | An unguarded `UPDATE` would re-approve a row an operator had since rejected, every time the migration ran. Verified by rejecting a row and re-running |
+| 2026-07-31 | JWTs carry a `typ` actor claim; `expected_actor` is a required argument | Two actors sign against one secret, so without `typ` a traveller token and a staff token decode identically. `users.id` and `restaurant_users.id` are independent sequences, so low IDs collide routinely — a traveller presenting their own valid token as staff was the common case, not an exotic one |
+| 2026-07-31 | Authorization reads `restaurant_id` from the staff row, never the `rid` claim | A claim is client-visible and fixed at issue time; the row is current. Staff moved between outlets or deactivated lose access immediately rather than at token expiry |
+| 2026-07-31 | Restaurant login succeeds while approval is pending or rejected | Approval gates taking orders, not signing in. An owner needs to log in precisely to see why they are not live; locking them out makes the onboarding checklist unreachable |
+| 2026-07-31 | No restaurant self-registration endpoint | Anyone able to create their own staff row could attach themselves to an existing restaurant and read its order queue |
+| 2026-07-31 | `RESTAURANT_DASHBOARD_TOKEN` deleted rather than left unused | A live credential for a scheme nothing implements reads as supported. A test asserts the field is gone, because that is the kind of thing that gets quietly reintroduced |
+| 2026-07-31 | Hours are replaced wholesale, not merged per day | Omitting a day is how it is marked closed, so a merge would leave unmentioned days as they were — which is how a restaurant ends up open on a day it thought it had closed |
+| 2026-07-31 | Absent hours mean closed; `closes_at < opens_at` is a valid overnight window | A newly approved restaurant with no hours must not accept 3am orders. Highway dhabas routinely run past midnight, so rejecting the wrap would close them during peak hours |
+| 2026-07-31 | Availability is its own endpoint, separate from menu update | Most-used control in the product, tapped mid-service one-handed. Routing it through the general update would let an unrelated validation error block a stock change |
+| 2026-07-31 | `is_available` separate from `deleted_at` | "Out of paneer today" and "we stopped selling this" differ in reversibility; merging them makes an owner re-create the dish tomorrow |
+| 2026-07-31 | A restaurant with no menu is listed but not bookable — DEFAULT_MENU fallback removed | The fallback was fine while every menu was fictional. With real menus it would quote a price no restaurant agreed to, for an OSM row nobody has spoken to, and the failure would land at the roadside instead of in the API |
+| 2026-07-31 | Seed fixtures moved from `app/services/menu.py` to `scripts/seed_menus.py` | Leaving it beside the new `app/services/menus.py` put two modules one letter apart with opposite roles, and seed data does not belong in the service layer |
 | 2026-07-30 | All development runs in the container, not a host venv | Local Python is 3.14 and `pydantic-core` has no wheels for it; building from source needs a Rust toolchain. The container pins 3.11 |
 | 2026-07-30 | Login verifies the OTP **before** looking the phone up | Checking existence first makes the 404/401 split a registered-number oracle for a caller who has no valid OTP at all |
 | 2026-07-30 | A valid token for a deleted user is `401 UNAUTHORIZED`, identical to a bad signature | Distinguishing the two tells a token prober which user ids exist. Expiry stays distinguishable because a client needs to know to re-login |
