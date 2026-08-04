@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>No Orders Yet (Admin)</title>
+<!-- Google Fonts: Montserrat -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-tint": "#306576",
+                    "surface-container": "#edeeef",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed-variant": "#7a3000",
+                    "tertiary": "#660010",
+                    "secondary-fixed-dim": "#ffb693",
+                    "secondary": "#a04100",
+                    "on-primary-container": "#87bbce",
+                    "inverse-primary": "#9acee1",
+                    "outline": "#70787c",
+                    "outline-variant": "#c0c8cb",
+                    "on-surface": "#191c1d",
+                    "on-primary-fixed-variant": "#114d5d",
+                    "on-background": "#191c1d",
+                    "surface-container-high": "#e7e8e9",
+                    "primary": "#003441",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#f0f1f2",
+                    "on-tertiary-container": "#ff9694",
+                    "background": "#f8f9fa",
+                    "on-tertiary-fixed-variant": "#92001b",
+                    "secondary-fixed": "#ffdbcc",
+                    "on-tertiary-fixed": "#410007",
+                    "inverse-surface": "#2e3132",
+                    "tertiary-fixed-dim": "#ffb3b0",
+                    "on-error": "#ffffff",
+                    "surface-container-highest": "#e1e3e4",
+                    "tertiary-fixed": "#ffdad8",
+                    "secondary-container": "#fd7729",
+                    "on-primary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "surface-dim": "#d9dadb",
+                    "on-surface-variant": "#40484b",
+                    "error": "#ba1a1a",
+                    "surface": "#f8f9fa",
+                    "surface-bright": "#f8f9fa",
+                    "on-secondary-fixed": "#351000",
+                    "on-primary-fixed": "#001f28",
+                    "primary-container": "#0f4c5c",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-container": "#5e2300",
+                    "error-container": "#ffdad6",
+                    "surface-variant": "#e1e3e4",
+                    "tertiary-container": "#90001b",
+                    "surface-container-low": "#f3f4f5",
+                    "primary-fixed-dim": "#9acee1",
+                    "primary-fixed": "#b6ebfe"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "12px",
+                    "base": "8px",
+                    "xs": "4px",
+                    "margin-mobile": "16px",
+                    "xl": "64px",
+                    "gutter": "24px",
+                    "lg": "40px",
+                    "md": "24px",
+                    "margin-desktop": "48px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Montserrat"],
+                    "body-lg": ["Montserrat"],
+                    "display-lg": ["Montserrat"],
+                    "headline-sm": ["Montserrat"],
+                    "body-md": ["Montserrat"],
+                    "headline-md": ["Montserrat"],
+                    "label-md": ["Montserrat"],
+                    "display-lg-mobile": ["Montserrat"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #EDF2F4;
+            color: #191c1d;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .glass-card {
+            background: rgba(248, 249, fa, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid #D1D9DB;
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background font-body-md text-on-background">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface border-b border-outline-variant flex items-center justify-between px-margin-mobile md:px-margin-desktop h-12">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="restaurant">restaurant</span>
+<span class="font-headline-md text-headline-md font-bold text-primary">MealsOnWheels</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-container-high transition-colors active:scale-95">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="location_on">location_on</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="min-h-screen pt-12 pb-16 flex flex-col items-center justify-center px-margin-mobile">
+<div class="max-w-4xl w-full">
+<!-- Asymmetric Hero Empty State Layout -->
+<div class="flex flex-col md:flex-row items-center gap-lg">
+<!-- Illustration Section -->
+<div class="w-full md:w-1/2 relative flex justify-center items-center">
+<!-- Atmospheric Background Element -->
+<div class="absolute -z-10 w-64 h-64 bg-primary-container/20 rounded-full blur-3xl animate-pulse"></div>
+<div class="relative group">
+<div class="w-full aspect-square max-w-[400px] overflow-hidden rounded-xl glass-card p-gutter shadow-[0px_4px_20px_rgba(0,52,65,0.08)] flex items-center justify-center transition-transform duration-500 hover:scale-[1.02]">
+<img class="w-full h-full object-contain animate-float" data-alt="A minimalist and high-end editorial illustration of a polished chrome restaurant serving tray sitting empty on a clean, white marble countertop. The lighting is soft and cinematic, coming from a high-angle window to create long, sophisticated shadows. The aesthetic is Corporate Modern, using a palette of deep midnight teal and crisp white. In the background, a blurred, out-of-focus view of a high-speed train window suggests a motion-filled, transit-oriented context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtGOY77EjD8PKl0r9B7a25xgKvUANYvxnQ-Nk33gaEhh4JbjpG8QQOwEfUKrRL-vBpDKbocGAmbjpI5Is45PDh51bTJvTN_B5OcyNoK-m_XirD0ubuT5vmM28KHXkZuskXLRpJikW7czucyNfbAM7_MuO8PO4f6HZgIGhLYGBicJEYLlPDQeoFH1240rolucNsuX5l6NP4NXy_8nQsfRa5jj6LGmjZSXiVqXW1io9WCaK_fwaGjR-bPA"/>
+</div>
+<!-- Floating Micro-Interaction Elements -->
+<div class="absolute -top-4 -right-4 bg-secondary-container text-on-secondary-container p-base rounded-lg shadow-md flex items-center gap-2 transform rotate-12 group-hover:rotate-0 transition-transform">
+<span class="material-symbols-outlined text-sm" data-icon="notifications_paused">notifications_paused</span>
+<span class="font-label-sm text-label-sm">System Quiet</span>
+</div>
+</div>
+</div>
+<!-- Text & Actions Section -->
+<div class="w-full md:w-1/2 text-center md:text-left flex flex-col gap-base">
+<div class="inline-flex items-center gap-2 px-3 py-1 bg-surface-container-high rounded-full w-fit mx-auto md:mx-0">
+<span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">READY TO SERVE</span>
+</div>
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary leading-tight">
+                        No orders yet
+                    </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md">
+                        Your restaurant is ready to receive orders from travelers.
+                    </p>
+<p class="font-body-md text-body-md text-outline py-2">
+                        Share your link or wait for customers to discover you.
+                    </p>
+<div class="flex flex-col sm:flex-row gap-base mt-md">
+<button class="h-[48px] px-lg bg-primary text-on-primary font-label-md text-label-md rounded-lg flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-95 shadow-md">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+                            Share restaurant link
+                        </button>
+<button class="h-[48px] px-lg bg-surface border border-outline-variant text-primary font-label-md text-label-md rounded-lg flex items-center justify-center gap-2 hover:bg-surface-container-high transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+                            Go to home
+                        </button>
+</div>
+</div>
+</div>
+<!-- Bento Grid - Suggested Actions/Stats (Contextual Admin Elements) -->
+<div class="mt-xl grid grid-cols-1 md:grid-cols-3 gap-md opacity-70">
+<div class="p-md glass-card rounded-xl flex flex-col gap-xs">
+<span class="material-symbols-outlined text-secondary" data-icon="speed">speed</span>
+<h3 class="font-headline-sm text-headline-sm">0 mins</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Avg. Preparation Time</p>
+</div>
+<div class="p-md glass-card rounded-xl flex flex-col gap-xs">
+<span class="material-symbols-outlined text-secondary" data-icon="group">group</span>
+<h3 class="font-headline-sm text-headline-sm">0</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Active Customers</p>
+</div>
+<div class="p-md glass-card rounded-xl flex flex-col gap-xs">
+<span class="material-symbols-outlined text-secondary" data-icon="star">star</span>
+<h3 class="font-headline-sm text-headline-sm">N/A</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Daily Performance</p>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 bg-surface shadow-[0px_-4px_20px_rgba(0,52,65,0.08)] flex justify-around items-center h-16 px-2">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm-mobile">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="departure_board">departure_board</span>
+<span class="font-label-sm text-label-sm-mobile">Stops</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-sm text-label-sm-mobile">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm-mobile">Profile</span>
+</a>
+</nav>
+<!-- Decorative Map Background Mask (Sophisticated Transit Feel) -->
+<div class="fixed bottom-0 right-0 -z-20 w-1/3 h-1/2 opacity-5 pointer-events-none overflow-hidden">
+<div class="w-full h-full bg-cover grayscale" data-location="Chicago" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB4dg_iiV0UxnwGCORVFPI0EX49OcVL2Si1Cd6-q0kCIeejmDd785w-qTgcUlIqyNy3COm8PyEp28XpMmPL2cx4UUOvo5QiDqsibjgIS3rEX6t0Xs3APz_z76ol5OWwgIhg3GAtoKq0s4k9B35XWYG4ZpTYLTUXUFJaVVymQdpEWd41PcSj2jK1VJC7GcAlJEwBDMK4JbPpUn8i7mS7KfG9euEq-gtJA3x3qSeOQFOd0cMFWxiduvqukA')"></div>
+</div>
+<script>
+        // Simple micro-interaction for the share button
+        document.querySelector('button:has(span[data-icon="share"])').addEventListener('click', () => {
+            const btn = document.querySelector('button:has(span[data-icon="share"])');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span> Copied!`;
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+            }, 2000);
+        });
+    </script>
+</body></html>

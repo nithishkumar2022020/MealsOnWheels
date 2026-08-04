@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MealsOnWheels - Rate to help others</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed": "#b6ebfe",
+                    "on-tertiary-fixed": "#410007",
+                    "tertiary-fixed": "#ffdad8",
+                    "surface-container": "#edeeef",
+                    "secondary": "#a04100",
+                    "surface-container-highest": "#e1e3e4",
+                    "surface": "#f8f9fa",
+                    "outline-variant": "#c0c8cb",
+                    "error": "#ba1a1a",
+                    "surface-container-low": "#f3f4f5",
+                    "primary-container": "#0f4c5c",
+                    "on-tertiary-container": "#ff9694",
+                    "secondary-container": "#fd7729",
+                    "surface-container-lowest": "#ffffff",
+                    "primary": "#003441",
+                    "on-secondary-fixed": "#351000",
+                    "inverse-primary": "#9acee1",
+                    "on-background": "#191c1d",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "surface-container-high": "#e7e8e9",
+                    "on-surface": "#191c1d",
+                    "on-error": "#ffffff",
+                    "inverse-on-surface": "#f0f1f2",
+                    "background": "#f8f9fa",
+                    "surface-variant": "#e1e3e4",
+                    "on-secondary-container": "#5e2300",
+                    "outline": "#70787c",
+                    "on-surface-variant": "#40484b",
+                    "on-primary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "primary-fixed-dim": "#9acee1",
+                    "on-primary-fixed-variant": "#114d5d",
+                    "on-primary-fixed": "#001f28",
+                    "surface-tint": "#306576",
+                    "secondary-fixed-dim": "#ffb693",
+                    "secondary-fixed": "#ffdbcc",
+                    "surface-dim": "#d9dadb",
+                    "inverse-surface": "#2e3132",
+                    "on-primary-container": "#87bbce",
+                    "tertiary-container": "#90001b",
+                    "surface-bright": "#f8f9fa",
+                    "tertiary-fixed-dim": "#ffb3b0",
+                    "on-tertiary-fixed-variant": "#92001b",
+                    "tertiary": "#660010",
+                    "on-secondary-fixed-variant": "#7a3000",
+                    "on-error-container": "#93000a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "margin-desktop": "48px",
+                    "base": "8px",
+                    "gutter": "24px",
+                    "sm": "12px",
+                    "xs": "4px",
+                    "lg": "40px",
+                    "xl": "64px",
+                    "md": "24px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Montserrat"],
+                    "headline-md": ["Montserrat"],
+                    "body-lg": ["Montserrat"],
+                    "label-md": ["Montserrat"],
+                    "label-sm": ["Montserrat"],
+                    "headline-sm": ["Montserrat"],
+                    "display-lg": ["Montserrat"],
+                    "body-md": ["Montserrat"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      body {
+        background-color: #EDF2F4;
+        color: #191c1d;
+        -webkit-font-smoothing: antialiased;
+      }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .bento-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-rows: minmax(100px, auto);
+        gap: 24px;
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+      }
+      .floating-asset {
+        animation: float 4s ease-in-out infinite;
+      }
+      .glass-card {
+        background: rgba(248, 249, 250, 0.8);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(209, 217, 219, 0.5);
+      }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-margin-mobile md:p-margin-desktop overflow-hidden">
+<!-- Main Content Canvas -->
+<main class="w-full max-w-[1280px] h-full flex flex-col md:flex-row items-center justify-between gap-xl">
+<!-- Left Column: Illustration (Asymmetric/Modern Layout) -->
+<div class="relative w-full md:w-1/2 flex flex-col items-center justify-center order-2 md:order-1">
+<!-- Decorative Elements -->
+<div class="absolute -z-10 w-[120%] h-[120%] opacity-20 pointer-events-none">
+<div class="absolute top-10 left-10 w-64 h-64 bg-secondary-container rounded-full blur-[100px]"></div>
+<div class="absolute bottom-20 right-0 w-80 h-80 bg-primary-fixed rounded-full blur-[120px]"></div>
+</div>
+<!-- Illustration Container -->
+<div class="relative w-full max-w-sm md:max-w-md aspect-square glass-card rounded-[40px] flex items-center justify-center shadow-[0px_4px_20px_rgba(15,76,92,0.08)]">
+<div class="flex flex-col items-center space-y-md">
+<!-- Glowing Stars Animation Overlay -->
+<div class="flex space-x-sm floating-asset">
+<span class="material-symbols-outlined text-[64px] text-secondary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[80px] text-secondary-container -translate-y-base" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[64px] text-secondary-container" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<!-- Happy Face Illustration -->
+<div class="relative w-48 h-48 rounded-full overflow-hidden border-4 border-white shadow-lg">
+<img class="w-full h-full object-cover" data-alt="A minimalist, ultra-modern digital illustration of a smiling traveler's face against a clean, light-mode background. The style is sophisticated and editorial with smooth vector lines and a warm, welcoming vibe. Accents of Midnight Teal and Sunset Amber highlight the facial features. The lighting is soft and even, evoking a premium and friendly service brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQjd9a6zJZ4emY7Fc2YYuwTY6dYmGRa0zh64Yop7O-58cqCaYmAZ4yd_32mO6HieIbfmIa01FPWDB7gNXLZj0PoRS2VI5RP9okrpr1m-FC-4eYJ-ns0InZxio6dfyU8tHubw_OaPFnTYJ7MKw5xYvW3fbouoiJ-xhILIKm0ves5P8VQDoUIULi0oFrObMsvHb9CA96BlMOSbJIxuN2sstzgfOTf_9x9CSXNgbomBOBgpbAtF-Mj9QqQw"/>
+</div>
+</div>
+<!-- Floating Interaction Detail -->
+<div class="absolute -bottom-8 -right-4 glass-card p-md rounded-xl shadow-lg border border-white flex items-center gap-base">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined text-md">thumb_up</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary">High Accuracy</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Verified Stops</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Content and CTA -->
+<div class="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left order-1 md:order-2">
+<header class="mb-lg space-y-xs">
+<p class="font-label-md text-label-md text-secondary tracking-widest uppercase">Step 3 of 3</p>
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary leading-tight">
+                    Rate to help others
+                </h1>
+</header>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-xl max-w-md">
+                Share your experience and help travelers find the best restaurants. Your feedback ensures our "Sophisticated Transit" network remains the gold standard for quality.
+            </p>
+<!-- Pagination Dots -->
+<div class="flex items-center space-x-sm mb-xl">
+<div class="w-2.5 h-2.5 rounded-full bg-outline-variant"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-outline-variant"></div>
+<div class="w-8 h-2.5 rounded-full bg-primary transition-all duration-300"></div>
+</div>
+<!-- CTA Group -->
+<div class="w-full flex flex-col sm:flex-row gap-md items-center">
+<button class="w-full sm:w-auto h-12 px-xl rounded-full bg-primary text-on-primary font-label-md text-label-md hover:shadow-lg hover:-translate-y-0.5 active:scale-95 transition-all duration-200">
+                    Let's go!
+                </button>
+<button class="w-full sm:w-auto h-12 px-xl rounded-full bg-transparent border border-outline text-outline font-label-md text-label-md hover:bg-surface-container-low transition-colors duration-200">
+                    Skip
+                </button>
+</div>
+<!-- Trust Badge -->
+<div class="mt-lg flex items-center gap-xs opacity-60">
+<span class="material-symbols-outlined text-sm">verified_user</span>
+<span class="font-label-sm text-label-sm">Trusted by 50,000+ Transit Travelers</span>
+</div>
+</div>
+</main>
+<!-- Micro-interaction script for button feedback -->
+<script>
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                button.classList.add('opacity-80', 'scale-95');
+            });
+            button.addEventListener('mouseup', () => {
+                button.classList.remove('opacity-80', 'scale-95');
+            });
+            button.addEventListener('mouseleave', () => {
+                button.classList.remove('opacity-80', 'scale-95');
+            });
+        });
+    </script>
+</body></html>

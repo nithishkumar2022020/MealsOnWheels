@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Document Verification - Step 2</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed-variant": "#114d5d",
+            "surface-container-lowest": "#ffffff",
+            "on-surface-variant": "#40484b",
+            "surface-container-low": "#f3f4f5",
+            "error-container": "#ffdad6",
+            "on-primary-container": "#87bbce",
+            "on-error-container": "#93000a",
+            "surface-container": "#edeeef",
+            "primary-fixed": "#b6ebfe",
+            "on-secondary": "#ffffff",
+            "inverse-on-surface": "#f0f1f2",
+            "primary-fixed-dim": "#9acee1",
+            "on-tertiary": "#ffffff",
+            "inverse-primary": "#9acee1",
+            "on-tertiary-container": "#ff9694",
+            "on-secondary-fixed-variant": "#7a3000",
+            "on-secondary-container": "#5e2300",
+            "tertiary-container": "#90001b",
+            "error": "#ba1a1a",
+            "secondary-fixed-dim": "#ffb693",
+            "secondary-fixed": "#ffdbcc",
+            "outline": "#70787c",
+            "surface": "#f8f9fa",
+            "surface-container-high": "#e7e8e9",
+            "tertiary-fixed": "#ffdad8",
+            "tertiary": "#660010",
+            "primary": "#003441",
+            "outline-variant": "#c0c8cb",
+            "surface-variant": "#e1e3e4",
+            "on-surface": "#191c1d",
+            "on-secondary-fixed": "#351000",
+            "inverse-surface": "#2e3132",
+            "surface-bright": "#f8f9fa",
+            "on-tertiary-fixed": "#410007",
+            "surface-container-highest": "#e1e3e4",
+            "on-background": "#191c1d",
+            "on-tertiary-fixed-variant": "#92001b",
+            "primary-container": "#0f4c5c",
+            "on-primary": "#ffffff",
+            "tertiary-fixed-dim": "#ffb3b0",
+            "secondary-container": "#fd7729",
+            "surface-dim": "#d9dadb",
+            "on-primary-fixed": "#001f28",
+            "surface-tint": "#306576",
+            "secondary": "#a04100",
+            "on-error": "#ffffff",
+            "background": "#f8f9fa"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "lg": "40px",
+            "xl": "64px",
+            "margin-mobile": "16px",
+            "gutter": "24px",
+            "margin-desktop": "48px",
+            "xs": "4px",
+            "md": "24px",
+            "base": "8px",
+            "sm": "12px",
+            "touch-target-min": "48px",
+            "container-margin": "16px"
+          },
+          "fontFamily": {
+            "display-lg-mobile": ["Montserrat"],
+            "headline-sm": ["Montserrat"],
+            "body-md": ["Montserrat"],
+            "body-lg": ["Montserrat"],
+            "label-sm": ["Montserrat"],
+            "label-md": ["Montserrat"],
+            "headline-md": ["Montserrat"],
+            "display-lg": ["Montserrat"]
+          },
+          "fontSize": {
+            "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+            "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+            "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+            "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+            "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      background-color: #EDF2F4;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      line-height: 1;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+    }
+    .glass-card {
+      background: rgba(248, 249, 250, 0.8);
+      backdrop-filter: blur(8px);
+      border: 1px solid #D1D9DB;
+    }
+    .step-active {
+      background-color: #003441;
+      color: white;
+    }
+    .step-inactive {
+      background-color: #e1e3e4;
+      color: #40484b;
+    }
+    .custom-shadow {
+      box-shadow: 0px 4px 20px rgba(15, 76, 92, 0.08);
+    }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen">
+<!-- Top App Bar -->
+<header class="bg-surface docked full-width top-0 shadow-sm flex justify-between items-center w-full px-container-margin py-base h-touch-target-min fixed z-50">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+<h1 class="font-bold font-headline-lg-mobile text-headline-lg-mobile text-primary">Verification</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">notifications</span>
+</div>
+</header>
+<main class="flex-grow pt-20 pb-24 px-margin-mobile md:px-margin-desktop max-w-3xl mx-auto w-full">
+<!-- Progress Indicator -->
+<div class="mb-lg">
+<div class="flex justify-between items-center mb-base">
+<span class="font-label-md text-label-md text-primary">Step 2 of 3</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Document Upload</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-secondary-container h-full w-[66%] transition-all duration-500"></div>
+</div>
+<div class="flex justify-between mt-sm">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold bg-primary text-on-primary">
+<span class="material-symbols-outlined !text-[14px]">check</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary">Profile</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold bg-primary text-on-primary">2</div>
+<span class="font-label-sm text-label-sm text-primary">Documents</span>
+</div>
+<div class="flex items-center gap-2 opacity-50">
+<div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold bg-surface-variant text-on-surface-variant">3</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Review</span>
+</div>
+</div>
+</div>
+<!-- Header Description -->
+<div class="mb-lg">
+<h2 class="font-headline-md text-headline-md text-primary mb-xs">Identity &amp; Vehicle</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">We need to verify your credentials before you can start delivering. High-quality photos ensure faster approval.</p>
+</div>
+<!-- Document Cards Cluster -->
+<div class="space-y-md">
+<!-- Driving License Card (Uploaded State) -->
+<div class="glass-card rounded-xl p-md transition-all hover:custom-shadow group">
+<div class="flex justify-between items-start mb-sm">
+<div class="flex gap-md">
+<div class="w-12 h-12 bg-primary-container/10 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-container text-[32px]">license</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Driving License</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Front and back view required</p>
+</div>
+</div>
+<div class="flex items-center gap-1 bg-green-100 text-green-800 px-2 py-1 rounded-full">
+<span class="material-symbols-outlined !text-[16px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-sm text-label-sm">Uploaded</span>
+</div>
+</div>
+<div class="mt-base flex gap-sm overflow-x-auto pb-2">
+<div class="relative min-w-[120px] h-20 rounded-lg bg-surface-container-high flex items-center justify-center overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover opacity-80" data-alt="A macro close-up of a realistic government-issued driving license card placed on a clean white surface with soft studio lighting. The image captures the texture of the plastic card and subtle security holographic elements. Sophisticated corporate aesthetic with cool tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOV4-TnlEb_KAiiSW6656ltIlJuWC6poKQJoVeYoUuD_wh8QIJ7kxIOuTJ_2PO2FneN0XR-nN80a37z9_BRIZMTcj1myIAkL69c2IoDdNPHPqSLO-QQrrDx41vHkOYWQjUUE_JwxbJIPWDycKLPyPbS_3pNxaaCim1kxqepCraYtspJOrtf31mLRVVeAt34cOT989gvTXKT8B3r7gcux_u6WXd2njXWcwLBVQGn3CXWieCmk6O_-klgQ"/>
+<div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white">visibility</span>
+</div>
+</div>
+<div class="min-w-[120px] h-20 rounded-lg border-2 border-dashed border-outline-variant flex flex-col items-center justify-center text-outline gap-1 hover:border-primary hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined">add_a_photo</span>
+<span class="font-label-sm text-label-sm">Add Back</span>
+</div>
+</div>
+</div>
+<!-- Vehicle Registration Card (Pending State) -->
+<div class="glass-card rounded-xl p-md transition-all hover:custom-shadow">
+<div class="flex justify-between items-start mb-md">
+<div class="flex gap-md">
+<div class="w-12 h-12 bg-secondary-container/10 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-[32px]">directions_car</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Vehicle RC</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Registration Certificate (Smart card)</p>
+</div>
+</div>
+<div class="flex items-center gap-1 bg-secondary-fixed text-on-secondary-container px-2 py-1 rounded-full">
+<span class="material-symbols-outlined !text-[16px]">pending</span>
+<span class="font-label-sm text-label-sm">Pending</span>
+</div>
+</div>
+<button class="w-full h-touch-target-min border-2 border-primary text-primary font-label-md text-label-md rounded-lg hover:bg-primary-container/5 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">upload</span>
+          Upload RC
+        </button>
+</div>
+<!-- Aadhar/ID Card (Action State) -->
+<div class="glass-card rounded-xl p-md transition-all hover:custom-shadow bg-surface-container-low/50">
+<details class="group" open="">
+<summary class="flex justify-between items-center cursor-pointer list-none">
+<div class="flex gap-md">
+<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[32px]">badge</span>
+</div>
+<div class="flex flex-col justify-center">
+<h3 class="font-headline-sm text-headline-sm text-primary">Aadhar Card/ID</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant group-open:hidden">Requires 12-digit ID verification</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="mt-lg pt-lg border-t border-outline-variant/30 animate-in fade-in slide-in-from-top-4">
+<div class="space-y-md">
+<div>
+<label class="block font-label-md text-label-md text-primary mb-xs">Aadhar Number</label>
+<input class="w-full h-12 bg-white border border-outline-variant rounded-lg px-md focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all font-body-md" placeholder="0000 0000 0000" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-md">
+<div class="flex flex-col gap-sm">
+<div class="w-full h-32 bg-surface-container rounded-xl flex flex-col items-center justify-center border-2 border-dashed border-outline-variant hover:border-primary group transition-all cursor-pointer">
+<span class="material-symbols-outlined text-[32px] text-outline group-hover:text-primary mb-xs">add_a_photo</span>
+<span class="font-label-sm text-label-sm text-outline group-hover:text-primary">Front Side</span>
+</div>
+</div>
+<div class="flex flex-col gap-sm">
+<div class="w-full h-32 bg-surface-container rounded-xl flex flex-col items-center justify-center border-2 border-dashed border-outline-variant hover:border-primary group transition-all cursor-pointer">
+<span class="material-symbols-outlined text-[32px] text-outline group-hover:text-primary mb-xs">add_a_photo</span>
+<span class="font-label-sm text-label-sm text-outline group-hover:text-primary">Back Side</span>
+</div>
+</div>
+</div>
+<div class="bg-primary-container/5 p-sm rounded-lg flex gap-sm">
+<span class="material-symbols-outlined text-primary-container">info</span>
+<p class="font-label-sm text-label-sm text-primary-container">Make sure your photo is clear and all text is readable.</p>
+</div>
+</div>
+</div>
+</details>
+</div>
+</div>
+<!-- Submit Action -->
+<div class="mt-xl flex flex-col gap-md">
+<p class="text-center font-label-sm text-label-sm text-on-surface-variant">By submitting, you agree to our <span class="text-primary underline cursor-pointer">Privacy Policy</span> regarding document handling.</p>
+<button class="w-full h-touch-target-min bg-primary text-on-primary font-label-md text-label-md rounded-lg shadow-md hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+        Submit for Verification
+        <span class="material-symbols-outlined">send</span>
+</button>
+<button class="w-full h-touch-target-min bg-transparent text-primary font-label-md text-label-md rounded-lg hover:bg-surface-container transition-colors">
+        Save Progress &amp; Exit
+      </button>
+</div>
+</main>
+<!-- Bottom Nav Bar (Hidden for Task Flow as per Suppression Rule) -->
+<!-- Contextual FAB Suppression active as this is a transactional document screen -->
+<script>
+    // Micro-interactions for button press
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('mousedown', () => {
+        button.classList.add('scale-95');
+      });
+      button.addEventListener('mouseup', () => {
+        button.classList.remove('scale-95');
+      });
+      button.addEventListener('mouseleave', () => {
+        button.classList.remove('scale-95');
+      });
+    });
+
+    // Simple scroll behavior for top bar shadow
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      if (window.scrollY > 10) {
+        header.classList.add('shadow-lg');
+      } else {
+        header.classList.remove('shadow-lg');
+      }
+    });
+  </script>
+</body></html>

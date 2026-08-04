@@ -16,14 +16,12 @@ BASE = {
     "ENVIRONMENT": "development",
     "DATABASE_URL": "postgresql+asyncpg://u:p@localhost:5432/db",
     "JWT_SECRET": "a-development-secret-that-is-long-enough-here",
-    "RESTAURANT_DASHBOARD_TOKEN": "dev-token",
 }
 
 PROD = {
     **BASE,
     "ENVIRONMENT": "production",
     "JWT_SECRET": "x" * 48,
-    "RESTAURANT_DASHBOARD_TOKEN": None,
     "CORS_ORIGINS": "https://app.example.org",
 }
 
@@ -52,11 +50,6 @@ def test_sync_database_url_rejected() -> None:
         )
 
 
-def test_dev_requires_dashboard_token() -> None:
-    with pytest.raises(ValidationError, match="RESTAURANT_DASHBOARD_TOKEN"):
-        Settings(_env_file=None, **{**BASE, "RESTAURANT_DASHBOARD_TOKEN": None})
-
-
 def test_otp_stub_allowed_outside_production() -> None:
     assert Settings(_env_file=None, **BASE).otp_stub_allowed is True
 
@@ -78,10 +71,16 @@ def test_production_rejects_placeholder_secret() -> None:
         Settings(_env_file=None, **{**PROD, "JWT_SECRET": placeholder})
 
 
-def test_production_rejects_shared_dashboard_token() -> None:
-    # The shared static token is demo-grade; production must not run on it.
-    with pytest.raises(ValidationError, match="RESTAURANT_DASHBOARD_TOKEN"):
-        Settings(_env_file=None, **{**PROD, "RESTAURANT_DASHBOARD_TOKEN": "anything"})
+def test_settings_has_no_shared_dashboard_token() -> None:
+    """The shared static token is gone, replaced by per-restaurant JWTs.
+
+    Asserted rather than merely deleted: a single secret that authenticates every
+    restaurant is exactly the kind of thing that gets reintroduced by someone who
+    needs restaurant auth in a hurry and finds a familiar-looking field name. The
+    replacement is `ACTOR_RESTAURANT` tokens in app/core/security.py.
+    """
+    settings = Settings(_env_file=None, **BASE)
+    assert not hasattr(settings, "RESTAURANT_DASHBOARD_TOKEN")
 
 
 def test_production_rejects_wildcard_cors() -> None:

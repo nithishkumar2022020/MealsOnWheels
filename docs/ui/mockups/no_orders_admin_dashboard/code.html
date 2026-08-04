@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MealsOnWheels | Order Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#e1e3e4",
+                    "primary-fixed-dim": "#9acee1",
+                    "primary": "#003441",
+                    "inverse-on-surface": "#f0f1f2",
+                    "on-error-container": "#93000a",
+                    "secondary": "#a04100",
+                    "secondary-fixed-dim": "#ffb693",
+                    "primary-fixed": "#b6ebfe",
+                    "inverse-surface": "#2e3132",
+                    "surface-container": "#edeeef",
+                    "on-primary-container": "#87bbce",
+                    "on-error": "#ffffff",
+                    "surface-dim": "#d9dadb",
+                    "on-secondary-container": "#5e2300",
+                    "on-surface-variant": "#40484b",
+                    "outline": "#70787c",
+                    "on-tertiary-fixed-variant": "#92001b",
+                    "surface": "#f8f9fa",
+                    "on-primary": "#ffffff",
+                    "tertiary-container": "#90001b",
+                    "surface-tint": "#306576",
+                    "background": "#f8f9fa",
+                    "on-secondary-fixed-variant": "#7a3000",
+                    "outline-variant": "#c0c8cb",
+                    "on-surface": "#191c1d",
+                    "surface-variant": "#e1e3e4",
+                    "error": "#ba1a1a",
+                    "tertiary": "#660010",
+                    "surface-container-low": "#f3f4f5",
+                    "secondary-container": "#fd7729",
+                    "on-secondary": "#ffffff",
+                    "inverse-primary": "#9acee1",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#f8f9fa",
+                    "secondary-fixed": "#ffdbcc",
+                    "on-primary-fixed-variant": "#114d5d",
+                    "on-primary-fixed": "#001f28",
+                    "tertiary-fixed-dim": "#ffb3b0",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-container": "#ff9694",
+                    "primary-container": "#0f4c5c",
+                    "on-secondary-fixed": "#351000",
+                    "surface-container-high": "#e7e8e9",
+                    "on-tertiary-fixed": "#410007",
+                    "on-tertiary": "#ffffff",
+                    "on-background": "#191c1d",
+                    "tertiary-fixed": "#ffdad8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "md": "24px",
+                    "sm": "12px",
+                    "gutter": "24px",
+                    "base": "8px",
+                    "margin-desktop": "48px",
+                    "lg": "40px",
+                    "xl": "64px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "headline-sm": ["Montserrat"],
+                    "display-lg": ["Montserrat"],
+                    "label-md": ["Montserrat"],
+                    "label-sm": ["Montserrat"],
+                    "display-lg-mobile": ["Montserrat"],
+                    "headline-md": ["Montserrat"],
+                    "body-md": ["Montserrat"],
+                    "body-lg": ["Montserrat"]
+            },
+            "fontSize": {
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      body {
+        background-color: #EDF2F4;
+        font-family: 'Montserrat', sans-serif;
+        color: #191c1d;
+      }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .pulse-soft {
+        animation: pulse 3s infinite ease-in-out;
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.8; transform: scale(1.02); }
+      }
+      .transition-all-custom {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .bento-grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 24px;
+      }
+    </style>
+</head>
+<body class="bg-background min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex items-center justify-between px-margin-mobile md:px-margin-desktop h-16 bg-surface dark:bg-surface-dim shadow-sm dark:shadow-none border-b border-outline-variant dark:border-outline">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary p-2 hover:bg-surface-container-high rounded-full transition-colors">location_on</button>
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg font-bold text-primary">MealsOnWheels</h1>
+</div>
+<!-- Desktop Nav -->
+<nav class="hidden md:flex items-center gap-8">
+<a class="font-label-md text-label-md text-primary font-bold" href="#">Home</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Stops</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Orders</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Profile</a>
+<div class="h-6 w-[1px] bg-outline-variant"></div>
+<button class="material-symbols-outlined text-primary p-2 hover:bg-surface-container-high rounded-full transition-colors relative">
+                notifications
+                <span class="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full"></span>
+</button>
+</nav>
+<button class="md:hidden material-symbols-outlined text-primary">notifications</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-24 pb-32 px-margin-mobile md:px-margin-desktop max-w-[1280px] mx-auto w-full">
+<!-- Dashboard Header -->
+<div class="mb-lg flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<p class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-1">Kitchen Console</p>
+<h2 class="font-headline-md text-headline-md text-primary">Live Order Feed</h2>
+</div>
+<!-- Restaurant Status Toggle -->
+<div class="flex items-center bg-surface-container-low rounded-xl p-1 border border-outline-variant">
+<button class="px-4 py-2 rounded-lg font-label-md text-label-md bg-secondary text-on-secondary shadow-sm">
+                    Open
+                </button>
+<button class="px-4 py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high transition-colors">
+                    Closed
+                </button>
+</div>
+</div>
+<!-- Bento Layout for Dashboard Utility -->
+<div class="bento-grid">
+<!-- Main Empty State Centerpiece -->
+<div class="col-span-12 lg:col-span-8 min-h-[500px] bg-surface rounded-2xl border border-outline-variant flex flex-col items-center justify-center p-xl text-center relative overflow-hidden">
+<!-- Atmospheric Background Elements -->
+<div class="absolute top-0 right-0 p-8 opacity-5">
+<span class="material-symbols-outlined text-[120px]">restaurant</span>
+</div>
+<!-- Illustration Section -->
+<div class="relative mb-lg">
+<!-- Serving Tray SVG Illustration -->
+<div class="w-48 h-48 md:w-64 md:h-64 flex items-center justify-center text-primary-container opacity-20">
+<svg class="w-full h-full" fill="none" viewbox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<path d="M20 150H180V160C180 165.523 175.523 170 170 170H30C24.4772 170 20 165.523 20 160V150Z" fill="currentColor"></path>
+<path d="M100 40C60 40 30 70 30 110H170C170 70 140 40 100 40Z" stroke="currentColor" stroke-linecap="round" stroke-width="4"></path>
+<path d="M90 30H110V40H90V30Z" fill="currentColor"></path>
+<circle cx="100" cy="25" fill="currentColor" r="5"></circle>
+<line stroke="currentColor" stroke-dasharray="8 8" stroke-width="2" x1="40" x2="160" y1="130" y2="130"></line>
+</svg>
+</div>
+<!-- Decorative Ring -->
+<div class="absolute inset-0 border-2 border-dashed border-primary-container/10 rounded-full animate-[spin_20s_linear_infinite]"></div>
+</div>
+<!-- Text Content -->
+<div class="max-w-md">
+<h3 class="font-headline-md text-headline-md text-primary mb-2">No orders yet</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-xl">
+                        Your next meal request is just a click away. Make sure your status is set to <span class="font-bold text-secondary">'Open'</span> to start receiving deliveries.
+                    </p>
+<button class="bg-primary text-on-primary font-label-md text-label-md px-xl py-md rounded-xl hover:scale-105 active:scale-95 transition-all-custom flex items-center gap-2 mx-auto shadow-md" onclick="simulateRefresh(this)">
+<span class="material-symbols-outlined text-[20px]">refresh</span>
+                        Refresh Feed
+                    </button>
+</div>
+</div>
+<!-- Sidebar Stats/Utility -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-md">
+<!-- Performance Card -->
+<div class="bg-surface rounded-2xl border border-outline-variant p-md">
+<div class="flex justify-between items-start mb-md">
+<h4 class="font-label-md text-label-md text-primary uppercase tracking-wider">Today's Summary</h4>
+<span class="material-symbols-outlined text-secondary">trending_up</span>
+</div>
+<div class="space-y-sm">
+<div class="flex justify-between items-center py-2 border-b border-outline-variant">
+<span class="font-body-md text-on-surface-variant">Completed</span>
+<span class="font-headline-sm text-headline-sm text-primary">0</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant">
+<span class="font-body-md text-on-surface-variant">Revenue</span>
+<span class="font-headline-sm text-headline-sm text-primary">$0.00</span>
+</div>
+<div class="flex justify-between items-center py-2">
+<span class="font-body-md text-on-surface-variant">Avg. Prep Time</span>
+<span class="font-headline-sm text-headline-sm text-primary">--</span>
+</div>
+</div>
+</div>
+<!-- Live Help/Tips Card -->
+<div class="bg-primary-container text-on-primary-container rounded-2xl p-md flex flex-col gap-sm relative overflow-hidden">
+<div class="relative z-10">
+<div class="w-10 h-10 bg-on-primary-container/20 rounded-lg flex items-center justify-center mb-sm">
+<span class="material-symbols-outlined">lightbulb</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm">Operational Tip</h4>
+<p class="font-body-md opacity-90">High traffic is expected in your area between 6:00 PM and 8:00 PM tonight. Ensure your kitchen is fully staffed.</p>
+</div>
+<!-- Aesthetic Vector Background -->
+<div class="absolute -bottom-4 -right-4 opacity-10">
+<span class="material-symbols-outlined text-[100px]" style="font-variation-settings: 'FILL' 1;">timer</span>
+</div>
+</div>
+<!-- Recent Activity Empty State -->
+<div class="bg-surface rounded-2xl border border-outline-variant p-md flex-grow">
+<h4 class="font-label-md text-label-md text-primary uppercase tracking-wider mb-md">Recent Alerts</h4>
+<div class="flex flex-col items-center justify-center py-xl text-center opacity-40">
+<span class="material-symbols-outlined text-[40px] mb-2">history</span>
+<p class="font-label-sm text-label-sm">No activity recorded for the current session.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 flex justify-around items-center h-20 px-4 pb-2 bg-surface dark:bg-inverse-surface border-t border-outline-variant dark:border-outline shadow-[0px_-4px_20px_rgba(15,76,92,0.08)]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1.5" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-secondary-container text-on-primary-container dark:text-on-secondary-container rounded-xl px-4 py-1.5" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-label-sm text-label-sm font-bold">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1.5" href="#">
+<span class="material-symbols-outlined">departure_board</span>
+<span class="font-label-sm text-label-sm">Stops</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1.5" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        function simulateRefresh(button) {
+            const originalContent = button.innerHTML;
+            button.disabled = true;
+            button.innerHTML = '<span class="material-symbols-outlined animate-spin">refresh</span> Processing...';
+            button.classList.add('opacity-80');
+
+            setTimeout(() => {
+                button.innerHTML = '<span class="material-symbols-outlined">check</span> Updated';
+                button.classList.replace('bg-primary', 'bg-secondary');
+                
+                setTimeout(() => {
+                    button.innerHTML = originalContent;
+                    button.disabled = false;
+                    button.classList.replace('bg-secondary', 'bg-primary');
+                    button.classList.remove('opacity-80');
+                }, 2000);
+            }, 1200);
+        }
+
+        // Simple subtle parallax/mouse interaction for the illustration
+        document.addEventListener('mousemove', (e) => {
+            const tray = document.querySelector('svg');
+            if (tray) {
+                const moveX = (e.clientX - window.innerWidth / 2) / 100;
+                const moveY = (e.clientY - window.innerHeight / 2) / 100;
+                tray.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            }
+        });
+    </script>
+</body></html>

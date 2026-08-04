@@ -169,12 +169,19 @@ at search time, keyed on `osm_id`:
 INSERT INTO restaurants (name, phone, address, location, osm_id, avg_prep_time_minutes)
 VALUES (:name, '', :address, ST_SetSRID(ST_MakePoint(:lon, :lat), 4326)::geography,
         :osm_id, 30)
-ON CONFLICT (osm_id) DO UPDATE
+ON CONFLICT (osm_id) WHERE osm_id IS NOT NULL DO UPDATE
   SET name       = EXCLUDED.name,
       address    = COALESCE(EXCLUDED.address, restaurants.address),
       updated_at = now()
 RETURNING id;
 ```
+
+**The `WHERE osm_id IS NOT NULL` in the conflict target is required, not decoration.**
+`idx_restaurants_osm_id` is a *partial* unique index (§3.2), and PostgreSQL will not infer a
+partial index as an arbiter unless the conflict target repeats its predicate. Without it the
+statement fails outright with `no unique or exclusion constraint matching the ON CONFLICT
+specification` — the upsert cannot run at all. An earlier draft of this section omitted the
+predicate and so could never have executed against the index §3.2 defines.
 
 Every search result therefore carries a real integer `id`. Consequences:
 

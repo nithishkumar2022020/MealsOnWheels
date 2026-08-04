@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Connection Error | En route</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+        @keyframes drift {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        .animate-drift {
+            animation: drift 6s ease-in-out infinite;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(209, 217, 219, 0.5);
+        }
+    </style>
+<!-- Include Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#e1e3e4",
+                    "primary-fixed-dim": "#9acee1",
+                    "primary": "#003441",
+                    "inverse-on-surface": "#f0f1f2",
+                    "on-error-container": "#93000a",
+                    "secondary": "#a04100",
+                    "secondary-fixed-dim": "#ffb693",
+                    "primary-fixed": "#b6ebfe",
+                    "inverse-surface": "#2e3132",
+                    "surface-container": "#edeeef",
+                    "on-primary-container": "#87bbce",
+                    "on-error": "#ffffff",
+                    "surface-dim": "#d9dadb",
+                    "on-secondary-container": "#5e2300",
+                    "on-surface-variant": "#40484b",
+                    "outline": "#70787c",
+                    "on-tertiary-fixed-variant": "#92001b",
+                    "surface": "#f8f9fa",
+                    "on-primary": "#ffffff",
+                    "tertiary-container": "#90001b",
+                    "surface-tint": "#306576",
+                    "background": "#f8f9fa",
+                    "on-secondary-fixed-variant": "#7a3000",
+                    "outline-variant": "#c0c8cb",
+                    "on-surface": "#191c1d",
+                    "surface-variant": "#e1e3e4",
+                    "error": "#ba1a1a",
+                    "tertiary": "#660010",
+                    "surface-container-low": "#f3f4f5",
+                    "secondary-container": "#fd7729",
+                    "on-secondary": "#ffffff",
+                    "inverse-primary": "#9acee1",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#f8f9fa",
+                    "secondary-fixed": "#ffdbcc",
+                    "on-primary-fixed-variant": "#114d5d",
+                    "on-primary-fixed": "#001f28",
+                    "tertiary-fixed-dim": "#ffb3b0",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-container": "#ff9694",
+                    "primary-container": "#0f4c5c",
+                    "on-secondary-fixed": "#351000",
+                    "surface-container-high": "#e7e8e9",
+                    "on-tertiary-fixed": "#410007",
+                    "on-tertiary": "#ffffff",
+                    "on-background": "#191c1d",
+                    "tertiary-fixed": "#ffdad8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "md": "24px",
+                    "sm": "12px",
+                    "gutter": "24px",
+                    "base": "8px",
+                    "margin-desktop": "48px",
+                    "lg": "40px",
+                    "xl": "64px",
+                    "margin-mobile": "16px",
+                    "touch-target-min": "48px",
+                    "container-margin": "24px"
+            },
+            "fontFamily": {
+                    "headline-sm": ["Montserrat"],
+                    "display-lg": ["Montserrat"],
+                    "label-md": ["Montserrat"],
+                    "label-sm": ["Montserrat"],
+                    "display-lg-mobile": ["Montserrat"],
+                    "headline-md": ["Montserrat"],
+                    "body-md": ["Montserrat"],
+                    "body-lg": ["Montserrat"]
+            },
+            "fontSize": {
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col font-body-md text-body-md selection:bg-primary-fixed-dim selection:text-primary">
+<!-- TopAppBar: Derived from Shared Components -->
+<header class="bg-surface dark:bg-surface-dim shadow-sm docked full-width top-0 z-50">
+<nav class="flex justify-between items-center w-full px-container-margin py-base h-touch-target-min">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim" data-icon="location_on">location_on</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary dark:text-primary-fixed-dim">En route: New Delhi Exp</h1>
+</div>
+<div class="flex items-center gap-base">
+<button class="material-symbols-outlined text-on-surface-variant dark:text-secondary hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors rounded-full p-2" data-icon="notifications">notifications</button>
+</div>
+</nav>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex items-center justify-center relative overflow-hidden px-margin-mobile md:px-margin-desktop py-xl">
+<!-- Subtle Atmospheric Background Effect -->
+<div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+<div class="absolute -top-[10%] -left-[5%] w-[400px] h-[400px] bg-primary-fixed-dim/10 rounded-full blur-[100px]"></div>
+<div class="absolute bottom-[10%] right-[5%] w-[300px] h-[300px] bg-secondary-fixed/20 rounded-full blur-[100px]"></div>
+<!-- Grid Pattern for Corporate Feel -->
+<div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle at 2px 2px, #003441 1px, transparent 0); background-size: 40px 40px;"></div>
+</div>
+<!-- Bento Grid / Layout Wrapper -->
+<div class="max-w-4xl w-full z-10 grid grid-cols-1 md:grid-cols-12 gap-gutter items-center">
+<!-- Left Side: Visual Illustration (Asymmetric Layout) -->
+<div class="md:col-span-5 flex flex-col items-center md:items-end justify-center">
+<div class="relative w-48 h-48 md:w-64 md:h-64 flex items-center justify-center">
+<!-- Decorative Soft Red Rings -->
+<div class="absolute inset-0 border-2 border-error/5 rounded-full scale-110 animate-pulse"></div>
+<div class="absolute inset-0 border border-error/10 rounded-full scale-125"></div>
+<!-- Main Icon Container -->
+<div class="glass-card w-32 h-32 md:w-40 md:h-40 rounded-3xl flex items-center justify-center shadow-lg animate-drift">
+<span class="material-symbols-outlined text-[80px] md:text-[100px] text-error font-light" data-icon="cloud_off" style="font-variation-settings: 'wght' 200;">cloud_off</span>
+</div>
+<!-- Small Floating Detail Icons -->
+<div class="absolute top-4 right-0 glass-card p-2 rounded-xl shadow-md rotate-12">
+<span class="material-symbols-outlined text-outline text-xl" data-icon="signal_wifi_off">signal_wifi_off</span>
+</div>
+<div class="absolute bottom-10 -left-4 glass-card p-2 rounded-xl shadow-md -rotate-6">
+<span class="material-symbols-outlined text-outline text-xl" data-icon="refresh">refresh</span>
+</div>
+</div>
+</div>
+<!-- Right Side: Content -->
+<div class="md:col-span-7 flex flex-col text-center md:text-left">
+<div class="space-y-sm">
+<span class="inline-flex items-center gap-xs px-sm py-1 bg-error-container text-on-error-container rounded-full font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-sm" data-icon="report_problem">report_problem</span>
+                        Connection Unstable
+                    </span>
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary tracking-tight">
+                        Oops! Something <br class="hidden md:block"/> went wrong
+                    </h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md mx-auto md:mx-0 leading-relaxed">
+                        We couldn't connect to the server. Please check your internet connection and try again.
+                    </p>
+</div>
+<!-- CTA Section -->
+<div class="mt-lg flex flex-col sm:flex-row gap-base justify-center md:justify-start">
+<button class="bg-primary text-on-primary h-[48px] px-xl rounded-lg font-label-md text-label-md flex items-center justify-center gap-xs shadow-md hover:opacity-90 active:scale-95 transition-all">
+                        Try again
+                        <span class="material-symbols-outlined text-sm" data-icon="refresh">refresh</span>
+</button>
+<button class="border border-outline text-on-surface-variant h-[48px] px-xl rounded-lg font-label-md text-label-md flex items-center justify-center hover:bg-surface-container-low transition-colors active:scale-95">
+                        Go back
+                    </button>
+</div>
+<!-- Contextual Detail Card (Editorial/Modern Touch) -->
+<div class="mt-xl p-md border-t border-outline-variant opacity-60">
+<div class="flex items-center gap-base">
+<div class="p-xs bg-surface-container-highest rounded">
+<span class="material-symbols-outlined text-sm" data-icon="info">info</span>
+</div>
+<p class="font-label-sm text-label-sm uppercase tracking-widest text-outline">Error Log: TIMEOUT_REF_503</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar: Derived from Shared Components -->
+<!-- Suppression Logic: Suppressed because "Error" screen is task-focused/dead-end -->
+<!-- However, to follow the task of "Create the HTML for each predicted component", I will render it but keep it subtle -->
+<footer class="bg-surface dark:bg-surface-container-lowest shadow-lg docked full-width bottom-0 rounded-t-xl z-50 fixed bottom-0 left-0 w-full flex justify-around items-center px-container-margin pb-4 pt-2">
+<div class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-variant transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-variant transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="departure_board">departure_board</span>
+<span class="font-label-sm text-label-sm">Stops</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-variant transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-variant transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</div>
+</footer>
+<script>
+        // Micro-interaction for the "Try Again" button
+        document.querySelector('button.bg-primary').addEventListener('click', function() {
+            const icon = this.querySelector('.material-symbols-outlined');
+            icon.classList.add('animate-spin');
+            this.textContent = 'Retrying...';
+            this.appendChild(icon);
+            
+            // Simulating a network check
+            setTimeout(() => {
+                icon.classList.remove('animate-spin');
+                this.textContent = 'Try again';
+                this.appendChild(icon);
+                alert("Checking connection... server still unreachable.");
+            }, 2000);
+        });
+    </script>
+</body></html>

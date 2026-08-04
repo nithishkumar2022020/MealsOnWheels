@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Highway Dhaba - Menu</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Inter:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Montserrat:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline-variant": "#e4bebc",
+                    "on-background": "#1a1c1c",
+                    "surface-tint": "#bb162c",
+                    "on-tertiary-container": "#fffbff",
+                    "surface": "#f9f9f9",
+                    "on-secondary-fixed-variant": "#474747",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed": "#291800",
+                    "surface-container-highest": "#e2e2e2",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed": "#410007",
+                    "surface-variant": "#e2e2e2",
+                    "surface-dim": "#dadada",
+                    "secondary-fixed": "#e4e2e1",
+                    "inverse-primary": "#ffb3b1",
+                    "primary-fixed-dim": "#ffb3b1",
+                    "tertiary-fixed-dim": "#ffb954",
+                    "on-primary-fixed-variant": "#92001c",
+                    "error": "#ba1a1a",
+                    "background": "#f9f9f9",
+                    "tertiary-fixed": "#ffddb4",
+                    "on-surface-variant": "#5b403f",
+                    "tertiary": "#805200",
+                    "primary-fixed": "#ffdad8",
+                    "surface-bright": "#f9f9f9",
+                    "secondary-container": "#e4e2e1",
+                    "on-error": "#ffffff",
+                    "primary": "#b7122a",
+                    "inverse-on-surface": "#f1f1f1",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-container": "#a06900",
+                    "surface-container-high": "#e8e8e8",
+                    "surface-container": "#eeeeee",
+                    "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff",
+                    "inverse-surface": "#2f3131",
+                    "secondary": "#5f5e5e",
+                    "on-primary-container": "#fffbff",
+                    "on-tertiary-fixed-variant": "#633f00",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed-dim": "#c8c6c6",
+                    "on-secondary-container": "#656464",
+                    "primary-container": "#db313f",
+                    "outline": "#8f6f6e",
+                    "on-secondary-fixed": "#1b1c1c",
+                    "on-surface": "#1a1c1c",
+                    "surface-container-low": "#f3f3f3"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-margin": "20px",
+                    "gutter": "16px",
+                    "touch-target-min": "48px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "headline-xl": ["Montserrat"],
+                    "headline-lg": ["Montserrat"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Montserrat"],
+                    "label-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-32">
+<!-- TopAppBar (Mapped from Shared Components) -->
+<header class="sticky top-0 z-50 bg-surface shadow-sm h-touch-target-min flex justify-between items-center px-container-margin">
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-surface-container-low transition-colors rounded-full active:scale-95">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">En route: New Delhi Exp</h1>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">notifications</span>
+</div>
+</header>
+<!-- Hero Section -->
+<section class="relative w-full h-64 overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
+<div class="absolute inset-0" data-alt="A professional food photography shot of a traditional Indian dhaba exterior with rustic wooden tables, warm glowing lanterns, and steam rising from large copper pots. The lighting is golden hour, creating a cozy and inviting atmosphere. The aesthetic is clean and modern yet authentic, with rich textures and vibrant colors like deep reds and earthy browns." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDmc5iVKyTV-i_YmykNzN3EU5aQI8QE_b1AFIl28T_hYy9SfmKx5rym4akQ-Q5MiTZ1nDnflb_k-zU_GdNU7FVo-xy5fxHq8HIhlLJ8shzrNRijTlbj5tvduGGkYKQfOu7NaCEZi0D2lPcFm0Hnhasx5_dsVAGP8luOchW_M7ML6DD0ivkP7NqFU9VIFdZ7i0a6qvks7P2uxKziavBgElALLdFDssI2gfmU3UbU13ss5alBiqVKWVE8bg')"></div>
+<div class="absolute bottom-0 left-0 p-container-margin z-20 w-full">
+<div class="flex flex-col gap-2">
+<div class="flex gap-2">
+<span class="bg-tertiary-container text-on-tertiary-container text-[10px] font-bold px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+                        At Ambala Stop
+                    </span>
+<span class="bg-green-600 text-white text-[10px] font-bold px-3 py-1 rounded-full flex items-center gap-1">
+                        4.4 <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</span>
+</div>
+<h2 class="font-headline-xl text-headline-xl text-white">The Highway Dhaba</h2>
+<p class="text-white/80 font-label-md text-label-md">North Indian • Tandoor • 25-30 mins</p>
+</div>
+</div>
+</section>
+<!-- Categories Tab Bar -->
+<nav class="sticky top-[48px] z-40 bg-surface border-b border-surface-container-highest shadow-sm">
+<div class="flex gap-6 px-container-margin overflow-x-auto hide-scrollbar py-4">
+<button class="flex-shrink-0 text-primary border-b-2 border-primary pb-1 font-label-md text-label-md active:scale-95 transition-transform">Bestsellers</button>
+<button class="flex-shrink-0 text-secondary hover:text-primary transition-colors font-label-md text-label-md">Thalis</button>
+<button class="flex-shrink-0 text-secondary hover:text-primary transition-colors font-label-md text-label-md">Quick Bites</button>
+<button class="flex-shrink-0 text-secondary hover:text-primary transition-colors font-label-md text-label-md">Beverages</button>
+</div>
+</nav>
+<!-- Menu List -->
+<main class="px-container-margin py-base flex flex-col gap-gutter">
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile pt-4">Bestsellers</h3>
+<!-- Bento Grid / Asymmetric Layout for Menu -->
+<div class="grid grid-cols-1 gap-gutter">
+<!-- Menu Item 1 -->
+<div class="bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.06)] overflow-hidden flex items-stretch transition-transform hover:translate-y-[-2px]">
+<div class="flex-1 p-card-padding flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-1 mb-1">
+<span class="material-symbols-outlined text-green-600 text-[16px]" style="font-variation-settings: 'FILL' 1;">eco</span>
+<span class="text-[10px] font-bold text-green-600 uppercase tracking-wider">Veg</span>
+</div>
+<h4 class="font-label-md text-label-md text-on-background">Paneer Butter Masala</h4>
+<p class="text-secondary text-[12px] line-clamp-2 mt-1">Rich, creamy tomato gravy with soft paneer cubes and a dollop of fresh butter.</p>
+</div>
+<div class="mt-4 flex items-center justify-between">
+<span class="font-bold text-on-background">₹280</span>
+<button class="bg-primary hover:bg-primary-container text-white px-6 py-2 rounded-lg font-bold text-sm shadow-md active:scale-90 transition-all" onclick="updateCart(280)">ADD</button>
+</div>
+</div>
+<div class="w-32 h-32 m-2 rounded-lg bg-center bg-cover flex-shrink-0" data-alt="A close-up gourmet shot of creamy Paneer Butter Masala in a black ceramic bowl, garnished with a swirl of fresh cream and coriander leaves. The lighting is dramatic and focused, emphasizing the vibrant orange sauce and soft textures. The background is a clean, modern tabletop setting in a high-contrast corporate food style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAeWY9U9zCb4DWWzqP-2Rk0NBRNWZcQBpOFiV4PBvFSBBedLRu88neDUlzPuW3L4m4S6o0fUo7BtKUCK72jEk-pDKA_Q6GJeHcEz80pIvp-ypL2RjOd0twE0GnfxZPUpmVIDCckOJ2W7hMtlo0EaiXugL_2Mx4gAhmcI9k3QbKJ3fwhMIBBP7_ohRVm0-wTxKAjbDUVPHQbp39vOhCYSnOZdQIwkhZUcuDgfjPP9TyyfZbcXD7P7NEKzA')"></div>
+</div>
+<!-- Menu Item 2 -->
+<div class="bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.06)] overflow-hidden flex items-stretch transition-transform hover:translate-y-[-2px]">
+<div class="flex-1 p-card-padding flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-1 mb-1">
+<span class="material-symbols-outlined text-red-600 text-[16px]" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+<span class="text-[10px] font-bold text-red-600 uppercase tracking-wider">Non-Veg</span>
+</div>
+<h4 class="font-label-md text-label-md text-on-background">Butter Chicken Thali</h4>
+<p class="text-secondary text-[12px] line-clamp-2 mt-1">Includes Butter Chicken, Dal Makhani, 2 Butter Naan, Rice, Salad and Dessert.</p>
+</div>
+<div class="mt-4 flex items-center justify-between">
+<span class="font-bold text-on-background">₹450</span>
+<button class="bg-primary hover:bg-primary-container text-white px-6 py-2 rounded-lg font-bold text-sm shadow-md active:scale-90 transition-all" onclick="updateCart(450)">ADD</button>
+</div>
+</div>
+<div class="w-32 h-32 m-2 rounded-lg bg-center bg-cover flex-shrink-0" data-alt="A top-down professional thali photography featuring multiple small copper bowls arranged on a large platter. Highlights include bright red butter chicken, dark lentil dal, fluffy rice, and charred butter naan. The setting is bright and clean with a modern light-mode aesthetic, emphasizing freshness and abundance." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAcHj73sZXl1gedAjfZi-1VK_MTwPKuvrJzCaZYjRmy6Hr68U1hujnO1kXUBAN_gxeJSAgt51nXA3kzfOLOpde4vH2vheVSUCQJjPFUSR-pT7LB4eeY3yLA72w7W0S7IcFcke-VtCnVHY2HdenI3GxytsV-w6rOKVwnHr2c6BzheJDnuq_0PEJ-Wf1LDuYH-2eyCb-Js9dH7qqXJhWlfLIhvQPUBAtVRRQb1N1qnVmr_taZgBOMstZFSQ')"></div>
+</div>
+<!-- Menu Item 3 -->
+<div class="bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.06)] overflow-hidden flex items-stretch transition-transform hover:translate-y-[-2px]">
+<div class="flex-1 p-card-padding flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-1 mb-1">
+<span class="material-symbols-outlined text-green-600 text-[16px]" style="font-variation-settings: 'FILL' 1;">eco</span>
+<span class="text-[10px] font-bold text-green-600 uppercase tracking-wider">Veg</span>
+</div>
+<h4 class="font-label-md text-label-md text-on-background">Amritsari Kulcha with Chole</h4>
+<p class="text-secondary text-[12px] line-clamp-2 mt-1">Crispy, flaky stuffed bread served with spicy chickpea curry and tangy pickles.</p>
+</div>
+<div class="mt-4 flex items-center justify-between">
+<span class="font-bold text-on-background">₹220</span>
+<button class="bg-primary hover:bg-primary-container text-white px-6 py-2 rounded-lg font-bold text-sm shadow-md active:scale-90 transition-all" onclick="updateCart(220)">ADD</button>
+</div>
+</div>
+<div class="w-32 h-32 m-2 rounded-lg bg-center bg-cover flex-shrink-0" data-alt="A macro shot of crispy, golden-brown Amritsari Kulcha with visible butter glisten and herb flecks. Next to it is a bowl of dark, spicy chole. The composition is artistic and asymmetric, using a neutral stone-textured background that aligns with a high-end modern corporate dining aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBwzuOvHIHKatWsXYaRrq_Fw2zVd2l9FmKmokadiFsoVIe18kxNrFt42-AWTVkXgP2HI7V6ZaDY5bYReC1MA3O6XY_5e1VSb7z6ZMiF4-u764XDABH-x8VQNl-5onIUvsm7VNRXgO-BuhR10qihyWy_eKid1mJqLX5XAXoW0w1u7eaKO7EN_5iCrKgbCFmYmzX4v-i1DmxXcY6h6l12_U3_9R5jqD5yyMzGH1bYQxEjA5bnwBP6ZKV6-Q')"></div>
+</div>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile pt-8">Beverages</h3>
+<div class="grid grid-cols-2 gap-gutter">
+<!-- Beverage 1 -->
+<div class="bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.06)] overflow-hidden flex flex-col p-2">
+<div class="w-full aspect-square rounded-lg bg-center bg-cover mb-2" data-alt="A tall, condensation-beaded glass of thick, frothy Punjabi Lassi garnished with crushed pistachios and saffron strands. The lighting is bright and summery, making the drink look incredibly refreshing. The background is a clean white marble surface, conveying a sense of premium quality and hygiene." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC-qCKZ4sLILAjOzZLVCmZd6OvIrZAykDO5gR63O6NZ0oIJC3KlyVj8aXF9EDOglEEw_Mk6jsjpTbWFh_7RmJw_W5sy9MW5GpH76enkhvvLXqdyd2j9EdAvkue83L0RhKfyBDTajJUWPo2mpZGYZZ2yOO4jUe9n2qBUUC6w2X9d1XDGQZ87OgXXWnJFP5Ace4eK9fbnzgQ7I-hP2i03bmr2beZiN1cmfbhTHUwiyr2SL8gxQkZRjvoQCg')"></div>
+<div class="px-1 flex flex-col gap-1">
+<h4 class="font-label-md text-label-md text-on-background truncate">Sweet Punjabi Lassi</h4>
+<div class="flex justify-between items-center mt-1">
+<span class="font-bold text-on-background text-sm">₹90</span>
+<button class="text-primary font-bold text-xs uppercase border border-outline-variant px-3 py-1 rounded-md hover:bg-primary-fixed transition-colors" onclick="updateCart(90)">Add</button>
+</div>
+</div>
+</div>
+<!-- Beverage 2 -->
+<div class="bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.06)] overflow-hidden flex flex-col p-2">
+<div class="w-full aspect-square rounded-lg bg-center bg-cover mb-2" data-alt="Two small traditional clay cups (kulhad) filled with steaming hot masala chai. The steam is visible against a dark, out-of-focus background. The lighting is warm and directional, emphasizing the rich brown color of the tea and the rustic texture of the clay." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD6BcFm5Tt3sKdIdpSTUHejkpX0Lvm2rO8kWIDOaIhrE-nJpLox6I9x6NMDqvHc414Lbd_OSGJXTg6rLljA2Q2s_nQg7vPMdAPrGrRHfJe2CKGIuJd4_LzWP2rcexxQqF-maIIbUttqH2KaHuTpF1jfILb39_pD_VxZ4LuoL1XebaYVh21tXfBQnMkM0P_JaJ5owejgyjrbT5XaObNdV-Qaq5QSK1teln33l4lRFygKbX1RLk-XNy1hHw')"></div>
+<div class="px-1 flex flex-col gap-1">
+<h4 class="font-label-md text-label-md text-on-background truncate">Kulhad Masala Chai</h4>
+<div class="flex justify-between items-center mt-1">
+<span class="font-bold text-on-background text-sm">₹40</span>
+<button class="text-primary font-bold text-xs uppercase border border-outline-variant px-3 py-1 rounded-md hover:bg-primary-fixed transition-colors" onclick="updateCart(40)">Add</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Sticky Cart Summary -->
+<div class="fixed bottom-0 left-0 w-full z-50 transform translate-y-full transition-transform duration-300" id="cart-summary">
+<div class="m-container-margin bg-primary-container text-on-primary-container p-4 rounded-xl shadow-lg flex justify-between items-center border border-white/20">
+<div class="flex flex-col">
+<span class="font-bold text-sm" id="cart-count">1 Item | ₹250</span>
+<span class="text-[10px] opacity-80">Extra charges may apply</span>
+</div>
+<button class="flex items-center gap-1 font-bold text-sm uppercase tracking-widest active:scale-95 transition-transform">
+                View Cart
+                <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Bottom Navigation (Mapped from Shared Components) -->
+<footer class="fixed bottom-0 left-0 w-full z-[60] bg-surface shadow-lg rounded-t-xl flex justify-around items-center px-container-margin pb-4 pt-2">
+<button class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 scale-90">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">departure_board</span>
+<span class="font-label-sm text-label-sm">Stops</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary px-4 py-1 hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</button>
+</footer>
+<script>
+        let itemCount = 0;
+        let totalValue = 0;
+
+        function updateCart(price) {
+            itemCount++;
+            totalValue += price;
+            
+            const summary = document.getElementById('cart-summary');
+            const countText = document.getElementById('cart-count');
+            
+            countText.innerText = `${itemCount} Item${itemCount > 1 ? 's' : ''} | ₹${totalValue}`;
+            
+            if (itemCount > 0) {
+                summary.classList.remove('translate-y-full');
+                summary.classList.add('translate-y-[-72px]'); // Adjust to sit above bottom nav
+            }
+
+            // Haptic feedback simulation
+            const btn = event.currentTarget;
+            btn.classList.add('scale-90');
+            setTimeout(() => btn.classList.remove('scale-90'), 150);
+        }
+
+        // Intersection observer for tab highlighting or reveal animations could go here
+    </script>
+</body></html>

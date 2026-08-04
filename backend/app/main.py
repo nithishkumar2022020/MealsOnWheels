@@ -17,6 +17,13 @@ from app.config import get_settings
 from app.db import SessionLocal, engine
 from app.errors import AppError
 from app.logging_config import RequestContextMiddleware, configure_logging
+from app.routers import auth as auth_router
+from app.routers import bookings as bookings_router
+from app.routers import restaurant_admin as restaurant_admin_router
+from app.routers import restaurant_auth as restaurant_auth_router
+from app.routers import restaurants as restaurants_router
+from app.routers import routes as routes_router
+from app.routers import users as users_router
 
 settings = get_settings()
 configure_logging()
@@ -58,7 +65,7 @@ app.add_middleware(
     allow_origins=settings.cors_origin_list,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "OPTIONS"],
-    allow_headers=["Authorization", "Content-Type", "X-Restaurant-Token", "X-Request-ID"],
+    allow_headers=["Authorization", "Content-Type", "X-Request-ID"],
 )
 
 
@@ -70,6 +77,8 @@ async def _app_error_handler(request: Request, exc: AppError) -> JSONResponse:
     return JSONResponse(
         status_code=exc.status_code,
         content={"detail": exc.detail, "code": exc.code},
+        # Carries Retry-After on a 429; empty otherwise.
+        headers=exc.headers,
     )
 
 
@@ -114,6 +123,17 @@ async def _unhandled_error_handler(request: Request, exc: Exception) -> JSONResp
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         content={"detail": "Internal server error", "code": "INTERNAL_ERROR"},
     )
+
+
+# --- Routers --------------------------------------------------------------
+
+app.include_router(auth_router.router)
+app.include_router(restaurant_auth_router.router)
+app.include_router(restaurant_admin_router.router)
+app.include_router(users_router.router)
+app.include_router(routes_router.router)
+app.include_router(restaurants_router.router)
+app.include_router(bookings_router.router)
 
 
 # --- Health ---------------------------------------------------------------

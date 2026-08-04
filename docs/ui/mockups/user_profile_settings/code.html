@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TransitFood | Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-high": "#e7e8e9",
+                    "outline-variant": "#c0c8cb",
+                    "inverse-primary": "#9acee1",
+                    "on-secondary-fixed-variant": "#7a3000",
+                    "secondary-container": "#fd7729",
+                    "primary-container": "#0f4c5c",
+                    "tertiary-fixed": "#ffdad8",
+                    "on-secondary-fixed": "#351000",
+                    "secondary-fixed-dim": "#ffb693",
+                    "primary-fixed-dim": "#9acee1",
+                    "inverse-surface": "#2e3132",
+                    "surface-dim": "#d9dadb",
+                    "surface-container": "#edeeef",
+                    "on-secondary-container": "#5e2300",
+                    "tertiary-container": "#90001b",
+                    "surface-container-low": "#f3f4f5",
+                    "on-tertiary-fixed": "#410007",
+                    "on-tertiary-fixed-variant": "#92001b",
+                    "on-primary-fixed-variant": "#114d5d",
+                    "background": "#f8f9fa",
+                    "surface-container-highest": "#e1e3e4",
+                    "inverse-on-surface": "#f0f1f2",
+                    "surface-tint": "#306576",
+                    "secondary": "#a04100",
+                    "surface-variant": "#e1e3e4",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error": "#ffffff",
+                    "primary": "#003441",
+                    "primary-fixed": "#b6ebfe",
+                    "on-primary": "#ffffff",
+                    "on-background": "#191c1d",
+                    "error-container": "#ffdad6",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb3b0",
+                    "on-primary-fixed": "#001f28",
+                    "surface-bright": "#f8f9fa",
+                    "outline": "#70787c",
+                    "tertiary": "#660010",
+                    "surface": "#f8f9fa",
+                    "error": "#ba1a1a",
+                    "secondary-fixed": "#ffdbcc",
+                    "on-surface": "#191c1d",
+                    "on-primary-container": "#87bbce",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-container": "#ff9694",
+                    "on-surface-variant": "#40484b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "12px",
+                    "base": "8px",
+                    "xs": "4px",
+                    "lg": "40px",
+                    "md": "24px",
+                    "xl": "64px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "48px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Montserrat"],
+                    "display-lg": ["Montserrat"],
+                    "label-sm": ["Montserrat"],
+                    "headline-md": ["Montserrat"],
+                    "body-md": ["Montserrat"],
+                    "headline-sm": ["Montserrat"],
+                    "body-lg": ["Montserrat"],
+                    "label-md": ["Montserrat"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #EDF2F4;
+            color: #191c1d;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .profile-card {
+            border: 1px solid #D1D9DB;
+            transition: all 0.3s ease;
+        }
+        .profile-card:hover {
+            box-shadow: 0px 4px 20px rgba(15, 76, 92, 0.08);
+        }
+        .menu-item {
+            transition: background-color 0.2s ease-in-out;
+        }
+        .menu-item:active {
+            background-color: rgba(225, 227, 228, 0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-40 bg-surface dark:bg-surface-dim shadow-sm flex justify-between items-center px-margin-mobile md:px-margin-desktop h-12 w-full">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed">directions_bus</span>
+<h1 class="font-display-lg-mobile text-display-lg-mobile text-primary dark:text-primary-fixed tracking-tight">TransitFood</h1>
+</div>
+<div class="flex items-center">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed">location_on</span>
+</div>
+</header>
+<main class="max-w-md mx-auto mt-base px-margin-mobile">
+<!-- User Profile Header Section -->
+<section class="py-md flex flex-col items-center">
+<div class="relative group">
+<div class="w-24 h-24 rounded-full border-4 border-surface-container-high overflow-hidden shadow-sm">
+<img class="w-full h-full object-cover" data-alt="A professional, high-end close-up portrait of a young man named Rahul in a modern corporate setting. He is wearing a sophisticated charcoal blazer. The lighting is soft and directional, typical of an editorial fashion shoot, with a clean, minimalist off-white architectural background. The overall aesthetic is calm, authoritative, and polished to match a premium transit brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHJHcMjW_E6TTRQekFsb9VTVHy8ZuG98dZR-w0XNJSsRxcUX-9YZ5oT41hviwYBxg714D09KVTYzcXEHxzrQ0OqRItYZGUwASPappzwHML2ht_3ew_IS2O1xH7yru4e_9DmqiqoVY245WQqY0uNhP8O8HtmhOl8D2YJ2-uRiNiU2HfnkysqcfazWFEDc_KRURjl-qr5qELcLDfbWP-jNVZ5s4cGVrevX7mNsSAOPCV8iWXiGG-zg9sNw"/>
+</div>
+<div class="absolute bottom-0 right-0 bg-secondary-container p-1 rounded-full text-on-secondary-container shadow-md border-2 border-surface">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</div>
+</div>
+<div class="mt-base text-center">
+<h2 class="font-headline-md text-headline-md text-primary">Rahul</h2>
+<p class="font-label-md text-label-md text-on-surface-variant">Premium Transit Diner • Track #1294</p>
+</div>
+</section>
+<!-- Wallet Card (Bento Style) -->
+<section class="mb-md">
+<div class="profile-card bg-surface-container-lowest rounded-xl p-md flex justify-between items-center overflow-hidden relative">
+<div class="z-10">
+<p class="font-label-sm text-label-sm uppercase tracking-widest text-outline">Traveler Wallet</p>
+<h3 class="font-headline-md text-headline-md text-primary mt-xs">₹1,240.50</h3>
+</div>
+<div class="z-10">
+<button class="bg-primary text-on-primary px-md py-sm rounded-lg font-label-md text-label-md flex items-center gap-2 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[18px]">add_card</span>
+                        Add Funds
+                    </button>
+</div>
+<!-- Subtle visual accent background element -->
+<div class="absolute -right-4 -bottom-4 opacity-5 pointer-events-none">
+<span class="material-symbols-outlined text-[120px]" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+</div>
+</div>
+</section>
+<!-- Menu List View -->
+<section class="profile-card bg-surface-container-lowest rounded-xl overflow-hidden mb-lg">
+<!-- Edit Profile -->
+<button class="menu-item w-full flex items-center justify-between p-md border-b border-outline-variant/30">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary">person</span>
+<div class="text-left">
+<p class="font-label-md text-label-md text-on-surface">Edit Profile</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">+91 98765 43210</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+</button>
+<!-- Preferences -->
+<button class="menu-item w-full flex items-center justify-between p-md border-b border-outline-variant/30">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary">restaurant</span>
+<div class="text-left">
+<p class="font-label-md text-label-md text-on-surface">Preferences</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Veg Preferences Active</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-secondary font-bold">VEG</span>
+<span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+</div>
+</button>
+<!-- Saved Locations -->
+<button class="menu-item w-full flex items-center justify-between p-md border-b border-outline-variant/30">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary">bookmark</span>
+<div class="text-left">
+<p class="font-label-md text-label-md text-on-surface">Saved Locations</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">3 Destinations Saved</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+</button>
+<!-- App Settings -->
+<button class="menu-item w-full flex items-center justify-between p-md border-b border-outline-variant/30">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary">settings</span>
+<div class="text-left">
+<p class="font-label-md text-label-md text-on-surface">Settings</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Notifications &amp; Privacy</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+</button>
+<!-- Logout -->
+<button class="menu-item w-full flex items-center p-md text-error">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined">logout</span>
+<p class="font-label-md text-label-md">Logout</p>
+</div>
+</button>
+</section>
+<!-- Help Section -->
+<section class="text-center pb-md">
+<p class="font-label-sm text-label-sm text-outline-variant mb-xs">TransitFood v2.4.1</p>
+<a class="text-primary font-label-md text-label-md underline underline-offset-4" href="#">Need help with an order?</a>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface-container-lowest dark:bg-inverse-surface shadow-md flex justify-around items-center w-full h-16 px-2 pb-safe">
+<!-- Home -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 hover:text-primary dark:hover:text-primary-fixed-dim transition-transform duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<!-- Stops -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 hover:text-primary dark:hover:text-primary-fixed-dim transition-transform duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined">departure_board</span>
+<span class="font-label-sm text-label-sm">Stops</span>
+</a>
+<!-- Orders -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 hover:text-primary dark:hover:text-primary-fixed-dim transition-transform duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</a>
+<!-- Profile (Active) -->
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 transition-transform duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for feedback
+        document.querySelectorAll('.menu-item').forEach(button => {
+            button.addEventListener('click', function() {
+                const icon = this.querySelector('.material-symbols-outlined:first-child');
+                icon.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    icon.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+    </script>
+</body></html>

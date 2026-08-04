@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TransitFood - Kitchen Dashboard</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                            "on-background": "#1a1c18",
+                            "on-primary-fixed": "#410002",
+                            "inverse-on-surface": "#f1f1eb",
+                            "surface-container-highest": "#e3e3dc",
+                            "primary-fixed-dim": "#ffb4a9",
+                            "on-secondary-fixed": "#2c1512",
+                            "on-primary-fixed-variant": "#730005",
+                            "surface-dim": "#dadada",
+                            "secondary-fixed-dim": "#ffb4a8",
+                            "secondary": "#775651",
+                            "secondary-fixed": "#ffdad5",
+                            "surface-container-low": "#f3f3f3",
+                            "surface-container-lowest": "#ffffff",
+                            "on-secondary": "#ffffff",
+                            "tertiary-fixed": "#ffdf96",
+                            "surface-tint": "#c00114",
+                            "error": "#ba1a1a",
+                            "tertiary": "#705d00",
+                            "on-secondary-fixed-variant": "#5d3f3b",
+                            "error-container": "#ffdad6",
+                            "surface-variant": "#e1e3e4",
+                            "primary-fixed": "#ffdad5",
+                            "background": "#fdfdf6",
+                            "surface-container-high": "#e8e8e2",
+                            "primary-container": "#e23744",
+                            "inverse-primary": "#ffb4a9",
+                            "on-tertiary-fixed-variant": "#544600",
+                            "surface": "#f9f9f9",
+                            "secondary-container": "#ffdad5",
+                            "tertiary-fixed-dim": "#e9c349",
+                            "on-surface": "#1a1c18",
+                            "on-tertiary-fixed": "#221b00",
+                            "on-error-container": "#93000a",
+                            "surface-bright": "#f9f9f9",
+                            "outline": "#857370",
+                            "on-secondary-container": "#2c1512",
+                            "on-primary": "#ffffff",
+                            "on-tertiary": "#ffffff",
+                            "surface-container": "#eeeeee",
+                            "on-primary-container": "#ffffff",
+                            "tertiary-container": "#e9c349",
+                            "on-surface-variant": "#534341",
+                            "inverse-surface": "#2f312c",
+                            "primary": "#c00114",
+                            "outline-variant": "#d8c2bf",
+                            "on-tertiary-container": "#3d3200",
+                            "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                            "DEFAULT": "0.5rem",
+                            "lg": "0.75rem",
+                            "xl": "1rem",
+                            "full": "9999px"
+                    },
+                    "spacing": {
+                            "md": "24px",
+                            "lg": "40px",
+                            "margin-desktop": "48px",
+                            "xs": "4px",
+                            "gutter": "24px",
+                            "xl": "64px",
+                            "margin-mobile": "16px",
+                            "sm": "12px",
+                            "base": "8px"
+                    },
+                    "fontFamily": {
+                            "label-sm": [
+                                    "Montserrat"
+                            ],
+                            "body-lg": [
+                                    "Montserrat"
+                            ],
+                            "label-md": [
+                                    "Montserrat"
+                            ],
+                            "body-md": [
+                                    "Montserrat"
+                            ],
+                            "display-lg-mobile": [
+                                    "Montserrat"
+                            ],
+                            "display-lg": [
+                                    "Montserrat"
+                            ],
+                            "headline-sm": [
+                                    "Montserrat"
+                            ],
+                            "headline-md": [
+                                    "Montserrat"
+                            ]
+                    },
+                    "fontSize": {
+                            "label-sm": [
+                                    "12px",
+                                    {
+                                            "lineHeight": "16px",
+                                            "letterSpacing": "0.05em",
+                                            "fontWeight": "500"
+                                    }
+                            ],
+                            "body-lg": [
+                                    "18px",
+                                    {
+                                            "lineHeight": "28px",
+                                            "fontWeight": "400"
+                                    }
+                            ],
+                            "label-md": [
+                                    "14px",
+                                    {
+                                            "lineHeight": "20px",
+                                            "letterSpacing": "0.01em",
+                                            "fontWeight": "600"
+                                    }
+                            ],
+                            "body-md": [
+                                    "16px",
+                                    {
+                                            "lineHeight": "24px",
+                                            "fontWeight": "400"
+                                    }
+                            ],
+                            "display-lg-mobile": [
+                                    "32px",
+                                    {
+                                            "lineHeight": "40px",
+                                            "letterSpacing": "-0.01em",
+                                            "fontWeight": "700"
+                                    }
+                            ],
+                            "display-lg": [
+                                    "48px",
+                                    {
+                                            "lineHeight": "56px",
+                                            "letterSpacing": "-0.02em",
+                                            "fontWeight": "700"
+                                    }
+                            ],
+                            "headline-sm": [
+                                    "20px",
+                                    {
+                                            "lineHeight": "28px",
+                                            "fontWeight": "600"
+                                    }
+                            ],
+                            "headline-md": [
+                                    "24px",
+                                    {
+                                            "lineHeight": "32px",
+                                            "fontWeight": "600"
+                                    }
+                            ]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .custom-toggle:checked + div {
+            background-color: #e23744; /* primary-container */
+        }
+        .custom-toggle:checked + div > div {
+            transform: translateX(100%);
+            background-color: #ffffff;
+        }
+        
+        .custom-toggle-warning:checked + div {
+            background-color: #ba1a1a; /* error */
+        }
+        .custom-toggle-warning:checked + div > div {
+            transform: translateX(100%);
+            background-color: #ffffff;
+        }
+
+        /* Hide scrollbar for clean horizontal scroll */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-24 md:pb-8 flex flex-col font-body-md">
+<!-- TopAppBar -->
+<header class="bg-surface shadow-sm w-full top-0 flex justify-between items-center px-margin-mobile md:px-margin-desktop h-12 sticky z-40 border-b border-surface-variant">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary" data-weight="fill" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">TransitFood</h1>
+</div>
+<button aria-label="Account" class="active:scale-95 duration-150 rounded-full p-xs hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant text-[28px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">account_circle</span>
+</button>
+</header>
+<main class="flex-grow w-full max-w-7xl mx-auto flex flex-col gap-gutter px-margin-mobile md:px-margin-desktop py-md md:py-gutter">
+<!-- Status Banner: HUGE 'Closed Now' Toggle -->
+<section class="bg-error-container rounded-xl p-md shadow-sm border border-error/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-md relative overflow-hidden">
+<!-- Decorative background pattern for the warning banner -->
+<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#ba1a1a 1px, transparent 1px); background-size: 16px 16px;"></div>
+<div class="flex flex-col gap-xs relative z-10">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-error text-[32px]">storefront</span>
+<h2 class="font-headline-md text-headline-md text-on-error-container">Currently Closed</h2>
+</div>
+<p class="font-body-md text-on-error-container">You will not receive new orders until you reopen.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer z-10 shrink-0 self-start md:self-auto">
+<input checked="" class="sr-only peer custom-toggle-warning" type="checkbox" value=""/>
+<div class="w-[84px] h-[48px] bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:rounded-full after:h-[40px] after:w-[40px] after:transition-all shadow-inner"></div>
+<span class="ml-sm font-label-md text-label-md text-on-error-container sr-only">Toggle Store Status</span>
+</label>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+<!-- Left Column: Order Queue (Main Area) -->
+<div class="lg:col-span-8 flex flex-col gap-md">
+<div class="flex items-center justify-between mb-xs">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Active Orders</h2>
+<div class="flex gap-sm">
+<span class="bg-surface-variant text-on-surface-variant px-sm py-xs rounded-full font-label-sm text-label-sm">4 Pending</span>
+<span class="bg-primary-container text-on-primary-container px-sm py-xs rounded-full font-label-sm text-label-sm">2 Preparing</span>
+</div>
+</div>
+<!-- Order Card: Pending -->
+<article class="bg-surface rounded-lg border border-surface-variant p-md flex flex-col gap-sm shadow-sm hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start border-b border-surface-variant pb-sm">
+<div>
+<div class="flex items-center gap-sm mb-xs">
+<span class="bg-tertiary-container text-on-tertiary-container px-xs py-xs rounded text-xs font-bold uppercase tracking-wider">New</span>
+<span class="font-label-md text-label-md text-on-surface-variant">#TF-8992</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Pickup in 15 mins</h3>
+</div>
+<span class="font-headline-md text-headline-md text-primary">$42.50</span>
+</div>
+<ul class="py-sm flex flex-col gap-sm">
+<li class="flex items-start gap-sm">
+<span class="bg-surface-container-high text-on-surface font-label-md text-label-md h-8 w-8 flex items-center justify-center rounded shrink-0">2x</span>
+<div>
+<p class="font-body-md text-on-surface font-medium">Transit Burger (Double)</p>
+<p class="font-body-md text-on-surface-variant text-sm">No pickles, extra sauce</p>
+</div>
+</li>
+<li class="flex items-start gap-sm">
+<span class="bg-surface-container-high text-on-surface font-label-md text-label-md h-8 w-8 flex items-center justify-center rounded shrink-0">1x</span>
+<div>
+<p class="font-body-md text-on-surface font-medium">Express Fries (Large)</p>
+</div>
+</li>
+</ul>
+<div class="flex gap-sm mt-xs pt-sm border-t border-surface-variant">
+<button class="flex-1 bg-surface-variant text-on-surface-variant font-label-md text-label-md h-12 rounded flex items-center justify-center hover:bg-surface-dim transition-colors">Decline</button>
+<button class="flex-[2] bg-primary text-on-primary font-label-md text-label-md h-12 rounded flex items-center justify-center gap-xs hover:bg-on-primary-fixed-variant transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill">check_circle</span>
+                            Confirm Order
+                        </button>
+</div>
+</article>
+<!-- Order Card: Preparing -->
+<article class="bg-surface rounded-lg border border-surface-variant p-md flex flex-col gap-sm shadow-sm relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-secondary"></div>
+<div class="flex justify-between items-start border-b border-surface-variant pb-sm pl-xs">
+<div>
+<div class="flex items-center gap-sm mb-xs">
+<span class="text-secondary font-label-md text-label-md flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px] animate-pulse">local_fire_department</span>
+                                    Preparing
+                                </span>
+<span class="font-label-md text-label-md text-on-surface-variant">#TF-8988</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Pickup in 4 mins</h3>
+</div>
+<span class="font-headline-md text-headline-md text-on-surface-variant">$18.00</span>
+</div>
+<ul class="py-sm flex flex-col gap-sm pl-xs opacity-70">
+<li class="flex items-start gap-sm">
+<span class="bg-surface-container-high text-on-surface font-label-md text-label-md h-8 w-8 flex items-center justify-center rounded shrink-0">1x</span>
+<div>
+<p class="font-body-md text-on-surface font-medium">Vegan Wrap Station</p>
+</div>
+</li>
+</ul>
+<div class="flex gap-sm mt-xs pt-sm border-t border-surface-variant pl-xs">
+<button class="w-full bg-secondary text-on-secondary font-label-md text-label-md h-12 rounded flex items-center justify-center gap-xs hover:bg-on-secondary-fixed-variant transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[20px]">room_service</span>
+                            Mark Ready for Pickup
+                        </button>
+</div>
+</article>
+</div>
+<!-- Right Column: Quick Availability (Menu Toggles) -->
+<aside class="lg:col-span-4 flex flex-col gap-md bg-surface-container-low rounded-xl p-md border border-surface-variant">
+<div class="flex items-center justify-between mb-xs">
+<h2 class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-xs">
+<span class="material-symbols-outlined text-outline">inventory_2</span>
+                        Menu Item Availability
+                    </h2>
+</div>
+<p class="font-body-md text-on-surface-variant text-sm mb-sm">Quickly mark items out of stock mid-service.</p>
+<div class="flex flex-col gap-xs max-h-[600px] overflow-y-auto pr-xs no-scrollbar">
+<!-- Item Toggle -->
+<div class="flex items-center justify-between bg-surface p-sm rounded-lg border border-surface-variant shadow-sm">
+<div>
+<p class="font-label-md text-label-md text-on-surface">Transit Burger</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">In Stock</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer custom-toggle" type="checkbox" value=""/>
+<div class="w-14 h-8 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all shadow-inner"></div>
+</label>
+</div>
+<!-- Item Toggle -->
+<div class="flex items-center justify-between bg-surface p-sm rounded-lg border border-surface-variant shadow-sm">
+<div>
+<p class="font-label-md text-label-md text-on-surface">Express Fries</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">In Stock</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer custom-toggle" type="checkbox" value=""/>
+<div class="w-14 h-8 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all shadow-inner"></div>
+</label>
+</div>
+<!-- Item Toggle (Out of Stock) -->
+<div class="flex items-center justify-between bg-surface-variant p-sm rounded-lg border border-surface-variant shadow-none opacity-70">
+<div>
+<p class="font-label-md text-label-md text-on-surface line-through">Vegan Wrap Station</p>
+<p class="font-label-sm text-label-sm text-error mt-1">Out of Stock</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input class="sr-only peer custom-toggle" type="checkbox" value=""/>
+<div class="w-14 h-8 bg-surface-container-high peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all shadow-inner"></div>
+</label>
+</div>
+<!-- Item Toggle -->
+<div class="flex items-center justify-between bg-surface p-sm rounded-lg border border-surface-variant shadow-sm">
+<div>
+<p class="font-label-md text-label-md text-on-surface">Route 66 Shake</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">In Stock</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer custom-toggle" type="checkbox" value=""/>
+<div class="w-14 h-8 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all shadow-inner"></div>
+</label>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- BottomNavBar (Mobile only) -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl bg-surface shadow-[0px_-4px_20px_rgba(192,1,20,0.08)] block md:hidden">
+<ul class="fixed bottom-0 left-0 right-0 h-16 flex justify-around items-center px-4 pb-safe bg-surface border-t border-surface-variant/50">
+<!-- Route -->
+<li>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant active:scale-90 transition-transform p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[24px]">route</span>
+<span class="font-label-md text-[10px] mt-1">Route</span>
+</a>
+</li>
+<!-- Orders (Active) -->
+<li>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined text-[24px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-label-md text-[10px] mt-1 font-bold">Orders</span>
+</a>
+</li>
+<!-- Menu -->
+<li>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant active:scale-90 transition-transform p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[24px]">restaurant_menu</span>
+<span class="font-label-md text-[10px] mt-1">Menu</span>
+</a>
+</li>
+<!-- Kitchen -->
+<li>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant active:scale-90 transition-transform p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[24px]">arrow_back_ios_new</span>
+<span class="font-label-md text-[10px] mt-1">Kitchen</span>
+</a>
+</li>
+</ul>
+</nav>
+</body></html>

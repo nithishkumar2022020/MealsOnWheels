@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Connection Error - TransitFood</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(0.98); }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-fixed-variant": "#633f00",
+                      "error": "#ba1a1a",
+                      "on-primary-fixed": "#410007",
+                      "surface-variant": "#e2e2e2",
+                      "surface-container-high": "#e8e8e8",
+                      "primary-fixed-dim": "#ffb3b1",
+                      "on-secondary-fixed": "#1b1c1c",
+                      "background": "#f9f9f9",
+                      "on-primary-container": "#fffbff",
+                      "on-secondary-container": "#656464",
+                      "surface-tint": "#bb162c",
+                      "secondary-fixed": "#e4e2e1",
+                      "inverse-primary": "#ffb3b1",
+                      "on-error": "#ffffff",
+                      "on-tertiary-fixed": "#291800",
+                      "tertiary": "#805200",
+                      "outline": "#8f6f6e",
+                      "on-background": "#1a1c1c",
+                      "surface-container": "#eeeeee",
+                      "surface-bright": "#f9f9f9",
+                      "surface-dim": "#dadada",
+                      "on-primary-fixed-variant": "#92001c",
+                      "error-container": "#ffdad6",
+                      "inverse-on-surface": "#f1f1f1",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-fixed-dim": "#c8c6c6",
+                      "on-surface-variant": "#5b403f",
+                      "surface-container-low": "#f3f3f3",
+                      "inverse-surface": "#2f3131",
+                      "surface-container-highest": "#e2e2e2",
+                      "primary-fixed": "#ffdad8",
+                      "tertiary-fixed-dim": "#ffb954",
+                      "primary": "#b7122a",
+                      "primary-container": "#db313f",
+                      "on-surface": "#1a1c1c",
+                      "on-tertiary-container": "#fffbff",
+                      "tertiary-container": "#a06900",
+                      "tertiary-fixed": "#ffddb4",
+                      "outline-variant": "#e4bebc",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-fixed-variant": "#474747",
+                      "secondary-container": "#e4e2e1",
+                      "on-secondary": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "secondary": "#5f5e5e",
+                      "surface": "#f9f9f9",
+                      "on-primary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "touch-target-min": "48px",
+                      "container-margin": "20px",
+                      "base": "8px",
+                      "gutter": "16px",
+                      "card-padding": "16px"
+              },
+              "fontFamily": {
+                      "body-lg": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "headline-lg": ["Montserrat"],
+                      "headline-lg-mobile": ["Montserrat"],
+                      "label-md": ["Inter"],
+                      "headline-xl": ["Montserrat"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                      "headline-lg-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "700"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed overflow-hidden">
+<!-- Top App Bar (Suppressing actual shell for focused task, but keeping brand identity) -->
+<header class="w-full top-0 sticky bg-surface flex justify-between items-center px-margin-mobile md:px-margin-desktop h-12 w-full z-50">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="directions_bus">directions_bus</span>
+<span class="font-display-lg-mobile text-display-lg-mobile md:text-headline-sm text-primary tracking-tight font-bold">TransitFood</span>
+</div>
+<div class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-variant/20 transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="close">close</span>
+</div>
+</header>
+<main class="relative min-h-[calc(100vh-48px)] flex flex-col items-center justify-center px-container-margin py-32 overflow-hidden">
+<!-- Subtle Animated Background Element -->
+<div class="absolute inset-0 z-0 pointer-events-none opacity-30">
+<div class="absolute top-1/4 -left-20 w-64 h-64 bg-primary-fixed blur-[100px] rounded-full"></div>
+<div class="absolute bottom-1/4 -right-20 w-80 h-80 bg-tertiary-fixed-dim blur-[120px] rounded-full"></div>
+</div>
+<div class="z-10 w-full max-w-lg flex flex-col items-center text-center">
+<!-- Hero Illustration/Icon Section -->
+<div class="relative mb-12 animate-float">
+<!-- Large Cloud with X - Using Material Symbols with custom styling -->
+<div class="relative flex items-center justify-center">
+<span class="material-symbols-outlined text-[120px] text-surface-variant dark:text-outline-variant" data-icon="cloud_off" style="font-variation-settings: 'opsz' 48, 'wght' 200;">cloud_off</span>
+<!-- Decorative Disconnected Cables / Elements -->
+<div class="absolute -bottom-4 flex gap-4">
+<div class="h-2 w-12 bg-outline-variant rounded-full rotate-12"></div>
+<div class="h-2 w-8 bg-outline-variant rounded-full -rotate-45"></div>
+</div>
+<!-- Error Badge -->
+<div class="absolute top-0 right-0 transform translate-x-1/4 -translate-y-1/4">
+<div class="bg-error w-10 h-10 rounded-full flex items-center justify-center shadow-lg border-4 border-white">
+<span class="material-symbols-outlined text-on-error text-xl font-bold" data-icon="close">close</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Content Section -->
+<div class="space-y-4 mb-12">
+<h1 class="font-headline-xl text-headline-xl text-on-surface leading-tight">
+                    Can't find restaurants
+                </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md mx-auto">
+                    We're having trouble connecting. Please check your internet and try again.
+                </p>
+</div>
+<!-- Action Cluster -->
+<div class="flex flex-col gap-4 w-full sm:flex-row sm:justify-center">
+<button class="h-[56px] px-8 bg-primary text-on-primary font-bold rounded-xl shadow-md hover:shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 min-w-[200px]" onclick="location.reload()">
+<span class="material-symbols-outlined" data-icon="refresh">refresh</span>
+                    Try again
+                </button>
+<button class="h-[56px] px-8 bg-secondary-container text-on-secondary-container font-semibold rounded-xl border-2 border-transparent hover:border-outline-variant active:scale-95 transition-all flex items-center justify-center gap-2 min-w-[160px]">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+                    Go back
+                </button>
+</div>
+<!-- Troubleshooting List (Progress Stepper style but for guidance) -->
+<div class="mt-16 w-full max-w-sm glass-card rounded-2xl p-6 text-left">
+<h3 class="font-label-md text-label-md text-on-surface mb-4 uppercase tracking-wider opacity-60">Quick Checks</h3>
+<ul class="space-y-4">
+<li class="flex items-start gap-4">
+<div class="w-6 h-6 rounded-full bg-secondary-fixed flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="wifi">wifi</span>
+</div>
+<span class="text-body-md text-on-surface-variant">Check your Wi-Fi or cellular data.</span>
+</li>
+<li class="flex items-start gap-4">
+<div class="w-6 h-6 rounded-full bg-secondary-fixed flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="flight">flight</span>
+</div>
+<span class="text-body-md text-on-surface-variant">Make sure Airplane Mode is off.</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- System Error Message at bottom -->
+<footer class="absolute bottom-8 w-full text-center px-4">
+<code class="text-label-sm font-label-sm text-secondary bg-surface-container px-3 py-1 rounded-full opacity-60">
+                Error: Failed to connect to Nominatim
+            </code>
+</footer>
+</main>
+<script>
+        // Micro-interaction for the 'Try again' button pulse
+        const tryAgainBtn = document.querySelector('button');
+        if (tryAgainBtn) {
+            tryAgainBtn.addEventListener('mouseenter', () => {
+                tryAgainBtn.classList.add('animate-pulse-slow');
+            });
+            tryAgainBtn.addEventListener('mouseleave', () => {
+                tryAgainBtn.classList.remove('animate-pulse-slow');
+            });
+        }
+
+        // Simulating a connectivity check logic
+        window.addEventListener('online', () => {
+            console.log('User is back online');
+            // In a real app, we might automatically retry here
+        });
+    </script>
+</body></html>

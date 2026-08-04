@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Delivery Partner Registration - Step 1</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-fixed-variant": "#114d5d",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface-variant": "#40484b",
+                    "surface-container-low": "#f3f4f5",
+                    "error-container": "#ffdad6",
+                    "on-primary-container": "#87bbce",
+                    "on-error-container": "#93000a",
+                    "surface-container": "#edeeef",
+                    "primary-fixed": "#b6ebfe",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#f0f1f2",
+                    "primary-fixed-dim": "#9acee1",
+                    "on-tertiary": "#ffffff",
+                    "inverse-primary": "#9acee1",
+                    "on-tertiary-container": "#ff9694",
+                    "on-secondary-fixed-variant": "#7a3000",
+                    "on-secondary-container": "#5e2300",
+                    "tertiary-container": "#90001b",
+                    "error": "#ba1a1a",
+                    "secondary-fixed-dim": "#ffb693",
+                    "secondary-fixed": "#ffdbcc",
+                    "outline": "#70787c",
+                    "surface": "#f8f9fa",
+                    "surface-container-high": "#e7e8e9",
+                    "tertiary-fixed": "#ffdad8",
+                    "tertiary": "#660010",
+                    "primary": "#003441",
+                    "outline-variant": "#c0c8cb",
+                    "surface-variant": "#e1e3e4",
+                    "on-surface": "#191c1d",
+                    "on-secondary-fixed": "#351000",
+                    "inverse-surface": "#2e3132",
+                    "surface-bright": "#f8f9fa",
+                    "on-tertiary-fixed": "#410007",
+                    "surface-container-highest": "#e1e3e4",
+                    "on-background": "#191c1d",
+                    "on-tertiary-fixed-variant": "#92001b",
+                    "primary-container": "#0f4c5c",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb3b0",
+                    "secondary-container": "#fd7729",
+                    "surface-dim": "#d9dadb",
+                    "on-primary-fixed": "#001f28",
+                    "surface-tint": "#306576",
+                    "secondary": "#a04100",
+                    "on-error": "#ffffff",
+                    "background": "#f8f9fa"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "40px",
+                    "xl": "64px",
+                    "margin-mobile": "16px",
+                    "gutter": "24px",
+                    "margin-desktop": "48px",
+                    "xs": "4px",
+                    "md": "24px",
+                    "base": "8px",
+                    "sm": "12px",
+                    "touch-target-min": "48px",
+                    "container-margin": "24px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Montserrat"],
+                    "headline-sm": ["Montserrat"],
+                    "body-md": ["Montserrat"],
+                    "body-lg": ["Montserrat"],
+                    "label-sm": ["Montserrat"],
+                    "label-md": ["Montserrat"],
+                    "headline-md": ["Montserrat"],
+                    "display-lg": ["Montserrat"],
+                    "headline-lg-mobile": ["Montserrat"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Montserrat', sans-serif; background-color: #f8f9fa; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .vehicle-card input:checked + label {
+            border-color: #003441;
+            background-color: #0f4c5c10;
+        }
+    </style>
+</head>
+<body class="text-on-surface bg-background">
+<!-- TopAppBar from Shared Components -->
+<header class="bg-surface dark:bg-surface-dim shadow-sm docked full-width top-0 sticky z-50">
+<div class="flex justify-between items-center w-full px-container-margin py-base h-touch-target-min">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="location_on">location_on</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary dark:text-primary-fixed-dim">En route</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer hover:bg-surface-container-low transition-colors p-2 rounded-full" data-icon="notifications">notifications</span>
+</div>
+</div>
+</header>
+<main class="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-lg">
+<!-- Progress Stepper -->
+<nav class="mb-xl max-w-2xl mx-auto">
+<div class="flex items-center justify-between relative">
+<div class="absolute top-1/2 left-0 w-full h-0.5 bg-outline-variant -z-10 -translate-y-1/2"></div>
+<!-- Step 1: Active -->
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold shadow-lg">1</div>
+<span class="font-label-md text-label-md text-primary mt-2">Identity</span>
+</div>
+<!-- Step 2: Inactive -->
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center font-bold">2</div>
+<span class="font-label-md text-label-md text-on-surface-variant mt-2">Documents</span>
+</div>
+<!-- Step 3: Inactive -->
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center font-bold">3</div>
+<span class="font-label-md text-label-md text-on-surface-variant mt-2">Verify</span>
+</div>
+</div>
+</nav>
+<div class="bento-grid">
+<!-- Left Panel: Form Content -->
+<div class="col-span-12 lg:col-span-7 flex flex-col gap-8">
+<section>
+<h2 class="font-display-lg-mobile text-display-lg-mobile text-primary mb-2">Partner with us</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Step 1: Registration &amp; Vehicle Information</p>
+</section>
+<div class="bg-surface-container-lowest p-8 rounded-xl border border-outline-variant shadow-sm transition-all hover:shadow-md">
+<form class="flex flex-col gap-6" id="registrationForm">
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant" for="full_name">Full Name</label>
+<input class="h-12 px-4 rounded bg-surface border border-outline-variant focus:border-2 focus:border-primary outline-none transition-all font-body-md text-body-md" id="full_name" placeholder="Enter your full name as per ID" required="" type="text"/>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant" for="phone">Phone Number</label>
+<input class="h-12 px-4 rounded bg-surface border border-outline-variant focus:border-2 focus:border-primary outline-none transition-all font-body-md text-body-md" id="phone" placeholder="+91 00000 00000" required="" type="tel"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant" for="city">City of Operation</label>
+<select class="h-12 px-4 rounded bg-surface border border-outline-variant focus:border-2 focus:border-primary outline-none transition-all font-body-md text-body-md appearance-none" id="city" required="">
+<option disabled="" selected="" value="">Select your city</option>
+<option value="delhi">New Delhi</option>
+<option value="mumbai">Mumbai</option>
+<option value="bangalore">Bangalore</option>
+</select>
+</div>
+</div>
+<div class="flex flex-col gap-4 mt-4">
+<label class="font-label-md text-label-md text-on-surface-variant">Vehicle Type Selection</label>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Bike -->
+<div class="vehicle-card relative">
+<input class="hidden peer" id="bike" name="vehicle" required="" type="radio" value="bike"/>
+<label class="flex flex-col items-center justify-center p-6 border border-outline-variant rounded-xl cursor-pointer hover:bg-surface-variant transition-all peer-checked:border-2 peer-checked:border-primary peer-checked:bg-primary/5" for="bike">
+<span class="material-symbols-outlined text-primary text-4xl mb-2" data-icon="motorcycle">motorcycle</span>
+<span class="font-label-md text-label-md text-primary">Bike</span>
+</label>
+</div>
+<!-- Scooter -->
+<div class="vehicle-card relative">
+<input class="hidden peer" id="scooter" name="vehicle" type="radio" value="scooter"/>
+<label class="flex flex-col items-center justify-center p-6 border border-outline-variant rounded-xl cursor-pointer hover:bg-surface-variant transition-all peer-checked:border-2 peer-checked:border-primary peer-checked:bg-primary/5" for="scooter">
+<span class="material-symbols-outlined text-primary text-4xl mb-2" data-icon="moped">moped</span>
+<span class="font-label-md text-label-md text-primary">Scooter</span>
+</label>
+</div>
+<!-- EV -->
+<div class="vehicle-card relative">
+<input class="hidden peer" id="ev" name="vehicle" type="radio" value="ev"/>
+<label class="flex flex-col items-center justify-center p-6 border border-outline-variant rounded-xl cursor-pointer hover:bg-surface-variant transition-all peer-checked:border-2 peer-checked:border-primary peer-checked:bg-primary/5" for="ev">
+<span class="material-symbols-outlined text-primary text-4xl mb-2" data-icon="electric_scooter">electric_scooter</span>
+<span class="font-label-md text-label-md text-primary">Electric</span>
+</label>
+</div>
+</div>
+</div>
+<button class="mt-8 h-12 bg-primary text-on-primary font-label-md text-label-md rounded-lg shadow-sm hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2" type="submit">
+                            Next: Document Upload
+                            <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</form>
+</div>
+</div>
+<!-- Right Panel: Visual Context -->
+<div class="col-span-12 lg:col-span-5 flex flex-col gap-6">
+<div class="h-full rounded-xl overflow-hidden relative border border-outline-variant group">
+<div class="bg-cover bg-center w-full h-full min-h-[400px] transition-transform duration-700 group-hover:scale-105" data-alt="A professional delivery partner in a clean, modern teal uniform standing next to a sleek electric scooter in a bustling metropolitan transit hub. The scene is bathed in warm golden hour lighting, highlighting the efficiency and premium nature of the logistics service. The background shows a blurry cityscape with modern transit architecture, conveying a sense of sophisticated transit." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAqofjiptrucGaWxXR6zyGXBvGUEldF05UOvFZKJoD_-ozAtU87VCMAn-6Sd5_3ibvfE0o--YBQmgaJ0gheIhhoA2YDXzyZ1Qz9CklHeroKrewNWClO0duqVK7mAfp9b9wkKeBIA74EMy3ee4tgrbgjLbnETZa8w8aqikOJxu-RzZkQgGqPps5Ud09NOz8wIli7HCx6An13Lrs1i9C1eeZOpfNgc7_KfqZXJrDajvUdawdRP5GwwzoKzg')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent flex flex-col justify-end p-8 text-on-primary">
+<h3 class="font-headline-sm text-headline-sm mb-2">Join the Elite Fleet</h3>
+<p class="font-body-md text-body-md opacity-90">Experience the gold standard in delivery logistics with optimized routes and premium support.</p>
+</div>
+</div>
+<!-- Info Chips -->
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-container" data-icon="payments">payments</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary">Daily Payouts</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Instant transfers</p>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container" data-icon="health_and_safety" style="font-variation-settings: 'FILL' 1;">health_and_safety</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary">Full Insurance</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">On-duty coverage</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Nav Suppression Logic applied: Hidden since this is a Transactional/Form Page -->
+<!-- But shown here for responsive demo purposes, hidden on desktop -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface dark:bg-surface-container-lowest z-50 flex justify-around items-center px-container-margin pb-4 pt-2 shadow-lg border-t border-outline-variant">
+<a class="flex flex-col items-center justify-center text-secondary px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="departure_board">departure_board</span>
+<span class="font-label-sm text-label-sm">Stops</span>
+</a>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 scale-90">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Join</span>
+</div>
+</nav>
+<script>
+        // Form submission micro-interaction
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const originalHtml = btn.innerHTML;
+            
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin" data-icon="progress_activity">progress_activity</span> Processing...';
+            btn.classList.add('opacity-80');
+            
+            setTimeout(() => {
+                alert('Profile saved! Moving to Step 2: Document Upload.');
+                btn.innerHTML = originalHtml;
+                btn.classList.remove('opacity-80');
+                // Normally route to next page
+            }, 1200);
+        });
+
+        // Vehicle selection animation
+        const vehicleCards = document.querySelectorAll('.vehicle-card label');
+        vehicleCards.forEach(card => {
+            card.addEventListener('click', () => {
+                vehicleCards.forEach(c => c.style.transform = 'scale(1)');
+                card.style.transform = 'scale(1.02)';
+            });
+        });
+    </script>
+</body></html>

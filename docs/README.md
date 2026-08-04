@@ -25,6 +25,8 @@
 | [12_DEPLOYMENT.md](./12_DEPLOYMENT.md) | Docker, Render, CI/CD |
 | [13_ROADMAP.md](./13_ROADMAP.md) | Phased roadmap and risks |
 | [14_BUILD_PLAN.md](./14_BUILD_PLAN.md) | **Build progress and handoff log — start here** |
+| [15_DESIGN_BACKEND_ALIGNMENT.md](./15_DESIGN_BACKEND_ALIGNMENT.md) | Design vs backend — where they diverge and which is right |
+| [16_FUNCTIONAL_PRODUCT_DATA.md](./16_FUNCTIONAL_PRODUCT_DATA.md) | Owner-managed menus and hours — **UI + backend changes, needs sign-off** |
 
 ---
 

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TransitFood - Restaurant Status</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed-variant": "#633f00",
+                    "error": "#ba1a1a",
+                    "on-primary-fixed": "#410007",
+                    "surface-variant": "#e2e2e2",
+                    "surface-container-high": "#e8e8e8",
+                    "primary-fixed-dim": "#ffb3b1",
+                    "on-secondary-fixed": "#1b1c1c",
+                    "background": "#f9f9f9",
+                    "on-primary-container": "#fffbff",
+                    "on-secondary-container": "#656464",
+                    "surface-tint": "#bb162c",
+                    "secondary-fixed": "#e4e2e1",
+                    "inverse-primary": "#ffb3b1",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed": "#291800",
+                    "tertiary": "#805200",
+                    "outline": "#8f6f6e",
+                    "on-background": "#1a1c1c",
+                    "surface-container": "#eeeeee",
+                    "surface-bright": "#f9f9f9",
+                    "surface-dim": "#dadada",
+                    "on-primary-fixed-variant": "#92001c",
+                    "error-container": "#ffdad6",
+                    "inverse-on-surface": "#f1f1f1",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed-dim": "#c8c6c6",
+                    "on-surface-variant": "#5b403f",
+                    "surface-container-low": "#f3f3f3",
+                    "inverse-surface": "#2f3131",
+                    "surface-container-highest": "#e2e2e2",
+                    "primary-fixed": "#ffdad8",
+                    "tertiary-fixed-dim": "#ffb954",
+                    "primary": "#b7122a",
+                    "primary-container": "#db313f",
+                    "on-surface": "#1a1c1c",
+                    "on-tertiary-container": "#fffbff",
+                    "tertiary-container": "#a06900",
+                    "tertiary-fixed": "#ffddb4",
+                    "outline-variant": "#e4bebc",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed-variant": "#474747",
+                    "secondary-container": "#e4e2e1",
+                    "on-secondary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "secondary": "#5f5e5e",
+                    "surface": "#f9f9f9",
+                    "on-primary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "touch-target-min": "48px",
+                    "container-margin": "20px",
+                    "base": "8px",
+                    "gutter": "16px",
+                    "card-padding": "16px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-lg": ["Montserrat"],
+                    "headline-lg-mobile": ["Montserrat"],
+                    "label-md": ["Inter"],
+                    "headline-xl": ["Montserrat"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bg-glass {
+            backdrop-filter: blur(8px);
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .animate-pulse-soft {
+            animation: pulse-soft 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-20">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-surface shadow-sm z-40 transition-colors duration-200 ease-in-out flex justify-between items-center px-5 md:px-margin-desktop h-12">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="directions_bus">directions_bus</span>
+<h1 class="font-headline-sm text-headline-sm-mobile md:text-headline-sm text-primary font-bold tracking-tight">TransitFood</h1>
+</div>
+<button class="p-2 hover:bg-surface-variant/20 rounded-full transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="location_on">location_on</span>
+</button>
+</header>
+<main class="max-w-4xl mx-auto px-5 pt-6">
+<!-- Breadcrumb / Back Navigation -->
+<nav class="flex items-center gap-2 mb-6">
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_back">arrow_back</span>
+<span class="font-label-md text-label-md">Back to Restaurants</span>
+</button>
+</nav>
+<!-- Restaurant Details Card (The Background Context) -->
+<div class="relative bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.06)] overflow-hidden border border-surface-variant/50">
+<!-- Full Bleed Header Image -->
+<div class="h-48 md:h-64 w-full relative">
+<img class="w-full h-full object-cover" data-alt="A vibrant, high-end close-up photograph of a modern bistro kitchen interior during a busy service. The scene features warm, focused lighting over polished stainless steel surfaces, with colorful fresh vegetables and artisan breads in the foreground. The aesthetic is clean and professional, matching a modern corporate and high-contrast UI style with accents of Hunger Red and pristine whites." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1qX_xOUUJ8lvrXPq6dDHSEIzOOedSrWFgVqnG2poY24hehKISjsS0JBmXOWICmRU8xEUFeHi_CQXVLL3xUo95VQxWTSmH2JJvkn6icmUnqzBLovP6hl9cVlvljZgZT00HFWloRfEqgNwWYkV78E0KkPnkg6FqjuGgof8xYHs25xcjO52N81aXzWGxQTBlN9WIfka-1Gsarer7M4BGCVORyLVyz8yt585lINSkroQLwL0rfQqvv5nQ7g"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-4 left-6">
+<h2 class="font-headline-xl text-headline-xl text-white">Central Station Diner</h2>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-[18px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-white font-label-md text-label-md">4.8 (1.2k reviews) • American Bistro</span>
+</div>
+</div>
+</div>
+<!-- Content Area -->
+<div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="md:col-span-2 space-y-6">
+<section>
+<h3 class="font-headline-lg text-headline-lg text-on-surface mb-3">About the Kitchen</h3>
+<p class="text-on-surface-variant font-body-md text-body-md leading-relaxed">
+                            A hub for travelers seeking gourmet comfort food. We specialize in rapid-service artisan sandwiches and hot meals designed to stay fresh throughout your journey.
+                        </p>
+</section>
+<section class="space-y-4">
+<h3 class="font-headline-lg text-headline-lg text-on-surface">Popular Right Now</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="p-4 bg-surface rounded-lg border border-outline-variant flex gap-4">
+<div class="w-20 h-20 bg-surface-container-high rounded-lg overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="A high-contrast professional studio photograph of a gourmet wagyu beef burger with melting cheese and crisp greens, styled against a neutral background to suit a modern corporate food app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrQdw6XXmJllyK84dko4dC-0fMns_LBLGBGY-b1XkVVb72l3SyW78mFPAS7V8xC-8GkfcCCHcDS9gakIa973PDP3dc-xISXxj1GCFQJa9UkJ-JexAHuL-jti807RhfK1bwCH-l8YNKrZXhEw_JDJLs4J3HtUYG9cJ1ABoojADNWdxdxcPWfaTEbBcVXdwhdvQvGTgLle2C_LC2DqHp9Ss9ATuxxEEhrTXT_FX1LzbU0JLk_8Q9bPl0KA"/>
+</div>
+<div>
+<p class="font-label-md text-label-md font-bold">Transit Burger</p>
+<p class="text-on-surface-variant text-label-sm">$14.50</p>
+</div>
+</div>
+<div class="p-4 bg-surface rounded-lg border border-outline-variant flex gap-4">
+<div class="w-20 h-20 bg-surface-container-high rounded-lg overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="A minimalist overhead shot of a colorful mediterranean bowl with quinoa, feta, olives and bright lemon slices, highlighting freshness and healthy corporate dining options." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGo3-Yb53fuTY9Ago82iAbYiDjK8KXnvvOHHtog776dAjlONlCRL6bbcrsZvvI02V642rlNAnIzB2JBgDQpq3oCfgBsEiCiHpb1-yVljn4PvNhX9xdefSshNoTFQhWSmeRaMs89VD4Q4oHIS1BjPoaIrFOp1mqch7SGnVdd8bX8ci3-3q4z2oz70HNrikQPyemZc0RuUv5_4v_0jbmdgI68xYMZCNO9m0FDFVXE9HtCkNMVORGKC0xdw"/>
+</div>
+<div>
+<p class="font-label-md text-label-md font-bold">Express Bowl</p>
+<p class="text-on-surface-variant text-label-sm">$12.00</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Sidebar for Desktop -->
+<div class="hidden md:block">
+<div class="sticky top-20 bg-surface-container-low p-5 rounded-xl border border-outline-variant">
+<h4 class="font-label-md text-label-md uppercase tracking-wider text-secondary mb-4">Location Info</h4>
+<div class="space-y-3">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="train">train</span>
+<p class="text-body-md font-body-md">Platform 4, Sector B</p>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="schedule">schedule</span>
+<p class="text-body-md font-body-md">Closes at 11:00 PM</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- BUSY STATE MODAL OVERLAY -->
+<div class="absolute inset-0 z-50 flex items-center justify-center p-4 bg-on-surface/20 backdrop-blur-sm transition-opacity duration-300" id="busy-modal">
+<div class="bg-surface-container-lowest w-full max-w-md rounded-2xl shadow-xl overflow-hidden border border-outline-variant animate-in fade-in zoom-in duration-300">
+<!-- Modal Header/Status Icon -->
+<div class="p-8 pb-0 flex flex-col items-center text-center">
+<div class="w-16 h-16 bg-tertiary-fixed rounded-full flex items-center justify-center mb-6 animate-pulse-soft">
+<span class="material-symbols-outlined text-tertiary text-4xl" data-icon="hourglass_empty">hourglass_empty</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">Restaurant is busy</h2>
+<p class="text-on-surface-variant font-body-md text-body-md px-4">
+                            They're handling <span class="font-bold text-on-surface">15 orders</span> right now. <br/>
+                            Estimated wait time: <span class="font-bold text-primary">45 mins</span>
+</p>
+</div>
+<!-- Progress/Queue Section -->
+<div class="px-8 py-8 space-y-4">
+<div class="flex justify-between items-center mb-1">
+<span class="font-label-md text-label-md text-secondary">Queue Status</span>
+<span class="font-label-md text-label-md text-on-surface font-bold">You'd be #8 in queue</span>
+</div>
+<div class="h-3 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<!-- Visualizing 8/15 as the progress -->
+<div class="h-full bg-tertiary rounded-full transition-all duration-1000 ease-out" style="width: 53%;"></div>
+</div>
+<!-- Notification Checkbox -->
+<label class="flex items-center gap-3 p-4 bg-surface-container rounded-xl cursor-pointer hover:bg-surface-container-high transition-colors group mt-6">
+<div class="relative flex items-center">
+<input class="w-5 h-5 rounded border-outline text-primary focus:ring-primary focus:ring-offset-2 transition-all cursor-pointer" type="checkbox"/>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant group-hover:text-on-surface">Notify me when they're less busy</span>
+</label>
+</div>
+<!-- Actions -->
+<div class="p-6 pt-0 flex flex-col gap-3">
+<button class="w-full bg-primary text-on-primary font-bold py-4 px-6 rounded-xl hover:bg-primary-container transition-all active:scale-95 shadow-md h-14 flex items-center justify-center gap-2">
+<span>Book anyway</span>
+<span class="material-symbols-outlined text-[20px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<button class="w-full bg-transparent border-2 border-outline-variant text-secondary font-bold py-4 px-6 rounded-xl hover:bg-surface-variant/10 transition-all h-14" onclick="document.getElementById('busy-modal').classList.add('hidden')">
+                            Browse other restaurants
+                        </button>
+</div>
+<!-- Decorative subtle indicator -->
+<div class="h-1.5 w-full bg-gradient-to-r from-tertiary via-tertiary-container to-tertiary"></div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface-container-lowest shadow-[0px_-4px_20px_rgba(15,76,92,0.08)] flex justify-around items-center h-16 px-2 pb-safe md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="departure_board">departure_board</span>
+<span class="font-label-sm text-label-sm">Stops</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        // Simple logic to simulate modal entry
+        window.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('busy-modal');
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.opacity = '1';
+            }, 500);
+        });
+
+        // Add active state to nav items (Top Bar Logic for Web if needed)
+        const navItems = document.querySelectorAll('nav a');
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                navItems.forEach(i => {
+                    i.className = "flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary transition-colors";
+                });
+                item.className = "flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 active:scale-95 transition-transform duration-150";
+            });
+        });
+    </script>
+</body></html>

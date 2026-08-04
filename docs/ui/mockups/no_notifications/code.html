@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>No Notifications</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bell-bounce {
+            animation: bell-bounce 2.5s ease-in-out infinite;
+        }
+        @keyframes bell-bounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            10% { transform: translateY(-4px) rotate(-8deg); }
+            20% { transform: translateY(0) rotate(8deg); }
+            30% { transform: translateY(-2px) rotate(-4deg); }
+            40% { transform: translateY(0) rotate(0deg); }
+        }
+        .check-fade {
+            animation: check-fade 3s ease-in-out infinite;
+        }
+        @keyframes check-fade {
+            0%, 100% { opacity: 0.4; transform: scale(0.9); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-tint": "#306576",
+                      "surface-container": "#edeeef",
+                      "surface-container-lowest": "#ffffff",
+                      "on-secondary-fixed-variant": "#7a3000",
+                      "tertiary": "#660010",
+                      "secondary-fixed-dim": "#ffb693",
+                      "secondary": "#a04100",
+                      "on-primary-container": "#87bbce",
+                      "inverse-primary": "#9acee1",
+                      "outline": "#70787c",
+                      "outline-variant": "#c0c8cb",
+                      "on-surface": "#191c1d",
+                      "on-primary-fixed-variant": "#114d5d",
+                      "on-background": "#191c1d",
+                      "surface-container-high": "#e7e8e9",
+                      "primary": "#003441",
+                      "on-secondary": "#ffffff",
+                      "inverse-on-surface": "#f0f1f2",
+                      "on-tertiary-container": "#ff9694",
+                      "background": "#f8f9fa",
+                      "on-tertiary-fixed-variant": "#92001b",
+                      "secondary-fixed": "#ffdbcc",
+                      "on-tertiary-fixed": "#410007",
+                      "inverse-surface": "#2e3132",
+                      "tertiary-fixed-dim": "#ffb3b0",
+                      "on-error": "#ffffff",
+                      "surface-container-highest": "#e1e3e4",
+                      "tertiary-fixed": "#ffdad8",
+                      "secondary-container": "#fd7729",
+                      "on-primary": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "surface-dim": "#d9dadb",
+                      "on-surface-variant": "#40484b",
+                      "error": "#ba1a1a",
+                      "surface": "#f8f9fa",
+                      "surface-bright": "#f8f9fa",
+                      "on-secondary-fixed": "#351000",
+                      "on-primary-fixed": "#001f28",
+                      "primary-container": "#0f4c5c",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-container": "#5e2300",
+                      "error-container": "#ffdad6",
+                      "surface-variant": "#e1e3e4",
+                      "tertiary-container": "#90001b",
+                      "surface-container-low": "#f3f4f5",
+                      "primary-fixed-dim": "#9acee1",
+                      "primary-fixed": "#b6ebfe"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sm": "12px",
+                      "base": "8px",
+                      "xs": "4px",
+                      "margin-mobile": "16px",
+                      "xl": "64px",
+                      "gutter": "24px",
+                      "lg": "40px",
+                      "md": "24px",
+                      "margin-desktop": "48px"
+              },
+              "fontFamily": {
+                      "label-sm": ["Montserrat"],
+                      "body-lg": ["Montserrat"],
+                      "display-lg": ["Montserrat"],
+                      "headline-sm": ["Montserrat"],
+                      "body-md": ["Montserrat"],
+                      "headline-md": ["Montserrat"],
+                      "label-md": ["Montserrat"],
+                      "display-lg-mobile": ["Montserrat"]
+              },
+              "fontSize": {
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md text-body-md overflow-x-hidden">
+<!-- Top Navigation Anchor -->
+<header class="fixed top-0 w-full z-50 flex items-center justify-between px-margin-mobile h-12 bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed" data-icon="restaurant">restaurant</span>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">MealsOnWheels</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center p-2 rounded-full hover:bg-surface-container-high transition-colors active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed" data-icon="location_on">location_on</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas: Notification Empty State -->
+<main class="flex-grow flex flex-col items-center justify-center px-margin-mobile pt-12 pb-16">
+<!-- Bento-style Content Card -->
+<div class="w-full max-w-md bg-surface p-lg rounded-xl border border-outline-variant/30 flex flex-col items-center text-center shadow-md relative overflow-hidden">
+<!-- Atmospheric Background Texture (Subtle) -->
+<div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(#003441 1px, transparent 1px); background-size: 24px 24px;"></div>
+<!-- Animated Icon Cluster -->
+<div class="relative mb-lg">
+<div class="w-24 h-24 rounded-full bg-surface-container-high flex items-center justify-center relative">
+<span class="material-symbols-outlined text-[48px] text-primary/20 absolute" data-icon="notifications">notifications</span>
+<div class="bell-bounce relative z-10">
+<span class="material-symbols-outlined text-[56px] text-primary" data-icon="notifications">notifications</span>
+</div>
+<!-- Small Checkmark Badge -->
+<div class="absolute -bottom-2 -right-2 w-10 h-10 bg-secondary-container text-on-secondary-container rounded-full flex items-center justify-center border-4 border-surface check-fade">
+<span class="material-symbols-outlined font-bold text-sm" data-icon="check">check</span>
+</div>
+</div>
+</div>
+<!-- Typography Content -->
+<div class="space-y-sm z-10">
+<h1 class="font-headline-md text-headline-md text-on-surface font-bold">All caught up!</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-[280px] mx-auto">
+                    No new notifications. You'll see order updates here.
+                </p>
+</div>
+<!-- Primary Action -->
+<div class="mt-lg w-full z-10">
+<button class="w-full h-12 bg-primary text-on-primary font-label-md text-label-md rounded-lg flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-sm">
+                    Continue exploring
+                </button>
+</div>
+<!-- Secondary Contextual Link -->
+<button class="mt-base text-primary font-label-sm text-label-sm hover:underline p-2">
+                Check History
+            </button>
+</div>
+<!-- Decorative Illustration Background (Abstract Transit Lines) -->
+<div class="absolute inset-x-0 bottom-16 h-32 opacity-10 pointer-events-none overflow-hidden">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 1000 100">
+<path d="M0,50 Q250,20 500,50 T1000,50" fill="none" stroke="#003441" stroke-dasharray="8 8" stroke-width="2"></path>
+<path d="M0,70 Q250,40 500,70 T1000,70" fill="none" stroke="#fd7729" stroke-dasharray="4 4" stroke-width="1"></path>
+</svg>
+</div>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center h-16 px-2 bg-surface dark:bg-surface-dim shadow-[0px_-4px_20px_rgba(0,52,65,0.08)]">
+<!-- Home -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1 hover:bg-surface-container-highest transition-colors active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm-mobile">Home</span>
+</a>
+<!-- Stops -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1 hover:bg-surface-container-highest transition-colors active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="departure_board">departure_board</span>
+<span class="font-label-sm text-label-sm-mobile">Stops</span>
+</a>
+<!-- Orders (Active Logic: Notifications typically belong to the activity/orders stream) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-sm text-label-sm-mobile">Orders</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant px-4 py-1 hover:bg-surface-container-highest transition-colors active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm-mobile">Profile</span>
+</a>
+</nav>
+<script>
+        // Simple Interaction logic
+        document.querySelector('button').addEventListener('click', function() {
+            // Ripple or navigation simulation
+            this.classList.add('scale-95');
+            setTimeout(() => {
+                this.classList.remove('scale-95');
+                console.log('Navigating to explore...');
+            }, 100);
+        });
+
+        // Atmosphere initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('Sophisticated Transit UI loaded');
+        });
+    </script>
+</body></html>

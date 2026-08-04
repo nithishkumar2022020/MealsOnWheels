@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Route Search - MealsOnWheels</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-high": "#e7e8e9",
+                    "outline-variant": "#c0c8cb",
+                    "inverse-primary": "#ffb4ab",
+                    "on-secondary-fixed-variant": "#7a3000",
+                    "secondary-container": "#fd7729",
+                    "primary-container": "#ffdad6",
+                    "tertiary-fixed": "#ffdad8",
+                    "on-secondary-fixed": "#351000",
+                    "secondary-fixed-dim": "#ffb693",
+                    "primary-fixed-dim": "#ffb4ab",
+                    "inverse-surface": "#2e3132",
+                    "surface-dim": "#d9dadb",
+                    "surface-container": "#edeeef",
+                    "on-secondary-container": "#5e2300",
+                    "tertiary-container": "#90001b",
+                    "surface-container-low": "#f3f4f5",
+                    "on-tertiary-fixed": "#410007",
+                    "on-tertiary-fixed-variant": "#92001b",
+                    "on-primary-fixed-variant": "#93000a",
+                    "background": "#f8f9fa",
+                    "surface-container-highest": "#e1e3e4",
+                    "inverse-on-surface": "#f0f1f2",
+                    "surface-tint": "#e23744",
+                    "secondary": "#a04100",
+                    "surface-variant": "#e1e3e4",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error": "#ffffff",
+                    "primary": "#e23744",
+                    "primary-fixed": "#ffdad6",
+                    "on-primary": "#ffffff",
+                    "on-background": "#191c1d",
+                    "error-container": "#ffdad6",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb3b0",
+                    "on-primary-fixed": "#410002",
+                    "surface-bright": "#f8f9fa",
+                    "outline": "#70787c",
+                    "tertiary": "#660010",
+                    "surface": "#f8f9fa",
+                    "error": "#ba1a1a",
+                    "secondary-fixed": "#ffdbcc",
+                    "on-surface": "#191c1d",
+                    "on-primary-container": "#410002",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-container": "#ff9694",
+                    "on-surface-variant": "#40484b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "12px",
+                    "base": "8px",
+                    "xs": "4px",
+                    "lg": "40px",
+                    "md": "24px",
+                    "xl": "64px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "48px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Montserrat"],
+                    "display-lg": ["Montserrat"],
+                    "label-sm": ["Montserrat"],
+                    "headline-md": ["Montserrat"],
+                    "body-md": ["Montserrat"],
+                    "headline-sm": ["Montserrat"],
+                    "body-lg": ["Montserrat"],
+                    "label-md": ["Montserrat"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #EDF2F4;
+            font-family: 'Montserrat', sans-serif;
+            color: #191c1d;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .premium-card {
+            background-color: #F8F9FA;
+            border: 1px solid #D1D9DB;
+            transition: all 0.2s ease-in-out;
+        }
+        .premium-card:hover {
+            box-shadow: 0px 4px 20px rgba(226, 55, 68, 0.08);
+            border-color: #e23744;
+        }
+        .gradient-mesh {
+            background: radial-gradient(at 0% 0%, rgba(226, 55, 68, 0.15) 0px, transparent 50%),
+                        radial-gradient(at 100% 100%, rgba(253, 119, 41, 0.1) 0px, transparent 50%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface border-b border-outline-variant shadow-sm flex items-center justify-between px-margin-mobile md:px-margin-desktop h-16 w-full">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="location_on">location_on</span>
+<span class="font-display-lg-mobile text-display-lg-mobile font-bold text-primary">MealsOnWheels</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<nav class="flex gap-6">
+<a class="text-primary font-bold font-label-md text-label-md" href="{{DATA:SCREEN:SCREEN_52}}">Home</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="{{DATA:SCREEN:SCREEN_47}}">Stops</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="{{DATA:SCREEN:SCREEN_29}}">Orders</a>
+</nav>
+<button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+</button>
+</div>
+<div class="md:hidden">
+<span class="material-symbols-outlined text-primary" data-icon="notifications">notifications</span>
+</div>
+</header>
+<main class="flex-grow pt-24 pb-32 px-margin-mobile md:px-margin-desktop relative overflow-hidden">
+<!-- Background decorative element -->
+<div class="absolute top-0 right-0 w-1/2 h-full gradient-mesh -z-10 opacity-50"></div>
+<div class="max-w-4xl mx-auto">
+<!-- Hero Header -->
+<section class="mb-lg text-center md:text-left">
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-2 leading-tight">
+                    Ready for a <br class="hidden md:block"/> mid-journey feast?
+                </h1>
+<p class="text-on-surface-variant font-body-lg text-body-lg max-w-xl">
+                    Savor high-quality meals delivered right to your transit stop. Precision timing, culinary excellence.
+                </p>
+</section>
+<!-- Search Section -->
+<section class="premium-card rounded-xl p-6 md:p-8 mb-xl">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter mb-md">
+<!-- From Location -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="departure_board">departure_board</span>
+                            Origin
+                        </label>
+<div class="relative group">
+<select class="w-full h-[56px] px-4 bg-surface-container-low border border-outline-variant rounded-lg font-body-md text-body-md appearance-none focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all cursor-pointer">
+<option disabled="" value="">Select departure city</option>
+<option selected="" value="delhi">Delhi</option>
+<option value="chandigarh">Chandigarh</option>
+<option value="mumbai">Mumbai</option>
+<option value="pune">Pune</option>
+<option value="bangalore">Bangalore</option>
+<option value="hyderabad">Hyderabad</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- To Location -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="location_on">location_on</span>
+                            Destination
+                        </label>
+<div class="relative group">
+<select class="w-full h-[56px] px-4 bg-surface-container-low border border-outline-variant rounded-lg font-body-md text-body-md appearance-none focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all cursor-pointer">
+<option disabled="" selected="" value="">Select arrival city</option>
+<option value="delhi">Delhi</option>
+<option value="chandigarh">Chandigarh</option>
+<option value="mumbai">Mumbai</option>
+<option value="pune">Pune</option>
+<option value="bangalore">Bangalore</option>
+<option value="hyderabad">Hyderabad</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter items-end">
+<!-- Date & Time -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="schedule">schedule</span>
+                            Pick-up Time
+                        </label>
+<div class="relative">
+<input class="w-full h-[56px] px-4 bg-surface-container-low border border-outline-variant rounded-lg font-body-md text-body-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all" type="text" value="Today 7:30 AM"/>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="calendar_month">calendar_month</span>
+</div>
+</div>
+<!-- Search Button -->
+<button class="h-[56px] bg-primary text-on-primary rounded-lg font-label-md text-label-md flex items-center justify-center gap-3 hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-95 shadow-md" onclick="window.location.href='{{DATA:SCREEN:SCREEN_50}}'">
+                        Search Restaurants
+                        <span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+</div>
+<!-- Popular Routes -->
+<div class="mt-8">
+<h3 class="font-label-md text-label-md text-on-surface-variant mb-3 uppercase tracking-wider">Popular routes</h3>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2 rounded-full border border-outline-variant text-on-surface-variant font-label-sm text-label-sm flex items-center gap-2 hover:bg-secondary-fixed hover:text-on-secondary-fixed-variant hover:border-secondary transition-all" onclick="window.location.href='{{DATA:SCREEN:SCREEN_50}}'">
+                            Delhi <span class="material-symbols-outlined text-[14px]" data-icon="trending_flat">trending_flat</span> Chandigarh
+                        </button>
+<button class="px-4 py-2 rounded-full border border-outline-variant text-on-surface-variant font-label-sm text-label-sm flex items-center gap-2 hover:bg-secondary-fixed hover:text-on-secondary-fixed-variant hover:border-secondary transition-all" onclick="window.location.href='{{DATA:SCREEN:SCREEN_50}}'">
+                            Mumbai <span class="material-symbols-outlined text-[14px]" data-icon="trending_flat">trending_flat</span> Pune
+                        </button>
+<button class="px-4 py-2 rounded-full border border-outline-variant text-on-surface-variant font-label-sm text-label-sm flex items-center gap-2 hover:bg-secondary-fixed hover:text-on-secondary-fixed-variant hover:border-secondary transition-all" onclick="window.location.href='{{DATA:SCREEN:SCREEN_50}}'">
+                            Bangalore <span class="material-symbols-outlined text-[14px]" data-icon="trending_flat">trending_flat</span> Hyderabad
+                        </button>
+</div>
+</div>
+</section>
+<!-- Visual Content / Featured -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="relative h-64 md:col-span-2 rounded-2xl overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent z-10"></div>
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A premium close-up of a sophisticated bento box meal being served on a clean, modern train table. The lighting is soft and natural, emphasizing fresh vegetables and steaming hot rice. The overall aesthetic is professional, airy, and high-end transit-themed with hints of teal and amber." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbEIiIgpqmlsNm58wV1BzaDNrhSPxBHFBt7yP3jF4knTdSifs_0Iutc6KapHAnVTk_vE8cz_P464mpG8d-bUczJDSKvAwb7OS4PkV2N5mhUgr4rcL9Kt6OIxwfL549nZgfqrefhMCOqFlIDSzum-DIEWJP2EtYnNRlsK-P37_FnmJWE1BHvzulX1f3qiVjDCUK8v888NYVG3VbXZcr7YITNIDwk4v1HjMdx_UEmygy8kvr9exqJNRh_Q"/>
+<div class="absolute bottom-0 left-0 p-6 z-20">
+<span class="bg-secondary text-on-secondary font-label-sm text-label-sm px-2 py-1 rounded-sm mb-2 inline-block">CHEF'S CHOICE</span>
+<h4 class="text-white font-headline-md text-headline-md">Regional Specialites</h4>
+<p class="text-white/80 font-body-md text-body-md">Sourced from top-rated kitchens along your route.</p>
+</div>
+</div>
+<div class="premium-card rounded-2xl p-6 flex flex-col justify-between">
+<div>
+<div class="w-12 h-12 bg-primary-container rounded-xl flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-on-primary-container" data-icon="timer">timer</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-primary mb-2">Precision Delivery</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Synchronized with your transit schedule for zero-wait pickups.</p>
+</div>
+<a class="text-secondary font-label-md text-label-md flex items-center gap-1 hover:underline" href="#">
+                        Learn more <span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 bg-surface border-t border-outline-variant shadow-[0px_-4px_20px_rgba(226,55,68,0.08)] flex justify-around items-center h-20 w-full px-4 pb-2">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1.5 hover:bg-surface-container-low transition-colors active:scale-95 duration-150" href="{{DATA:SCREEN:SCREEN_52}}">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1.5 active:scale-95 duration-150 ease-in-out" href="{{DATA:SCREEN:SCREEN_47}}">
+<span class="material-symbols-outlined" data-icon="departure_board">departure_board</span>
+<span class="font-label-sm text-label-sm">Stops</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1.5 hover:bg-surface-container-low transition-colors active:scale-95 duration-150" href="{{DATA:SCREEN:SCREEN_29}}">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1.5 hover:bg-surface-container-low transition-colors active:scale-95 duration-150" href="{{DATA:SCREEN:SCREEN_28}}">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions for inputs
+        const selects = document.querySelectorAll('select');
+        selects.forEach(select => {
+            select.addEventListener('focus', () => {
+                select.parentElement.classList.add('scale-[1.01]');
+            });
+            select.addEventListener('blur', () => {
+                select.parentElement.classList.remove('scale-[1.01]');
+            });
+        });
+
+        // Simple button active state visual feedback
+        const buttons = document.querySelectorAll('button:not([onclick])');
+        buttons.forEach(btn => {
+            btn.addEventListener('mousedown', () => btn.classList.add('scale-95'));
+            btn.addEventListener('mouseup', () => btn.classList.remove('scale-95'));
+        });
+    </script>
+</body></html>

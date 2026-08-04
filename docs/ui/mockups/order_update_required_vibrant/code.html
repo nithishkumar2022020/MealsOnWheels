@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TransitFood - Order Update Needed</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "on-background": "#191c1d",
+                "on-primary-fixed": "#001f28",
+                "inverse-on-surface": "#f0f1f2",
+                "surface-container-highest": "#e1e3e4",
+                "primary-fixed-dim": "#9acee1",
+                "on-secondary-fixed": "#351000",
+                "on-primary-fixed-variant": "#114d5d",
+                "surface-dim": "#d9dadb",
+                "secondary-fixed-dim": "#ffb693",
+                "secondary": "#a04100",
+                "secondary-fixed": "#ffdbcc",
+                "surface-container-low": "#f3f4f5",
+                "surface-container-lowest": "#ffffff",
+                "on-secondary": "#ffffff",
+                "tertiary-fixed": "#ffdad8",
+                "surface-tint": "#306576",
+                "error": "#ba1a1a",
+                "tertiary": "#660010",
+                "on-secondary-fixed-variant": "#7a3000",
+                "error-container": "#ffdad6",
+                "surface-variant": "#e1e3e4",
+                "primary-fixed": "#b6ebfe",
+                "background": "#f8f9fa",
+                "surface-container-high": "#e7e8e9",
+                "primary-container": "#0f4c5c",
+                "inverse-primary": "#9acee1",
+                "on-tertiary-fixed-variant": "#92001b",
+                "surface": "#f8f9fa",
+                "secondary-container": "#fd7729",
+                "tertiary-fixed-dim": "#ffb3b0",
+                "on-surface": "#191c1d",
+                "on-tertiary-fixed": "#410007",
+                "on-error-container": "#93000a",
+                "surface-bright": "#f8f9fa",
+                "outline": "#70787c",
+                "on-secondary-container": "#5e2300",
+                "on-primary": "#ffffff",
+                "on-tertiary": "#ffffff",
+                "surface-container": "#edeeef",
+                "on-primary-container": "#87bbce",
+                "tertiary-container": "#90001b",
+                "on-surface-variant": "#40484b",
+                "inverse-surface": "#2e3132",
+                "primary": "#e23744",
+                "outline-variant": "#c0c8cb",
+                "on-tertiary-container": "#ff9694",
+                "on-error": "#ffffff"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "md": "24px",
+                "lg": "40px",
+                "margin-desktop": "48px",
+                "xs": "4px",
+                "gutter": "24px",
+                "xl": "64px",
+                "margin-mobile": "16px",
+                "sm": "12px",
+                "base": "8px"
+        },
+        "fontFamily": {
+                "label-sm": [
+                        "Montserrat"
+                ],
+                "body-lg": [
+                        "Montserrat"
+                ],
+                "label-md": [
+                        "Montserrat"
+                ],
+                "body-md": [
+                        "Montserrat"
+                ],
+                "display-lg-mobile": [
+                        "Montserrat"
+                ],
+                "display-lg": [
+                        "Montserrat"
+                ],
+                "headline-sm": [
+                        "Montserrat"
+                ],
+                "headline-md": [
+                        "Montserrat"
+                ]
+        },
+        "fontSize": {
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "label-md": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "letterSpacing": "0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "display-lg-mobile": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "display-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "56px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "headline-sm": [
+                        "20px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-md": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "fontWeight": "600"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md antialiased">
+<!-- TopAppBar -->
+<header class="w-full top-0 bg-surface shadow-sm sticky z-40">
+<div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-12 w-full">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-variant transition-colors rounded-full p-1 cursor-pointer active:scale-95 duration-150">close</span>
+</div>
+<div class="font-headline-sm text-headline-sm text-primary tracking-tight font-bold">TransitFood</div>
+<div class="flex items-center gap-sm opacity-0 pointer-events-none">
+<!-- Spacer to center title -->
+<span class="material-symbols-outlined">account_circle</span>
+</div>
+</div>
+<div class="h-px w-full bg-surface-container"></div>
+</header>
+<!-- Main Content Canvas (Reconciliation State) -->
+<main class="flex-grow flex flex-col items-center justify-center p-margin-mobile md:p-margin-desktop w-full max-w-3xl mx-auto">
+<!-- Reconciliation Card (Glassmorphism/Modern Container) -->
+<div class="bg-surface border border-outline-variant rounded-xl p-md md:p-lg w-full flex flex-col items-center text-center relative overflow-hidden shadow-[0px_4px_20px_rgba(15,76,92,0.08)]">
+<!-- Background Decorative Element (Subtle) -->
+<div class="absolute -top-24 -right-24 w-64 h-64 bg-secondary-container opacity-10 rounded-full blur-3xl pointer-events-none"></div>
+<!-- Icon -->
+<div class="w-20 h-20 rounded-full bg-secondary-container/20 flex items-center justify-center mb-md relative">
+<div class="absolute inset-0 rounded-full bg-secondary-container/10 animate-ping" style="animation-duration: 3s;"></div>
+<span class="material-symbols-outlined fill text-secondary-container text-[40px]">inventory_2</span>
+</div>
+<!-- Headline -->
+<h1 class="font-headline-md text-headline-md text-on-surface mb-sm">Update Needed</h1>
+<!-- Message -->
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-lg max-w-md">
+                We're sorry, but the <strong class="text-on-surface">Paneer Paratha</strong> is no longer available at this location. Would you like to update your order?
+            </p>
+<!-- Order Context Summary -->
+<div class="w-full bg-surface-container-low rounded-lg p-4 mb-lg text-left border border-outline-variant/50">
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest mb-sm">Current Order</h3>
+<ul class="space-y-3">
+<li class="flex justify-between items-center opacity-50 relative group">
+<!-- Strikethrough effect on hover for context, but mainly just greyed out -->
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded bg-surface-container-high flex-shrink-0" data-alt="A close-up, highly detailed food photography shot of a single Paneer Paratha on a rustic plate. The lighting is warm and inviting, highlighting the golden-brown, crispy texture of the flatbread. The scene is set in a modern, sophisticated culinary environment with a light color palette featuring soft whites and subtle teal accents. The mood is appetizing and premium." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDrN905b8QqbbUC8znwlCpWXkSxpaFcZFk85xV_cHDTB9_aspe4s12g32cKIoLFCxNz5Dr70aRs3UB_czsNLDwt2gJMJdfHIaKq5tkZTQvKKvcZqcfomcJwph-lho2pD4RzTvEPAAVHZ4h3f5JpM4RugfJ2JnhklsBCUWXvVgziYZaFcAH6mP2s2TDU39nkd4KaTPd0oFD7XL7PwrgYBQdH1vqOYiQnJP5bARI6TRQBOWhpgG-J6lpPmg')"></div>
+<div>
+<span class="font-label-md text-label-md text-on-surface line-through decoration-on-surface-variant decoration-2">Paneer Paratha</span>
+<div class="font-label-sm text-label-sm text-error mt-0.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">error</span> Unavailable
+                                </div>
+</div>
+</div>
+<span class="font-body-md text-body-md text-on-surface-variant line-through">$8.50</span>
+</li>
+<li class="h-px bg-outline-variant/30 w-full"></li>
+<li class="flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded bg-surface-container-high flex-shrink-0" data-alt="A top-down, high-quality image of a bowl of rich, creamy Dal Makhani garnished with a swirl of fresh cream and cilantro. The food is placed on a clean, light-colored surface (surface-bright) with a subtle, diffused shadow. The lighting is editorial and crisp, emphasizing the rich dark brown color of the dal against the sophisticated, minimalist setting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCudKR3rJUoOutotkDmTF8l635pAiYtw6EeNwaqaJbHARU-pXz5Cm2cANkudvSqV4xSIiFEzv6pb55fQOg4HTQnmQsQZ5orNYnmzzTSDurBMHkqPHH3XevIW9a_08rjPvI5aGw0Qqtb7BAoQNC-Amct8lFCB1Xk0b7RO_QDVjSE4-vGZ2J3KhZ389c3R1qxUwlevmkxRthBefI689Y6hrqXOpIpy5R0eEOeMj6evJ1vNZRV3PEovvswFQ')"></div>
+<div>
+<span class="font-label-md text-label-md text-on-surface">Dal Makhani Bowl</span>
+<div class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">Qty: 1</div>
+</div>
+</div>
+<span class="font-body-md text-body-md text-on-surface">$12.00</span>
+</li>
+</ul>
+</div>
+<!-- Actions -->
+<div class="flex flex-col sm:flex-row gap-sm w-full sm:w-auto">
+<button class="h-[48px] px-8 bg-primary text-on-primary rounded font-label-md text-label-md transition-transform active:scale-95 duration-150 flex-1 sm:flex-none shadow-sm hover:shadow-[0px_4px_12px_rgba(226,55,68,0.2)]">
+                    Update Order
+                </button>
+<button class="h-[48px] px-8 bg-surface text-secondary border border-secondary rounded font-label-md text-label-md transition-colors hover:bg-secondary-fixed/30 active:scale-95 duration-150 flex-1 sm:flex-none">
+                    Cancel Order
+                </button>
+</div>
+</div>
+</main>
+<!-- Navigation Suppressed: Transactional/Interrupt flow -->
+</body></html>

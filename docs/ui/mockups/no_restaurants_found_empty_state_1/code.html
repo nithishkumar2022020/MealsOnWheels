@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>No Results Found - Sophisticated Transit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "surface-container-highest": "#e1e3e4",
+                "primary-fixed-dim": "#9acee1",
+                "primary": "#003441",
+                "inverse-on-surface": "#f0f1f2",
+                "on-error-container": "#93000a",
+                "secondary": "#a04100",
+                "secondary-fixed-dim": "#ffb693",
+                "primary-fixed": "#b6ebfe",
+                "inverse-surface": "#2e3132",
+                "surface-container": "#edeeef",
+                "on-primary-container": "#87bbce",
+                "on-error": "#ffffff",
+                "surface-dim": "#d9dadb",
+                "on-secondary-container": "#5e2300",
+                "on-surface-variant": "#40484b",
+                "outline": "#70787c",
+                "on-tertiary-fixed-variant": "#92001b",
+                "surface": "#f8f9fa",
+                "on-primary": "#ffffff",
+                "tertiary-container": "#90001b",
+                "surface-tint": "#306576",
+                "background": "#f8f9fa",
+                "on-secondary-fixed-variant": "#7a3000",
+                "outline-variant": "#c0c8cb",
+                "on-surface": "#191c1d",
+                "surface-variant": "#e1e3e4",
+                "error": "#ba1a1a",
+                "tertiary": "#660010",
+                "surface-container-low": "#f3f4f5",
+                "secondary-container": "#fd7729",
+                "on-secondary": "#ffffff",
+                "inverse-primary": "#9acee1",
+                "surface-container-lowest": "#ffffff",
+                "surface-bright": "#f8f9fa",
+                "secondary-fixed": "#ffdbcc",
+                "on-primary-fixed-variant": "#114d5d",
+                "on-primary-fixed": "#001f28",
+                "tertiary-fixed-dim": "#ffb3b0",
+                "error-container": "#ffdad6",
+                "on-tertiary-container": "#ff9694",
+                "primary-container": "#0f4c5c",
+                "on-secondary-fixed": "#351000",
+                "surface-container-high": "#e7e8e9",
+                "on-tertiary-fixed": "#410007",
+                "on-tertiary": "#ffffff",
+                "on-background": "#191c1d",
+                "tertiary-fixed": "#ffdad8"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "xs": "4px",
+                "md": "24px",
+                "sm": "12px",
+                "gutter": "24px",
+                "base": "8px",
+                "margin-desktop": "48px",
+                "lg": "40px",
+                "xl": "64px",
+                "margin-mobile": "16px",
+                "touch-target-min": "48px",
+                "container-margin": "24px"
+            },
+            "fontFamily": {
+                "headline-sm": ["Montserrat"],
+                "display-lg": ["Montserrat"],
+                "label-md": ["Montserrat"],
+                "label-sm": ["Montserrat"],
+                "display-lg-mobile": ["Montserrat"],
+                "headline-md": ["Montserrat"],
+                "headline-lg-mobile": ["Montserrat"],
+                "body-md": ["Montserrat"],
+                "body-lg": ["Montserrat"]
+            },
+            "fontSize": {
+                "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #f8f9fa;
+            color: #191c1d;
+            font-family: 'Montserrat', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .premium-shadow {
+            box-shadow: 0px 4px 20px rgba(0, 52, 65, 0.08);
+        }
+
+        /* Subtle animated background for atmosphere */
+        .highway-bg-pattern {
+            background-color: #f8f9fa;
+            background-image: radial-gradient(#d1d9db 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+            opacity: 0.4;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim shadow-sm docked full-width top-0 z-50 flex justify-between items-center w-full px-container-margin py-base h-touch-target-min">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim" data-icon="location_on">location_on</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary dark:text-primary-fixed-dim">En route: New Delhi Exp</h1>
+</div>
+<div class="flex items-center">
+<button class="p-2 hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center px-6 py-12 relative overflow-hidden">
+<!-- Background Pattern Decor -->
+<div class="absolute inset-0 highway-bg-pattern -z-10"></div>
+<!-- Empty State Illustration Container -->
+<div class="w-full max-w-md flex flex-col items-center text-center">
+<!-- Minimal Highway Illustration -->
+<div class="mb-12 w-64 h-64 flex items-center justify-center relative">
+<svg class="w-full h-full" fill="none" viewbox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<!-- Road -->
+<path d="M40 180L90 40H110L160 180H140L105 80H95L60 180H40Z" fill="#D1D9DB"></path>
+<!-- Road Markings -->
+<rect fill="#F8F9FA" height="20" opacity="0.8" width="4" x="98" y="60"></rect>
+<rect fill="#F8F9FA" height="25" opacity="0.8" width="4" x="98" y="100"></rect>
+<rect fill="#F8F9FA" height="30" opacity="0.8" width="4" x="98" y="145"></rect>
+<!-- Map Pin at Destination -->
+<path d="M100 20C91.7 20 85 26.7 85 35C85 46.2 100 65 100 65C100 65 115 46.2 115 35C115 26.7 108.3 20 100 20ZM100 42.5C95.9 42.5 92.5 39.1 92.5 35C92.5 30.9 95.9 27.5 100 27.5C104.1 27.5 107.5 30.9 107.5 35C107.5 39.1 104.1 42.5 100 42.5Z" fill="#003441"></path>
+<!-- Subtle shadow -->
+<ellipse cx="100" cy="180" fill="#003441" fill-opacity="0.05" rx="40" ry="8"></ellipse>
+</svg>
+<!-- Floating Decorative Chips -->
+<div class="absolute top-0 right-0 animate-bounce transition-all duration-[3000ms]">
+<span class="material-symbols-outlined text-outline-variant text-4xl opacity-40" data-icon="restaurant">restaurant</span>
+</div>
+</div>
+<!-- Text Content -->
+<div class="space-y-4 mb-10">
+<h2 class="font-headline-md text-headline-md text-primary tracking-tight">No restaurants found on your route</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-sm mx-auto">
+                    Try adjusting your search time or location to find more options.
+                </p>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col sm:flex-row gap-4 w-full px-4">
+<button class="flex-1 h-touch-target-min bg-primary text-on-primary font-label-md text-label-md rounded-lg premium-shadow active:scale-95 transition-transform flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="search">search</span>
+                    Search another route
+                </button>
+<button class="flex-1 h-touch-target-min border-2 border-outline-variant text-primary font-label-md text-label-md rounded-lg hover:bg-surface-variant transition-colors active:scale-95 transition-transform flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+                    Browse popular routes
+                </button>
+</div>
+<!-- Secondary Link -->
+<a class="mt-8 text-primary font-label-md text-label-md underline underline-offset-4 hover:text-secondary transition-colors" href="#">
+                Set a reminder to search later?
+            </a>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="bg-surface dark:bg-surface-container-lowest shadow-lg docked full-width bottom-0 rounded-t-xl fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-container-margin pb-4 pt-2">
+<div class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-dim transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-full px-4 py-1 active:scale-90 transition-all duration-150 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="departure_board">departure_board</span>
+<span class="font-label-sm text-label-sm">Stops</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-dim transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-dim transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</div>
+</nav>
+<script>
+        // Micro-interaction: Subtle parallax on the empty highway SVG based on mouse movement
+        document.addEventListener('mousemove', (e) => {
+            const svg = document.querySelector('svg');
+            const x = (window.innerWidth / 2 - e.pageX) / 45;
+            const y = (window.innerHeight / 2 - e.pageY) / 45;
+            if (svg) {
+                svg.style.transform = `translateX(${x}px) translateY(${y}px)`;
+            }
+        });
+
+        // Simple scale effect for primary button on hover
+        const primaryBtn = document.querySelector('.bg-primary');
+        if (primaryBtn) {
+            primaryBtn.addEventListener('mouseenter', () => {
+                primaryBtn.classList.remove('premium-shadow');
+                primaryBtn.classList.add('shadow-lg');
+            });
+            primaryBtn.addEventListener('mouseleave', () => {
+                primaryBtn.classList.add('premium-shadow');
+                primaryBtn.classList.remove('shadow-lg');
+            });
+        }
+    </script>
+</body></html>

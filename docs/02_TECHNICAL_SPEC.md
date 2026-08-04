@@ -297,7 +297,6 @@ Documented in `backend/.env.example` and [12_DEPLOYMENT.md](./12_DEPLOYMENT.md):
 | `DATABASE_URL` | Yes | PostgreSQL connection string (asyncpg driver) |
 | `JWT_SECRET` | Yes | HS256 signing secret (≥ 32 bytes) |
 | `ENVIRONMENT` | Yes | `development` \| `test` \| `production`. Gates the OTP stub, the dashboard token, and the API docs — so it has no default |
-| `RESTAURANT_DASHBOARD_TOKEN` | Yes when `ENVIRONMENT != production` | Shared secret for `X-Restaurant-Token` |
 | `REDIS_URL` | No | Redis URL; omit to run without cache |
 | `JWT_EXPIRE_HOURS` | No | Default 24 |
 | `NOMINATIM_BASE_URL` | No | Default public Nominatim |

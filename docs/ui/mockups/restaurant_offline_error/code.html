@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Restaurant Offline - Sophisticated Transit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "surface-container-highest": "#e1e3e4",
+                "primary-fixed-dim": "#9acee1",
+                "primary": "#003441",
+                "inverse-on-surface": "#f0f1f2",
+                "on-error-container": "#93000a",
+                "secondary": "#a04100",
+                "secondary-fixed-dim": "#ffb693",
+                "primary-fixed": "#b6ebfe",
+                "inverse-surface": "#2e3132",
+                "surface-container": "#edeeef",
+                "on-primary-container": "#87bbce",
+                "on-error": "#ffffff",
+                "surface-dim": "#d9dadb",
+                "on-secondary-container": "#5e2300",
+                "on-surface-variant": "#40484b",
+                "outline": "#70787c",
+                "on-tertiary-fixed-variant": "#92001b",
+                "surface": "#f8f9fa",
+                "on-primary": "#ffffff",
+                "tertiary-container": "#90001b",
+                "surface-tint": "#306576",
+                "background": "#f8f9fa",
+                "on-secondary-fixed-variant": "#7a3000",
+                "outline-variant": "#c0c8cb",
+                "on-surface": "#191c1d",
+                "surface-variant": "#e1e3e4",
+                "error": "#ba1a1a",
+                "tertiary": "#660010",
+                "surface-container-low": "#f3f4f5",
+                "secondary-container": "#fd7729",
+                "on-secondary": "#ffffff",
+                "inverse-primary": "#9acee1",
+                "surface-container-lowest": "#ffffff",
+                "surface-bright": "#f8f9fa",
+                "secondary-fixed": "#ffdbcc",
+                "on-primary-fixed-variant": "#114d5d",
+                "on-primary-fixed": "#001f28",
+                "tertiary-fixed-dim": "#ffb3b0",
+                "error-container": "#ffdad6",
+                "on-tertiary-container": "#ff9694",
+                "primary-container": "#0f4c5c",
+                "on-secondary-fixed": "#351000",
+                "surface-container-high": "#e7e8e9",
+                "on-tertiary-fixed": "#410007",
+                "on-tertiary": "#ffffff",
+                "on-background": "#191c1d",
+                "tertiary-fixed": "#ffdad8"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "xs": "4px",
+                "md": "24px",
+                "sm": "12px",
+                "gutter": "24px",
+                "base": "8px",
+                "margin-desktop": "48px",
+                "lg": "40px",
+                "xl": "64px",
+                "margin-mobile": "16px",
+                "touch-target-min": "48px",
+                "container-margin": "24px"
+            },
+            "fontFamily": {
+                "headline-sm": ["Montserrat"],
+                "display-lg": ["Montserrat"],
+                "label-md": ["Montserrat"],
+                "label-sm": ["Montserrat"],
+                "display-lg-mobile": ["Montserrat"],
+                "headline-md": ["Montserrat"],
+                "body-md": ["Montserrat"],
+                "body-lg": ["Montserrat"],
+                "headline-lg-mobile": ["Montserrat"]
+            },
+            "fontSize": {
+                "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #EDF2F4;
+            font-family: 'Montserrat', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .modal-overlay {
+            background: rgba(0, 52, 65, 0.4);
+            backdrop-filter: blur(4px);
+        }
+        .premium-shadow {
+            box-shadow: 0px 4px 20px rgba(15, 76, 92, 0.08);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- Top App Bar (Shared Component) -->
+<header class="bg-surface docked full-width top-0 shadow-sm flex justify-between items-center w-full px-container-margin py-base h-touch-target-min fixed top-0 left-0 z-40">
+<div class="flex items-center gap-base">
+<span class="material-symbols-outlined text-primary" data-icon="location_on">location_on</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">En route: New Delhi Exp</h1>
+</div>
+<div class="flex items-center gap-md">
+<button class="hover:bg-surface-container-low transition-colors p-2 rounded-full">
+<span class="material-symbols-outlined text-primary" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-20 px-container-margin min-h-screen">
+<!-- Sub-Header -->
+<section class="mb-lg">
+<h2 class="font-headline-md text-headline-md text-primary mb-xs">Ambala Junction (UMB)</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Recommended restaurants at this stop</p>
+</section>
+<!-- Bento Grid Restaurant List -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Featured Restaurant (Active Context) -->
+<div class="md:col-span-8 bg-surface-container-lowest rounded-xl p-md border border-outline-variant premium-shadow flex flex-col md:flex-row gap-md relative overflow-hidden">
+<div class="w-full md:w-1/3 h-48 md:h-auto rounded-lg overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover grayscale opacity-50" data-alt="A premium food photography shot of a traditional Indian thali with vibrant curries and fresh naan, captured in a clean high-end editorial style with soft natural lighting and warm amber accents, echoing a sophisticated transit dining experience." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrkU55ZYw8jjXbbGeJyA-raIMMeC-iIY5K4HURduuLjkjNbLFUQ9mcOiVQhuCK9xqPQbWeuO65gWcUwXb39JEA1KmZRGNaL5Zhhhqlaz5CXTt73JmMPLdzdNXqKkbwn7vQ6RBlFJ5j0Sv7jEblHDm5jSH6r2BQNAqpl9mprDXsz4RRu1TonoL34KGBbOUIE0WdZz6XzNMVNdPL9pDIqL3MU1ZHOEjj9xf-rb2PICCOxlNetvYNjhIaOQ"/>
+</div>
+<div class="flex-1 flex flex-col justify-center">
+<div class="flex items-center gap-sm mb-base">
+<span class="font-label-sm text-label-sm px-2 py-1 bg-surface-variant text-on-surface-variant rounded">CLOSED</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-xs">Ambala Cantt Kitchen</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md">Premium North Indian delicacies and regional comfort food.</p>
+<div class="mt-auto flex items-center gap-md">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-secondary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md">4.8</span>
+</div>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary" data-icon="schedule">schedule</span>
+<span class="font-label-md text-label-md">Offline</span>
+</div>
+</div>
+</div>
+<!-- Status Badge -->
+<div class="absolute top-4 right-4 bg-error-container text-on-error-container px-3 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="error">error</span>
+                    NOT ACCEPTING ORDERS
+                </div>
+</div>
+<!-- Side Bento Items -->
+<div class="md:col-span-4 bg-surface-container-lowest rounded-xl p-md border border-outline-variant flex flex-col gap-sm">
+<h4 class="font-label-md text-label-md text-secondary">ALTERNATIVES</h4>
+<div class="flex items-center gap-sm p-base hover:bg-surface-container-low transition-colors rounded-lg cursor-pointer">
+<div class="w-16 h-16 rounded bg-surface-container shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A clean, professional close-up of a steaming bowl of artisanal pasta with fresh herbs, shot against a neutral background with soft high-key lighting, maintaining a corporate and modern food aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3DKJ88HbhixrgJaJUtN2eE5o4WA1n62nopPiDeIZ8ydNfJ-aO_PKj_H__Roa-pI9Tvqec9jc6e4BFPyY6Z5m3aMddDQ2zAIz3W11Lv8Bjdir4u0imzfksq_jUMGXIYHGRSe-PQ9mx53Vx7FvPt44pDpGmh2E9LmIWcS1-bQ2u78vkYIDdYUfEPqO1DgUVA77ChZxwWEA9J7GS-O0lZZxRz0S6EJabiNsWFZZKWq_2PdbaAfPvxZ2FFQ"/>
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary">Station Bites</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Continental • 15 mins</p>
+</div>
+</div>
+<div class="flex items-center gap-sm p-base hover:bg-surface-container-low transition-colors rounded-lg cursor-pointer">
+<div class="w-16 h-16 rounded bg-surface-container shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A minimalist overhead shot of healthy gourmet salads and grain bowls arranged neatly on a white tabletop, featuring vibrant greens and sunset amber roasted vegetables in a sophisticated layout." src="https://lh3.googleusercontent.com/aida-public/AB6AXuATt7lyte5kTKK0Prl_OLtM0OjJ8YtnbjAWaEbmzIki3z3GfOP5xkFPobeGUHHBre-dYHWkSCsO2uXuo_m5X_38JbvFDFnNvbI1WnhCW0wSTvvL31VymPsvs-qwMJ9ZD-i7JlkjwDOaIXVa57U5PzXJIGJThwaNXf9CaG8r63nirpVJzxpMh_KQMYukWrp1mjXjdi8H3HnEGKYVf0kjxHJRCKYP3_DMISLTiBkhWhrcIk62d11SFBw1qg"/>
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary">Green Express</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Salads • 10 mins</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Nav Bar (Shared Component) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-container-margin pb-4 pt-2 bg-surface rounded-t-xl shadow-lg md:hidden">
+<a class="flex flex-col items-center justify-center text-secondary px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="departure_board">departure_board</span>
+<span class="font-label-sm text-label-sm">Stops</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<!-- ERROR STATE: RESTAURANT OFFLINE MODAL -->
+<div class="fixed inset-0 z-[100] flex items-center justify-center p-md modal-overlay" id="offlineModal">
+<div class="bg-surface-container-lowest w-full max-w-[440px] rounded-xl premium-shadow overflow-hidden border border-outline-variant animate-in fade-in zoom-in duration-300">
+<!-- Modal Header / Decorative Element -->
+<div class="h-1.5 w-full bg-error"></div>
+<div class="p-lg flex flex-col items-center text-center">
+<!-- Icon: Soft red alert -->
+<div class="w-16 h-16 rounded-full bg-error-container flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-error text-[40px]" data-icon="storefront" style="font-variation-settings: 'FILL' 0;">storefront</span>
+<div class="absolute translate-x-5 translate-y-5 bg-surface-container-lowest rounded-full p-1">
+<span class="material-symbols-outlined text-error text-[20px]" data-icon="block">block</span>
+</div>
+</div>
+<!-- Content -->
+<h2 class="font-headline-sm text-headline-sm text-primary mb-sm">Restaurant not responding</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-xl leading-relaxed">
+                    Ambala Cantt is currently not accepting orders. Please try another restaurant at this stop.
+                </p>
+<!-- Actions -->
+<div class="w-full">
+<button class="w-full bg-primary text-on-primary h-[48px] rounded-lg font-label-md text-label-md hover:opacity-90 active:scale-95 transition-all shadow-md" id="dismissModal">
+                        Okay
+                    </button>
+</div>
+</div>
+</div>
+</div>
+<script>
+        // Modal Dismiss Interaction
+        const modal = document.getElementById('offlineModal');
+        const dismissBtn = document.getElementById('dismissModal');
+
+        dismissBtn.addEventListener('click', () => {
+            modal.classList.add('opacity-0', 'pointer-events-none', 'transition-opacity', 'duration-300');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        });
+
+        // Close on ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.style.display !== 'none') {
+                dismissBtn.click();
+            }
+        });
+
+        // Atmospheric Micro-interaction for buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousedown', () => {
+                btn.style.transform = 'scale(0.98)';
+            });
+            btn.addEventListener('mouseup', () => {
+                btn.style.transform = 'scale(1)';
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>

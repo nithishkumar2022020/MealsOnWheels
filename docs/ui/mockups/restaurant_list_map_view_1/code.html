@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MealsOnWheels - Ambala Cantt</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      vertical-align: middle;
+    }
+    .active-nav-pill {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    /* Custom scrollbar for premium feel */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f1f1; }
+    ::-webkit-scrollbar-thumb { background: #0f4c5c; border-radius: 10px; }
+    
+    .map-container {
+      background-image: radial-gradient(#c0c8cb 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    
+    .glass-effect {
+      background: rgba(248, 249, 250, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+  </style>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-container": "#90001b",
+            "surface-container": "#edeeef",
+            "outline-variant": "#c0c8cb",
+            "on-tertiary": "#ffffff",
+            "error-container": "#ffdad6",
+            "tertiary": "#660010",
+            "surface-container-high": "#e7e8e9",
+            "secondary-fixed": "#ffdbcc",
+            "tertiary-fixed-dim": "#ffb3b0",
+            "on-tertiary-container": "#ff9694",
+            "on-primary": "#ffffff",
+            "on-primary-fixed-variant": "#114d5d",
+            "inverse-on-surface": "#f0f1f2",
+            "error": "#ba1a1a",
+            "on-tertiary-fixed": "#410007",
+            "on-surface-variant": "#40484b",
+            "primary-fixed-dim": "#9acee1",
+            "inverse-primary": "#9acee1",
+            "on-secondary": "#ffffff",
+            "on-background": "#191c1d",
+            "tertiary-fixed": "#ffdad8",
+            "surface-container-lowest": "#ffffff",
+            "primary-container": "#0f4c5c",
+            "on-secondary-fixed-variant": "#7a3000",
+            "inverse-surface": "#2e3132",
+            "on-primary-container": "#87bbce",
+            "on-secondary-container": "#5e2300",
+            "surface-container-low": "#f3f4f5",
+            "surface": "#f8f9fa",
+            "on-primary-fixed": "#001f28",
+            "background": "#f8f9fa",
+            "surface-tint": "#306576",
+            "primary": "#003441",
+            "on-secondary-fixed": "#351000",
+            "surface-dim": "#d9dadb",
+            "secondary-container": "#fd7729",
+            "secondary": "#a04100",
+            "on-surface": "#191c1d",
+            "on-tertiary-fixed-variant": "#92001b",
+            "on-error-container": "#93000a",
+            "primary-fixed": "#b6ebfe",
+            "secondary-fixed-dim": "#ffb693",
+            "surface-bright": "#f8f9fa",
+            "outline": "#70787c",
+            "surface-variant": "#e1e3e4",
+            "surface-container-highest": "#e1e3e4",
+            "on-error": "#ffffff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "lg": "40px",
+            "xl": "64px",
+            "md": "24px",
+            "base": "8px",
+            "gutter": "24px",
+            "xs": "4px",
+            "sm": "12px",
+            "margin-mobile": "16px",
+            "margin-desktop": "48px"
+          },
+          "fontFamily": {
+            "label-sm": ["Montserrat"],
+            "headline-sm": ["Montserrat"],
+            "body-md": ["Montserrat"],
+            "headline-md": ["Montserrat"],
+            "body-lg": ["Montserrat"],
+            "label-md": ["Montserrat"],
+            "display-lg-mobile": ["Montserrat"],
+            "display-lg": ["Montserrat"]
+          },
+          "fontSize": {
+            "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+            "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+            "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+            "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+            "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+            "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-20 md:pb-0">
+<!-- TopAppBar Component (Immutable Content) -->
+<header class="fixed top-0 w-full z-50 bg-surface dark:bg-surface-dim shadow-sm dark:shadow-none border-b border-outline-variant dark:border-outline h-16 flex items-center justify-between px-margin-mobile md:px-margin-desktop">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim">location_on</span>
+<div class="flex flex-col">
+<span class="font-bold text-primary dark:text-on-primary-container font-display-lg-mobile text-[18px]">Ambala Cantt</span>
+<span class="text-xs text-on-surface-variant">Railway Station Area</span>
+</div>
+</div>
+<div class="absolute left-1/2 -translate-x-1/2 hidden md:block">
+<h1 class="font-display-lg-mobile text-display-lg-mobile font-bold text-primary dark:text-on-primary-container">MealsOnWheels</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">search</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim">notifications</span>
+</button>
+</div>
+</header>
+<main class="pt-20 px-margin-mobile md:px-margin-desktop max-w-[1280px] mx-auto">
+<!-- Hero & View Toggle -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-md mb-lg">
+<div>
+<p class="text-secondary font-label-md mb-2">Transit-Friendly Dining</p>
+<h2 class="font-headline-md text-headline-md text-primary">Discover Stops in Ambala</h2>
+</div>
+<!-- Segmented Toggle -->
+<div class="inline-flex p-1 bg-surface-container rounded-xl shadow-inner h-12 w-full md:w-64">
+<button class="flex-1 flex items-center justify-center gap-2 font-label-md rounded-lg bg-surface text-primary shadow-sm active-nav-pill" id="listViewBtn" onclick="toggleView('list')">
+<span class="material-symbols-outlined text-[20px]">list</span>
+          List View
+        </button>
+<button class="flex-1 flex items-center justify-center gap-2 font-label-md rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-all" id="mapViewBtn" onclick="toggleView('map')">
+<span class="material-symbols-outlined text-[20px]">map</span>
+          Map View
+        </button>
+</div>
+</div>
+<!-- Filter Bar -->
+<div class="flex items-center gap-sm overflow-x-auto pb-4 no-scrollbar mb-md">
+<button class="flex items-center gap-2 px-4 py-2 rounded-full border border-outline-variant bg-surface hover:bg-surface-container-low transition-colors whitespace-nowrap text-label-md">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+        Filters
+      </button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-full bg-primary-container text-on-primary-container text-label-md whitespace-nowrap">
+        Hygiene: 4.0+
+      </button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-full border border-outline-variant bg-surface hover:bg-surface-container-low transition-colors whitespace-nowrap text-label-md">
+        Fast Prep (&lt; 20m)
+      </button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-full border border-outline-variant bg-surface hover:bg-surface-container-low transition-colors whitespace-nowrap text-label-md">
+        Pure Veg
+      </button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-full border border-outline-variant bg-surface hover:bg-surface-container-low transition-colors whitespace-nowrap text-label-md">
+        Cuisines
+        <span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+</div>
+<!-- List View Container -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter mb-xl" id="listView">
+<!-- Restaurant Card 1 -->
+<div class="group bg-surface rounded-xl overflow-hidden border border-outline-variant hover:shadow-[0px_4px_20px_rgba(15,76,92,0.08)] transition-all duration-300">
+<div class="relative h-48 overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="A premium Indian restaurant interior with warm sunset amber lighting, wooden furniture, and elegant table settings in Ambala. The atmosphere is sophisticated and clean, reflecting high-end transit dining with a focus on hygiene and modern corporate aesthetics. Teal accents are subtly integrated into the decor." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDNDjO-gzElDDgpTV227babu-8QseN85gghyx-CUpf32UxgFPip_IE3RJ93CY4-VI_18hUj3TVLW31EG5ciFcB_HRR0a_Vka8XjGKVsMMXTMHvBjUiEHhHDRzGq3G_ho4Ry6Ta5bskfusvGVzNwcprDKSOMsgeV0-3J62aCKmASLYP6SOd4IKnDOjTJC8BqFRFnAfH5sl8iJlLyNnAeBzkCkHPE07r3x7Yy_OsFY93DxLiWXCqPPm9lIA')">
+</div>
+<div class="absolute top-3 left-3 bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+            QUICK PREP
+          </div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm text-headline-sm text-primary">Ambala Highway Treat</h3>
+<div class="flex items-center gap-1 bg-surface-container px-2 py-1 rounded text-label-sm text-primary">
+<span class="material-symbols-outlined text-[16px] text-secondary" style="font-variation-settings: 'FILL' 1;">star</span>
+              4.8
+            </div>
+</div>
+<p class="text-on-surface-variant text-label-md mb-4">North Indian • Continental • 2.4 km</p>
+<div class="flex items-center justify-between border-t border-surface-variant pt-4">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+<span class="text-label-sm">15-20 mins</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">verified_user</span>
+<span class="text-label-sm">Hygiene A+</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Restaurant Card 2 -->
+<div class="group bg-surface rounded-xl overflow-hidden border border-outline-variant hover:shadow-[0px_4px_20px_rgba(15,76,92,0.08)] transition-all duration-300">
+<div class="relative h-48 overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="A modern, high-density cafe environment with minimalist white walls and midnight teal accents. Large windows show a bustling transit station outside. The lighting is soft and corporate, highlighting the pristine cleanliness of the food preparation area. Professional food photography style with editorial clarity." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCc317bu6At3sS0DfoCoMJdnf__VTFMg0yk23cyh9BMq066mer2h0USm4E7cZFMC3rLlAy7TAfffkcy6W1J_7IsOpafegU7BomGFNHWUreLNivySeeOIcs81mATAqgDQexOHQ2TrzDNh86v5kMJEPcTW5dsbNOpwlGmydjw57NuVO7HG_glb662KLECfcifZgvjC6OdjWHLQbN5-AgxdvQa9m7baaunyAosXkugl2YSTWLLBRW4EhHUZQ')">
+</div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm text-headline-sm text-primary">The Transit Junction</h3>
+<div class="flex items-center gap-1 bg-surface-container px-2 py-1 rounded text-label-sm text-primary">
+<span class="material-symbols-outlined text-[16px] text-secondary" style="font-variation-settings: 'FILL' 1;">star</span>
+              4.5
+            </div>
+</div>
+<p class="text-on-surface-variant text-label-md mb-4">South Indian • Beverages • 0.8 km</p>
+<div class="flex items-center justify-between border-t border-surface-variant pt-4">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+<span class="text-label-sm">10-12 mins</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">verified_user</span>
+<span class="text-label-sm">Hygiene A</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Restaurant Card 3 -->
+<div class="group bg-surface rounded-xl overflow-hidden border border-outline-variant hover:shadow-[0px_4px_20px_rgba(15,76,92,0.08)] transition-all duration-300">
+<div class="relative h-48 overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="Gourmet bakery and pastry shop with a sophisticated modern aesthetic. White marble counters, glass displays, and subtle sunset amber lighting. The scene is calm and orderly, emphasizing high-end culinary precision and premium service. Detailed textures of freshly baked bread and fine pastries." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDAHeiZzsAcEJ8eM7TrIELYB9kNZcdu4GcZpZrzkoTXGGQL2Pm_-8DWuhLeVatqXZAKJYd9YJy-HBoZH-eaoGP9Yjno9LlkK7h0FtO33hypAP_PMiomlC33-use121b5OzVFhYj-NtrYUwhOBjp4IV0JYNrHmqKRxUdIiziTSyrkCs7k34DMTpBpyB_48dU2_GrNe8dHcse1NKGdrn8oKr-bteRKUNgfJ6UyVFieu6mHuMqOXMudNngcg')">
+</div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-sm text-headline-sm text-primary">Heritage Delights</h3>
+<div class="flex items-center gap-1 bg-surface-container px-2 py-1 rounded text-label-sm text-primary">
+<span class="material-symbols-outlined text-[16px] text-secondary" style="font-variation-settings: 'FILL' 1;">star</span>
+              4.7
+            </div>
+</div>
+<p class="text-on-surface-variant text-label-md mb-4">Bakery • Desserts • 1.5 km</p>
+<div class="flex items-center justify-between border-t border-surface-variant pt-4">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+<span class="text-label-sm">8-15 mins</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">verified_user</span>
+<span class="text-label-sm">Hygiene A+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Map View Container (Hidden by default) -->
+<div class="hidden h-[600px] w-full rounded-2xl overflow-hidden border border-outline-variant shadow-lg relative mb-xl" id="mapView">
+<!-- Simulated OSM Map -->
+<div class="absolute inset-0 bg-surface-container map-container flex items-center justify-center" data-location="Ambala Cantt" style="">
+<div class="text-center">
+<span class="material-symbols-outlined text-[64px] text-primary opacity-20">map</span>
+<p class="text-on-surface-variant mt-2 font-label-md">Interactive Transit Map - Ambala Cantt</p>
+</div>
+<!-- Markers -->
+<div class="absolute top-[30%] left-[40%] group cursor-pointer" onclick="showPopup('Ambala Highway Treat')">
+<div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+</div>
+<div class="absolute -top-12 left-1/2 -translate-x-1/2 bg-white px-3 py-1 rounded-lg text-xs font-bold whitespace-nowrap shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+            Highway Treat
+          </div>
+</div>
+<div class="absolute top-[50%] left-[60%] group cursor-pointer" onclick="showPopup('The Transit Junction')">
+<div class="w-10 h-10 bg-secondary text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">coffee</span>
+</div>
+<div class="absolute -top-12 left-1/2 -translate-x-1/2 bg-white px-3 py-1 rounded-lg text-xs font-bold whitespace-nowrap shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+            Transit Junction
+          </div>
+</div>
+<!-- Selected Restaurant Popup (Floating Glass Card) -->
+<div class="absolute bottom-8 left-8 right-8 md:right-auto md:w-96 glass-effect p-4 rounded-2xl border border-outline-variant shadow-xl transform translate-y-full transition-transform duration-500" id="mapPopup">
+<div class="flex gap-4">
+<div class="w-24 h-24 rounded-lg bg-cover bg-center flex-shrink-0" data-alt="Close up of a delicious signature dish with steam rising, reflecting the heat and movement brand value. Vibrant colors, shallow depth of field, high-end food commercial photography aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCWdx9E7XzhLjuHND-kBzk0avhtUb-vYVFHuTr-2GVDZO7xVp2wZHEbehGopjeqpRNvsQjyVw9gZPG7JvvAAW2aaZQk-KU6uUsZX4vHl-xJcqK-Ky-EUUIUyhYDmjm2ZuCnN6m-gzPMqhLCBDyY-K_WBGVexqCjXpzvM0uOeAg8vAbzcQIl81KkAexotyiYpKRTAV1CUZFPDokZbQDxddHzq1avFkHhx2tiE8aykdR2FK5W3hqtedU0Uw')"></div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h4 class="font-headline-sm text-[18px] text-primary" id="popupTitle">Selected Stop</h4>
+<button class="text-on-surface-variant" onclick="hidePopup()"><span class="material-symbols-outlined text-[20px]">close</span></button>
+</div>
+<p class="text-label-sm text-on-surface-variant mb-2">Ready in ~18 mins</p>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1 text-secondary text-label-sm">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                   4.8
+                 </div>
+<button class="bg-primary text-white px-4 py-2 rounded-lg text-label-sm font-bold flex-1">View Menu</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar Component (Immutable Content) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 bg-surface dark:bg-inverse-surface border-t border-outline-variant dark:border-outline shadow-[0px_-4px_20px_rgba(15,76,92,0.08)] h-20 px-4 pb-2 flex justify-around items-center">
+<div class="flex flex-col items-center justify-center bg-primary-container dark:bg-secondary-container text-on-primary-container dark:text-on-secondary-container rounded-xl px-4 py-1.5 active-nav-pill">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1.5">
+<span class="material-symbols-outlined">departure_board</span>
+<span class="font-label-sm text-label-sm">Stops</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1.5">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1.5">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</div>
+</nav>
+<!-- Desktop Floating Sidebar Navigation (Manual Addition for Desktop UX) -->
+<div class="hidden md:flex fixed right-8 top-1/2 -translate-y-1/2 flex-col gap-4 z-40">
+<button class="w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[28px]">shopping_cart</span>
+</button>
+<button class="w-14 h-14 bg-surface border border-outline-variant text-primary rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[28px]">support_agent</span>
+</button>
+</div>
+<script>
+    function toggleView(view) {
+      const listBtn = document.getElementById('listViewBtn');
+      const mapBtn = document.getElementById('mapViewBtn');
+      const listView = document.getElementById('listView');
+      const mapView = document.getElementById('mapView');
+
+      if (view === 'list') {
+        listView.classList.remove('hidden');
+        mapView.classList.add('hidden');
+        listBtn.classList.add('bg-surface', 'text-primary', 'shadow-sm');
+        listBtn.classList.remove('text-on-surface-variant');
+        mapBtn.classList.remove('bg-surface', 'text-primary', 'shadow-sm');
+        mapBtn.classList.add('text-on-surface-variant');
+      } else {
+        listView.classList.add('hidden');
+        mapView.classList.remove('hidden');
+        mapBtn.classList.add('bg-surface', 'text-primary', 'shadow-sm');
+        mapBtn.classList.remove('text-on-surface-variant');
+        listBtn.classList.remove('bg-surface', 'text-primary', 'shadow-sm');
+        listBtn.classList.add('text-on-surface-variant');
+      }
+    }
+
+    function showPopup(title) {
+      const popup = document.getElementById('mapPopup');
+      const titleEl = document.getElementById('popupTitle');
+      titleEl.innerText = title;
+      popup.classList.remove('translate-y-full');
+    }
+
+    function hidePopup() {
+      const popup = document.getElementById('mapPopup');
+      popup.classList.add('translate-y-full');
+    }
+    
+    // Auto-scroll logic for filter bar touch devices
+    const filterBar = document.querySelector('.overflow-x-auto');
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    filterBar.addEventListener('mousedown', (e) => {
+      isDown = true;
+      startX = e.pageX - filterBar.offsetLeft;
+      scrollLeft = filterBar.scrollLeft;
+    });
+    filterBar.addEventListener('mouseleave', () => { isDown = false; });
+    filterBar.addEventListener('mouseup', () => { isDown = false; });
+    filterBar.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - filterBar.offsetLeft;
+      const walk = (x - startX) * 2;
+      filterBar.scrollLeft = scrollLeft - walk;
+    });
+  </script>
+</body></html>
