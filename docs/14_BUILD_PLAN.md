@@ -1,7 +1,7 @@
 # Build Plan & Handoff Log
 
 **Document version:** 1.0
-**Last updated:** 2026-08-04 (Stage 10.5c complete — owner-managed product data)
+**Last updated:** 2026-08-04 (Stage 11 complete — bookings)
 **Purpose:** Single source of truth for build progress. Any agent or contributor picking
 this project up mid-stream starts here.
 
@@ -88,8 +88,8 @@ Each stage is independently runnable and independently testable.
 | 10.5a | Migration 002 — owner-managed product data schema | DONE | Six new/changed tables; migration idempotent; approval backfill guarded |
 | 10.5b | Per-restaurant auth (JWT with `typ` + `rid`) | DONE | `tests/test_restaurant_auth.py` green including the actor-collision test |
 | 10.5c | Menu + hours CRUD, bookability from the database | DONE | `tests/test_restaurant_admin.py` green; menus served from `menu_items` |
-| 11 | Booking module + state machine | TODO | `tests/test_bookings.py` green including every invalid transition |
-| 12 | Dashboard module + restaurant token auth | TODO | `tests/test_dashboard.py` green including cross-restaurant denial |
+| 11 | Booking module + state machine | DONE | `tests/test_bookings.py` green — 55 tests, full 16-case transition matrix |
+| 12 | Dashboard module (order queue, transitions, stats) | TODO | `tests/test_dashboard.py` green including cross-restaurant denial |
 | 13 | Ratings module + aggregate recompute | TODO | `tests/test_ratings.py` green; restaurant aggregate updates on rating |
 | 14 | CI workflow, migrate script, gitignore | TODO | CI config passes against the real backend |
 
@@ -109,79 +109,64 @@ Deliberately unplanned in detail. Scope these when Phase B is done, not before.
 
 ## 4. Next Action
 
-**Stage 11 — booking module and state machine.**
+**Stage 12 — restaurant dashboard: order queue, transitions, stats.**
 
-Phase A and Stages 7–10 are complete and verified. Do not re-open the Phase A decisions;
-they are recorded in §5 with reasons.
+Stages 7–11 are complete and verified. The auth and booking machinery this needs already
+exists — this stage is mostly assembling it, not inventing anything.
 
 ### What already exists (build on it, do not rewrite)
 
 | File | What it gives you |
 |------|-------------------|
-| `app/config.py` | `get_settings()`; `.otp_stub_allowed`, `.is_production` |
-| `app/db.py` | `Base`, `SessionLocal`, `get_db`. `NullPool` under `ENVIRONMENT=test` — see §5 |
-| `app/cache.py` | `get_json()` / `set_json()` / `incr_with_expiry()`. All fail open |
-| `app/errors.py` | `unauthorized()`, `forbidden()`, `not_found()`, `conflict()`, `validation_error()` |
-| `app/models.py` | `Booking`, `ALLOWED_TRANSITIONS`, and `Booking.can_transition_to()` |
-| `app/schemas.py` | `RequestModel` (`extra="forbid"`) / `ResponseModel` bases |
-| `app/deps.py` | `CurrentUser`, `DbSession`, `ClientIp` |
-| **`app/services/menus.py`** | **`price_lookup(db, restaurant_id)` → `{name: Decimal}`, the authoritative price source. Excludes unavailable items, so a missing name means "cannot be ordered right now"** |
-| **`app/services/bookability.py`** | **`unbookable_reason(restaurant, hours, moment, booking_type)` → reason string or `None`. Already handles timezone and overnight windows** |
-| `app/services/hours.py` | `list_hours(db, restaurant_id)` |
-| `app/models.py` | also `BOOKING_TYPES`, `READY_BEFORE_ARRIVAL_MINUTES`, `Booking.ready_by` |
-| `app/services/restaurants.py` | `get_detail()`; the geography/`ST_DWithin` pattern |
-| `app/services/rate_limit.py` | `enforce(key, limit, window)`; add a `(limit, window)` constant per §9 of `10_SECURITY.md` |
-| `tests/conftest.py` | `client`, `seeded`, `db_exec`, `db_scalar`, `db_count` fixtures; Overpass blocked by default |
-
-`app/services/menu.py` **no longer exists** — it moved to `scripts/seed_menus.py` and is seed
-data only. Do not import it from the request path; `price_lookup` above is the replacement.
+| `app/deps.py` | **`CurrentStaff`** — the whole authorization story. Resolves a restaurant JWT to a `RestaurantUser` with `.restaurant_id` and an eager-loaded `.restaurant` |
+| **`app/services/bookings.py`** | **`transition(db, booking, new_status, restaurant_id=...)`** — validates the move against `ALLOWED_TRANSITIONS`, refuses a booking belonging to another restaurant, and stamps `confirmed_at` / `ready_at` / `handed_over_at`. Already tested across all 16 transitions |
+| `app/services/bookings.py` | `summarise_items(items)` → `"2× Paneer Paratha, 1× Lassi"` |
+| `app/logging_config.py` | `mask_phone()` → `+919****3210`. Use it on every customer phone |
+| `app/models.py` | `Booking.ready_by`, `READY_BEFORE_ARRIVAL_MINUTES`, `BOOKING_STATUSES` |
+| `app/routers/restaurant_admin.py` | The pattern to copy: `staff: CurrentStaff`, no `restaurant_id` in any signature |
+| `tests/test_restaurant_admin.py` | The `two_restaurants` fixture — two restaurants with a staff token each, which is what the cross-restaurant tests need |
 
 ### Build
 
-1. `app/services/bookings.py` — creation, listing, cancellation, and the state machine.
-2. `app/routers/bookings.py` — `POST /api/bookings/create`, `GET /api/bookings`,
-   `GET /api/bookings/{id}`, `PUT /api/bookings/{id}/cancel`
-   ([05_API_SPEC.md](./05_API_SPEC.md) §7).
-3. Wire the router into `app/main.py`.
+1. `app/services/dashboard.py` — the queue query and the stats aggregation.
+2. `app/routers/dashboard.py` — `GET /api/dashboard/orders`,
+   `PUT /api/dashboard/orders/{id}/confirm|ready|handed_over`, `GET /api/dashboard/stats`
+   ([05_API_SPEC.md](./05_API_SPEC.md) §8).
+3. Wire into `app/main.py`.
 
 ### The behaviours that must be exactly right
 
-- **The server computes `total_price`. Always.** Resolve every line item's name against
-  `menus.price_lookup()`, reject any name not in it with a 400, and sum the result. A
-  client-sent price is refused by `extra="forbid"` — there is no field for it — and the old
-  contract that trusted one let two parathas be booked for ₹0.02.
-- **Resolved unit prices are frozen onto `bookings.items` at creation.** A later menu price
-  change must not retroactively alter a placed order. Store `menu_item_id` on each line as a
-  plain integer, **not** an FK: a soft-deleted dish must not break a historical order.
-- **A dish marked unavailable cannot be booked.** `price_lookup` already excludes them, so an
-  unavailable name lands in the same 400 path as an unknown one — but the message should say
-  which, and the code should be `ITEM_UNAVAILABLE` rather than a generic validation error.
-  This is the mid-checkout race from `16_FUNCTIONAL_PRODUCT_DATA.md` §3.6: **reject the whole
-  booking** rather than silently dropping the line and recomputing the total. Changing what
-  someone agreed to pay is a worse surprise than an error.
-- **Check `bookability.unbookable_reason()` before anything else.** Approval, the owner's
-  accepting-orders toggle, and opening hours at the *requested arrival time* — not at now.
-  A restaurant open when you browse and shut when you arrive cannot take the order.
-- **Minimum lead time is the restaurant's `avg_prep_time_minutes`, not a flat 30.**
-  Enforced server-side; `arrival_time` earlier than `now + prep` is `400 ARRIVAL_TOO_SOON`.
-- **`booking_type` is required and must be supported by the restaurant.** It drives
-  `ready_by` (dine-in resolves to arrival itself — food plated early cools while a family
-  parks), so it cannot be defaulted silently.
-- **Every invalid transition is a 400**, driven by `ALLOWED_TRANSITIONS` — including
-  reversals and any move out of a terminal state.
-- **Ownership is checked on every read and write.** A traveller may only see and cancel
-  their own bookings; another user's id is a 404, not a 403, so booking ids are not
-  enumerable.
+- **`restaurant_id` comes from `staff.restaurant_id`, never from a query parameter.** Do not
+  add one to any signature: a parameter that is not accepted cannot be trusted by mistake.
+  This is the whole reason the shared token was retired.
+- **Every mutation goes through `bookings.transition()`.** Do not re-implement the state
+  machine or set `status` directly — the stamps and the ownership check live in there, and a
+  second implementation is a second thing to keep correct.
+- **Customer phones are masked.** `mask_phone()` on every order in the queue. An unmasked
+  number in a dashboard payload is a PII leak to whoever holds a staff token.
+- **The queue sorts by `cutoff_time` ascending** — most urgent first. An overdue `pending`
+  order stays `pending` and is flagged, never auto-rejected: a human decides whether a late
+  order is still worth cooking.
+- **Stats are scoped to the restaurant and to today** in the restaurant's own timezone, not
+  UTC. `bookability.local_time_at()` shows the conversion pattern; a UTC day boundary would
+  cut an Indian dhaba's day at 05:30 local.
+
+### Watch for
+
+- `GET /api/dashboard/orders` returning bookings grouped by status (the frozen design wants
+  `pending_orders` / `confirmed_orders` / `ready_orders` as separate arrays) versus one flat
+  list with a `status` field. The design's shape is easier for the dashboard to render and is
+  the reason it was drawn that way — prefer it.
+- `time_until_cutoff_seconds` goes **negative** for overdue orders. Do not clamp it to zero;
+  the client styles overdue rows differently and needs to know how late.
 
 ### Done when
 
-`tests/test_bookings.py` is green including **every** invalid transition, the price-tampering
-attempt, the unavailable-item rejection, the closed-at-arrival-time rejection, and the
-lead-time boundary. Plus `ruff check`, `black --check`, `pytest tests/ -q`, and a real `curl`
-creating a booking against the running container.
-
-Note that seeded hours are 06:00–23:00 IST, so a `curl` with an arrival time outside that
-window is *correctly* rejected — check the reason before assuming it is a bug.
+`tests/test_dashboard.py` is green including: a staff token seeing only its own restaurant's
+orders, a cross-restaurant transition attempt refused, phones masked in the payload, queue
+ordering, and stats matching hand-computed values. Plus `ruff check`, `black --check`,
+`pytest tests/ -q`, and a real `curl` moving a booking through
+`confirm → ready → handed_over`.
 
 ### Running the stack
 
@@ -192,13 +177,17 @@ docker compose exec backend python scripts/migrate.py
 docker compose exec backend python scripts/seed.py   # idempotent, safe to re-run
 docker compose exec backend pytest tests/ -q
 docker compose exec backend ruff check app/ scripts/ tests/
-curl -s localhost:8000/api/health
-curl -s localhost:8000/api/routes
 ```
+
+A seeded staff login for manual checks: phone `+919555000111`, OTP `123456`, attached to
+Murthal Dhaba.
 
 Local Python is 3.14, which has no wheels for the pinned `pydantic-core` — **run everything
 in the container**, not in a host venv. Dev dependencies are not in the image; install them
 with `docker compose exec backend pip install -q -r requirements-dev.txt` after a rebuild.
+
+Seeded hours are 06:00–23:00 IST, so a manual booking with an arrival time outside that
+window is *correctly* rejected — read the reason before assuming a bug.
 
 ---
 
@@ -252,6 +241,14 @@ Decisions taken during the build that are not obvious from the code. Append, nev
 | 2026-07-31 | Availability is its own endpoint, separate from menu update | Most-used control in the product, tapped mid-service one-handed. Routing it through the general update would let an unrelated validation error block a stock change |
 | 2026-07-31 | `is_available` separate from `deleted_at` | "Out of paneer today" and "we stopped selling this" differ in reversibility; merging them makes an owner re-create the dish tomorrow |
 | 2026-07-31 | A restaurant with no menu is listed but not bookable — DEFAULT_MENU fallback removed | The fallback was fine while every menu was fictional. With real menus it would quote a price no restaurant agreed to, for an OSM row nobody has spoken to, and the failure would land at the roadside instead of in the API |
+| 2026-08-04 | Bookability checked at the arrival time, not at request time | A restaurant open while you browse and shut when you arrive cannot take the order. Validating against now would accept it and fail the traveller at the roadside |
+| 2026-08-04 | An unavailable item rejects the whole booking rather than dropping the line | Silently recomputing the total changes what someone reviewed and agreed to pay. `ITEM_UNAVAILABLE` and `ITEM_NOT_ON_MENU` are distinct codes because the remedies differ |
+| 2026-08-04 | `booking_type` required, never defaulted | It decides `ready_by`. Guessing wrong plates a bus passenger's order for a sit-down, or lets a family's food cool while they park |
+| 2026-08-04 | `menu_item_id` on booking lines is a plain integer, not an FK | A soft-deleted dish must not break a historical order. The frozen name and price are what the order *is*; the id is a hint about where it came from |
+| 2026-08-04 | Naive `arrival_time` rejected rather than assumed UTC | An offset-less timestamp silently means server-local somewhere down the stack, and every calculation here is UTC |
+| 2026-08-04 | Booking ownership scoped in the query, not fetched-then-compared | Leaves no branch that can be written to forget the check, and no window where the wrong row is loaded |
+| 2026-08-04 | `MAX_LEAD_DAYS = 2` on how far ahead a booking may be placed | Not a technical limit. Beyond a couple of days an arrival time is a guess, and a no-show costs a kitchen real food |
+| 2026-08-04 | No `refund_amount` on cancel | Payment is on arrival, so no money has changed hands. Reporting a refund of money never taken is worse than reporting nothing |
 | 2026-07-31 | Seed fixtures moved from `app/services/menu.py` to `scripts/seed_menus.py` | Leaving it beside the new `app/services/menus.py` put two modules one letter apart with opposite roles, and seed data does not belong in the service layer |
 | 2026-07-30 | All development runs in the container, not a host venv | Local Python is 3.14 and `pydantic-core` has no wheels for it; building from source needs a Rust toolchain. The container pins 3.11 |
 | 2026-07-30 | Login verifies the OTP **before** looking the phone up | Checking existence first makes the 404/401 split a registered-number oracle for a caller who has no valid OTP at all |
