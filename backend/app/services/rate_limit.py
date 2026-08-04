@@ -23,6 +23,10 @@ logger = logging.getLogger(__name__)
 LOGIN_LIMIT = (10, 3600)  # per phone
 REGISTER_LIMIT = (5, 3600)  # per IP
 RESTAURANT_REGISTER_LIMIT = (5, 3600)  # per user
+# Per docs/10_SECURITY.md section 9. Generous enough that a traveller
+# correcting a mistake is never blocked, tight enough to bound abuse of an
+# authenticated write that costs a kitchen real food.
+BOOKING_CREATE_LIMIT = (30, 3600)  # per user
 
 
 async def enforce(key: str, limit: int, window_seconds: int) -> None:
@@ -66,6 +70,10 @@ def login_key(phone: str) -> str:
 def register_key(client_ip: str) -> str:
     """Register is limited per IP: there is no account to key on yet."""
     return f"register:{client_ip}"
+
+
+def booking_create_key(user_id: int) -> str:
+    return f"ratelimit:booking-create:{user_id}"
 
 
 def restaurant_register_key(user_id: int) -> str:

@@ -26,6 +26,10 @@ from pydantic import (
     model_validator,
 )
 
+# Imported rather than duplicated: the tuple is also the source of the
+# database CHECK constraint, and two lists of the same three strings drift.
+from app.models import BOOKING_TYPES
+
 # E.164: leading +, no leading zero on the country code, 7–15 digits total.
 PHONE_PATTERN = r"^\+[1-9]\d{6,14}$"
 
@@ -332,6 +336,105 @@ class OnboardingResponse(ResponseModel):
     is_accepting_orders: bool
     onboarding_complete: bool
     missing: list[str]
+
+
+# --- Bookings -------------------------------------------------------------
+
+
+class BookingItemRequest(RequestModel):
+    """One line of an order.
+
+    **There is no `price` field, and that is the point.** `extra="forbid"` turns
+    a client-sent price into a 422 rather than silently ignoring it — being
+    ignored is the failure mode that lets a caller believe they set the price.
+    The server resolves every unit price from `menu_items`.
+    """
+
+    name: str = Field(min_length=1, max_length=200)
+    qty: int = Field(ge=1, le=99)
+
+
+class BookingCreateRequest(RequestModel):
+    restaurant_id: int = Field(ge=1)
+    arrival_time: datetime
+    # Required, never defaulted: it decides when food should be ready, and
+    # guessing wrong means a bus passenger's order is plated for a sit-down.
+    booking_type: str
+    items: list[BookingItemRequest] = Field(min_length=1, max_length=50)
+    route_id: int | None = Field(default=None, ge=1)
+    notes: str | None = Field(default=None, max_length=500)
+
+    @field_validator("booking_type")
+    @classmethod
+    def _known_booking_type(cls, v: str) -> str:
+        if v not in BOOKING_TYPES:
+            raise ValueError(f"booking_type must be one of {', '.join(BOOKING_TYPES)}")
+        return v
+
+    @field_validator("arrival_time")
+    @classmethod
+    def _timezone_aware(cls, v: datetime) -> datetime:
+        # A naive datetime silently means "server local time" somewhere down the
+        # stack, and every calculation here is UTC. Reject rather than assume.
+        if v.tzinfo is None:
+            raise ValueError(
+                "arrival_time must include a timezone offset " "(e.g. 2026-08-05T07:30:00Z)"
+            )
+        return v
+
+
+class BookingItemResponse(ResponseModel):
+    name: str
+    qty: int
+    # The resolved unit price, frozen at order time. Echoed so the client can
+    # render a priced order without holding an authoritative copy of the menu.
+    price: Decimal
+    # Plain integer, not a foreign key: a soft-deleted dish must not break a
+    # historical order (docs/16_FUNCTIONAL_PRODUCT_DATA.md §3.1).
+    menu_item_id: int | None = None
+
+
+class BookingResponse(ResponseModel):
+    id: int
+    restaurant_id: int
+    restaurant_name: str
+    route_id: int | None = None
+    booking_type: str
+    status: str
+    arrival_time: datetime
+    cutoff_time: datetime
+    # When the kitchen should have it plated. Differs from arrival by mode.
+    ready_by: datetime
+    items: list[BookingItemResponse]
+    total_price: Decimal
+    notes: str | None = None
+    payment_status: str
+    confirmed_at: datetime | None = None
+    ready_at: datetime | None = None
+    handed_over_at: datetime | None = None
+    created_at: datetime
+
+
+class BookingSummary(ResponseModel):
+    """List view. Deliberately lighter than the detail response."""
+
+    id: int
+    restaurant_id: int
+    restaurant_name: str
+    booking_type: str
+    status: str
+    arrival_time: datetime
+    cutoff_time: datetime
+    total_price: Decimal
+    # Pre-formatted for a list row ("2× Paneer Paratha, 1× Lassi") so the client
+    # does not ship rendering logic to summarise an array it never displays.
+    items_summary: str
+    created_at: datetime
+
+
+class BookingListResponse(ResponseModel):
+    bookings: list[BookingSummary]
+    total_count: int
 
 
 class RestaurantRegisterRequest(RequestModel):
